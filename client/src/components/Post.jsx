@@ -7,7 +7,7 @@ import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 const Post = () => {
   return (
     <>
-      <div className="w-2/4 mx-auto border rounded-lg p-5">
+      <div className="w-2/4 mx-auto border rounded-lg p-5 shadow-md">
         <div className="flex items-center border-b-2 pb-3">
           <img
             src="profileImage.jpg"

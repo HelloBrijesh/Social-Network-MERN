@@ -1,17 +1,19 @@
 import Navbar from "../components/Navbar";
-import HomeSidebar from "../components/HomeSidebar";
+import Sidebar from "../components/Sidebar";
 import Post from "../components/Post";
 
 const Home = () => {
   return (
     <>
-      <Navbar />
-      <div className="flex h-screen relative z-0">
-        <div className="w-1/4 border-r-2 h-full bg-white-smoke py-5">
-          <HomeSidebar />
+      <div className="h-[60px]">
+        <Navbar />
+      </div>
+      <div className="flex">
+        <div className="h-screen fixed w-1/6 bg-white-smoke border-r-2">
+          <Sidebar />
         </div>
-        <div className="w-3/4 text-center">
-          <div className="w-2/4 mx-auto my-5 border rounded-lg p-5">
+        <div className="w-5/6 text-center mx-auto">
+          <div className="w-2/4 mx-auto my-5 border rounded-lg p-5 shadow-md">
             <div className="flex border-b-2 pb-3 justify-between">
               <img
                 src="profileImage.jpg"
@@ -28,9 +30,7 @@ const Home = () => {
               <p>Feeling/activity</p>
             </div>
           </div>
-          <div>
-            <Post />
-          </div>
+          <Post />
         </div>
       </div>
     </>
