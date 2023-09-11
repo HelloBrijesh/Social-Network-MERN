@@ -6,28 +6,24 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 const Navbar = () => {
   return (
     <>
-      <nav className="flex justify-between py-3 items-center shadow-md">
-        <div className="w-2/5 text-blue text-2xl font-bold ms-10">
-          Social Network
-        </div>
-        <div className="flex w-1/5 justify-around">
-          <div>
+      <nav className="flex justify-between items-center shadow-md fixed w-full z-10 bg-white">
+        <div className="text-blue text-2xl font-bold ms-4">Social Network</div>
+        <div className="flex justify-around">
+          <div className="p-5">
             <FontAwesomeIcon icon={faHouse} />
           </div>
-          <div>
+          <div className="p-5">
             <FontAwesomeIcon icon={faUserGroup} />
           </div>
-          <div>
+          <div className="p-5">
             <FontAwesomeIcon icon={faBell} />
           </div>
         </div>
-        <div className="w-2/5">
-          <img
-            src="profileImage.jpg"
-            alt=""
-            className="w-[30px] h-[30px] rounded-full mx-auto"
-          />
-        </div>
+        <img
+          src="profileImage.jpg"
+          alt=""
+          className="w-[30px] h-[30px] rounded-full me-4"
+        />
       </nav>
     </>
   );

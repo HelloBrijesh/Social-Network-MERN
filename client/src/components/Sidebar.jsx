@@ -4,7 +4,7 @@ import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 
-const HomeSidebar = () => {
+const Sidebar = () => {
   return (
     <>
       <div className="">
@@ -38,4 +38,4 @@ const HomeSidebar = () => {
   );
 };
 
-export default HomeSidebar;
+export default Sidebar;
