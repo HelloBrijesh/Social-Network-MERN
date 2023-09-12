@@ -1,36 +1,87 @@
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import Post from "../components/Post";
+import { Outlet, Link } from "react-router-dom";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faRss } from "@fortawesome/free-solid-svg-icons";
+// import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
+// import { faMessage } from "@fortawesome/free-solid-svg-icons";
+// import { faImage } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   return (
     <>
-      <div className="h-[60px]">
-        <Navbar />
-      </div>
       <div className="flex">
         <div className="h-screen fixed w-1/6 bg-white-smoke border-r-2">
-          <Sidebar />
-        </div>
-        <div className="w-5/6 text-center mx-auto">
-          <div className="w-2/4 mx-auto my-5 border rounded-lg p-5 shadow-md">
-            <div className="flex border-b-2 pb-3 justify-between">
+          <div className="py-5">
+            <Link to="/user/profile/">
               <img
                 src="profileImage.jpg"
                 alt=""
-                className="w-[50px] h-[50px] rounded-full me-5"
+                className="w-[100px] h-[100px] mx-auto rounded-full border-4 border-white shadow-md"
               />
-              <button className="bg-white-smoke rounded-3xl px-3">
-                What's on your mind, Name ?
-              </button>
-            </div>
-            <div className="flex justify-between mt-3">
-              <p>Live video</p>
-              <p>Photo/video</p>
-              <p>Feeling/activity</p>
-            </div>
+              <p className="text-center my-5">Name </p>
+            </Link>
           </div>
-          <Post />
+          {/* <ul className="px-10">
+          <NavLink
+            to="/home/"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-blue border-b-4 border-b-blue"
+                : ""
+            }
+          >
+            <li className="py-3">
+              <FontAwesomeIcon icon={faRss} className="me-3" /> Feed
+            </li>
+          </NavLink>
+          <NavLink
+            to="/home/"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-blue border-b-4 border-b-blue"
+                : ""
+            }
+          >
+            <li className="py-3">
+              <FontAwesomeIcon icon={faUserGroup} className="me-3" /> Friends
+            </li>
+          </NavLink>
+          <NavLink
+            to="/home/"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-blue border-b-4 border-b-blue"
+                : ""
+            }
+          >
+            <li className="py-3">
+              <FontAwesomeIcon icon={faMessage} className="me-3" /> Messages
+            </li>
+          </NavLink>
+          <NavLink
+            to="/home/"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-blue border-b-4 border-b-blue"
+                : ""
+            }
+          >
+            <li className="py-3">
+              <FontAwesomeIcon icon={faImage} className="me-3" />
+              Photos
+            </li>
+          </NavLink>
+        </ul> */}
+        </div>
+        <div className="w-5/6 text-center mx-auto">
+          <Outlet />
         </div>
       </div>
     </>

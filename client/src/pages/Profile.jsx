@@ -1,3 +1,5 @@
+import { Outlet } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 const Profile = () => {
   return (
     <>
@@ -39,15 +41,63 @@ const Profile = () => {
               </p>
               <p className="my-3">in a relationship</p>
             </div>
-            <div className="mt-5 border rounded-2xl p-2 flex justify-around">
-              <div>Timeline</div>
-              <div>About</div>
-              <div>Friends</div>
-              <div>Photos</div>
-            </div>
+            <ul className="mt-5 border rounded-2xl p-2 flex justify-around">
+              <NavLink
+                to="/user/profile/timeline"
+                className={({ isActive, isPending }) =>
+                  isPending
+                    ? "pending"
+                    : isActive
+                    ? "text-blue border-b-4 border-b-blue"
+                    : ""
+                }
+              >
+                <li>Timeline</li>
+              </NavLink>
+              <NavLink
+                to="/user/profile/about/"
+                className={({ isActive, isPending }) =>
+                  isPending
+                    ? "pending"
+                    : isActive
+                    ? "text-blue border-b-4 border-b-blue"
+                    : ""
+                }
+              >
+                <li>About</li>
+              </NavLink>
+
+              <NavLink
+                to="/user/profile/friends/"
+                className={({ isActive, isPending }) =>
+                  isPending
+                    ? "pending"
+                    : isActive
+                    ? "text-blue border-b-4 border-b-blue"
+                    : ""
+                }
+              >
+                <li>Friends</li>
+              </NavLink>
+
+              <NavLink
+                to="/user/profile/photos/"
+                className={({ isActive, isPending }) =>
+                  isPending
+                    ? "pending"
+                    : isActive
+                    ? "text-blue border-b-4 border-b-blue"
+                    : ""
+                }
+              >
+                <li>Photos</li>
+              </NavLink>
+            </ul>
           </div>
         </div>
-        <div className="w-3/5">content</div>
+        <div className="w-3/5">
+          <Outlet />
+        </div>
       </div>
     </>
   );
