@@ -12,6 +12,8 @@ import User from "./pages/User";
 import FriendsList from "./components/FriendsList";
 import Timeline from "./components/Timeline.jsx";
 import Photos from "./components/Photos.jsx";
+import FindFriends from "./components/FindFriends.jsx";
+import FriendsRequests from "./components/FriendsRequests.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +37,20 @@ const router = createBrowserRouter([
       {
         path: "friends",
         element: <Friends />,
+        children: [
+          {
+            path: "",
+            element: <FriendsList />,
+          },
+          {
+            path: "find",
+            element: <FindFriends />,
+          },
+          {
+            path: "friendrequests",
+            element: <FriendsRequests />,
+          },
+        ],
       },
       {
         path: "profile",

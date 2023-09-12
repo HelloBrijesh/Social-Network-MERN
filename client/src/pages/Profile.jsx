@@ -4,7 +4,7 @@ const Profile = () => {
   return (
     <>
       <div className="flex">
-        <div className="w-2/5 border-r-2">
+        <div className="h-screen w-2/5 border-r-2">
           <img src="banner.jpg" alt="" className="h-[250px] w-full" />
           <div className="px-10">
             <div className="">
