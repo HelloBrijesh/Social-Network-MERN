@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <>
       <div className="flex">
-        <div className="h-screen fixed w-1/6 bg-white-smoke border-r-2">
+        <div className="h-screen fixed w-1/6 bg-white-smoke border-r-2 pt-10">
           <div className="py-5">
             <Link to="/user/profile/">
               <img
@@ -35,49 +35,7 @@ const Home = () => {
               <FontAwesomeIcon icon={faRss} className="me-3" /> Feed
             </li>
           </NavLink>
-          <NavLink
-            to="/home/"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-blue border-b-4 border-b-blue"
-                : ""
-            }
-          >
-            <li className="py-3">
-              <FontAwesomeIcon icon={faUserGroup} className="me-3" /> Friends
-            </li>
-          </NavLink>
-          <NavLink
-            to="/home/"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-blue border-b-4 border-b-blue"
-                : ""
-            }
-          >
-            <li className="py-3">
-              <FontAwesomeIcon icon={faMessage} className="me-3" /> Messages
-            </li>
-          </NavLink>
-          <NavLink
-            to="/home/"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-blue border-b-4 border-b-blue"
-                : ""
-            }
-          >
-            <li className="py-3">
-              <FontAwesomeIcon icon={faImage} className="me-3" />
-              Photos
-            </li>
-          </NavLink>
+          
         </ul> */}
         </div>
         <div className="w-5/6 text-center mx-auto">
