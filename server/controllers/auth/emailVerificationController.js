@@ -1,7 +1,7 @@
 import { UserModel, EmailTokenModel, RefreshTokenModel } from "../../models";
 import { customErrorHandler, jwtService } from "../../services";
 import { JWT_REFRESH_SECRET } from "../../config";
-import emailTokenModel from "../../models/emailTokenModel";
+import nodemailer from "nodemailer";
 
 const emailVerificationController = {
   async sendEmail(req, res, next) {
