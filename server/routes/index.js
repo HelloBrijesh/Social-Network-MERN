@@ -6,9 +6,10 @@ import {
   changePasswordController,
   refreshTokenController,
   aboutController,
+  friendlistController,
+  friendRequestController,
 } from "../controllers";
 import { auth } from "../middleware";
-import friendlistController from "../controllers/profile/friendlistController";
 
 const router = express.Router();
 
@@ -25,5 +26,17 @@ router.get("/refreshtoken", refreshTokenController.refreshToken);
 
 router.get("/about", auth, aboutController.about);
 router.get("/friendlist", auth, friendlistController.friendlist);
+
+router.post(
+  "/createfriendrequest",
+  auth,
+  friendRequestController.createRequest
+);
+router.post(
+  "/cancelfriendrequest",
+  auth,
+  friendRequestController.cancelRequest
+);
+router.post("/addfriend", auth, friendRequestController.addRequest);
 
 export default router;
