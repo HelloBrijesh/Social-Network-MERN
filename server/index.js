@@ -18,6 +18,7 @@ mongoose
   });
 
 app.use(express.json());
+app.use(express.urlencoded());
 
 app.use("/api", routes);
 

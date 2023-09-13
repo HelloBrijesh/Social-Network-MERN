@@ -1,4 +1,5 @@
 import { customErrorHandler } from "../services";
+import { ValidationError } from "joi";
 
 const errorHandler = (error, request, response, next) => {
   let statusCode = 500;
@@ -7,10 +8,16 @@ const errorHandler = (error, request, response, next) => {
     originalMessage: error.message,
   };
 
-  if (err instanceof customErrorHandler) {
-    statusCode = err.status;
+  if (error instanceof ValidationError) {
+    statusCode = 422;
     data = {
-      message: err.message,
+      message: error.message,
+    };
+  }
+  if (error instanceof customErrorHandler) {
+    statusCode = error.status;
+    data = {
+      message: error.message,
     };
   }
 
