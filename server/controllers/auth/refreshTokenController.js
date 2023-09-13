@@ -1,6 +1,6 @@
 import { JWT_REFRESH_SECRET } from "../../config";
-import { RefreshTokenModel, UserModel } from "../models";
-import { customErrorHandler, jwtService } from "../services";
+import { RefreshTokenModel, UserModel } from "../../models";
+import { customErrorHandler, jwtService } from "../../services";
 
 const refreshTokenController = {
   async refreshToken() {
