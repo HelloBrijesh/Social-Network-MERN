@@ -8,6 +8,7 @@ import {
   aboutController,
 } from "../controllers";
 import { auth } from "../middleware";
+import friendlistController from "../controllers/profile/friendlistController";
 
 const router = express.Router();
 
@@ -23,5 +24,6 @@ router.post("/changepassword", auth, changePasswordController.changePassword);
 router.get("/refreshtoken", refreshTokenController.refreshToken);
 
 router.get("/about", auth, aboutController.about);
+router.get("/friendlist", auth, friendlistController.friendlist);
 
 export default router;
