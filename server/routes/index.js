@@ -1,9 +1,9 @@
 import express from "express";
+import { signupController, loginController } from "../controllers";
 
 const router = express.Router();
 
-router.get("/home", (req, res) => {
-  res.json({ status: "1" });
-});
+router.post("/signup", signupController.signup);
+router.post("/login", loginController.login);
 
 export default router;
