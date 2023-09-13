@@ -3,3 +3,5 @@ export { default as loginController } from "./auth/loginController";
 export { default as emailVerificationController } from "./auth/emailVerificationController";
 export { default as changePasswordController } from "./auth/changePasswordController";
 export { default as refreshTokenController } from "./auth/refreshTokenController";
+
+export { default as aboutController } from "./profile/aboutController";
