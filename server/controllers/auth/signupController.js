@@ -59,7 +59,8 @@ const signupController = {
       return next(error);
     }
 
-    res.json({ status: "1" });
+    req.body.email = email;
+    next();
   },
 };
 
