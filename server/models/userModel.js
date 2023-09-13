@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   friends: [String],
   requestReceived: [String],
   requestSent: [String],
+  verified: { type: Boolean, default: false },
 });
 
 export default mongoose.model("User", userSchema, "users");

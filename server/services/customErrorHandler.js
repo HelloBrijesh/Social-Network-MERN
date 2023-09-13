@@ -13,6 +13,10 @@ class customErrorHandler extends Error {
     return new customErrorHandler(401, message);
   }
 
+  static notVerified(message = "Please Verify email") {
+    return new customErrorHandler(401, message);
+  }
+
   static unAuthorized(message = "unAuthorized") {
     return new customErrorHandler(401, message);
   }

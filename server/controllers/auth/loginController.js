@@ -35,6 +35,7 @@ const loginController = {
     try {
       const verifyPassword = await bcrypt.compare(password, user.password);
       if (!verifyPassword) return next(customErrorHandler.wrongCredentials());
+      if (!user.verified) return next(customErrorHandler.notVerified());
     } catch (error) {
       return next(error);
     }
