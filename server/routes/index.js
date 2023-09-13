@@ -8,6 +8,7 @@ import {
   aboutController,
   friendlistController,
   friendRequestController,
+  postController,
 } from "../controllers";
 import { auth } from "../middleware";
 
@@ -38,5 +39,8 @@ router.post(
   friendRequestController.cancelRequest
 );
 router.post("/addfriend", auth, friendRequestController.addRequest);
+
+router.post("/createpost", auth, postController.createPost);
+router.post("/deletepost", auth, postController.deletePost);
 
 export default router;
