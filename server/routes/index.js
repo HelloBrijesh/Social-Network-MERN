@@ -5,7 +5,9 @@ import {
   emailVerificationController,
   changePasswordController,
   refreshTokenController,
+  aboutController,
 } from "../controllers";
+import { auth } from "../middleware";
 
 const router = express.Router();
 
@@ -17,7 +19,9 @@ router.post(
 router.post("/login", loginController.login);
 router.post("/forgotpassword", emailVerificationController.sendEmail);
 router.post("/verify/:emailtoken", emailVerificationController.verifyEmail);
-router.post("/changepassword", changePasswordController.changePassword);
+router.post("/changepassword", auth, changePasswordController.changePassword);
 router.get("/refreshtoken", refreshTokenController.refreshToken);
+
+router.get("/about", auth, aboutController.about);
 
 export default router;
