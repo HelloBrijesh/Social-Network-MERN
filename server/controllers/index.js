@@ -6,4 +6,7 @@ export { default as refreshTokenController } from "./auth/refreshTokenController
 
 export { default as aboutController } from "./profile/aboutController";
 export { default as friendlistController } from "./profile/friendlistController";
+
 export { default as friendRequestController } from "./friendRequest/friendRequestController";
+
+export { default as postController } from "./post/postController";
