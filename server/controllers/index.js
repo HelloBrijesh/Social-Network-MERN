@@ -5,3 +5,4 @@ export { default as changePasswordController } from "./auth/changePasswordContro
 export { default as refreshTokenController } from "./auth/refreshTokenController";
 
 export { default as aboutController } from "./profile/aboutController";
+export { default as friendlistController } from "./profile/friendlistController";
