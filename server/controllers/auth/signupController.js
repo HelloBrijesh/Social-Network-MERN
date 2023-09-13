@@ -1,6 +1,6 @@
 import Joi from "joi";
 import bcrypt from "bcrypt";
-import { User } from "../../models";
+import { UserModel } from "../../models";
 import { customErrorHandler } from "../../services";
 
 const signupController = {
@@ -28,7 +28,7 @@ const signupController = {
       req.body;
 
     try {
-      const userExist = await User.exists({ email: email });
+      const userExist = await UserModel.exists({ email: email });
       if (userExist) {
         return next(
           customErrorHandler.alreadyExists("This email is already exists")
@@ -43,7 +43,7 @@ const signupController = {
     const hasedPassword = await bcrypt.hash(password, COST_FACTOR);
 
     // preparing the model
-    const newUser = new User({
+    const newUser = new UserModel({
       firstName,
       lastName,
       email,
