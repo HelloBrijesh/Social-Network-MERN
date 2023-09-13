@@ -1,6 +1,13 @@
 import { UserModel, EmailTokenModel, RefreshTokenModel } from "../../models";
 import { customErrorHandler, jwtService } from "../../services";
-import { JWT_REFRESH_SECRET } from "../../config";
+import {
+  JWT_REFRESH_SECRET,
+  EMAIL_PORT,
+  USER,
+  PASS,
+  SECURE,
+  SERVICE,
+} from "../../config";
 import nodemailer from "nodemailer";
 
 const emailVerificationController = {
