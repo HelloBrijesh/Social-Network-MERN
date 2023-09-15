@@ -1,8 +1,12 @@
-import { JWT_ACCESS_SECRET } from "../config";
+import { JWT_ACCESS_SECRET, ACCESS_TOKEN_EXIRY } from "../config";
 import jwt from "jsonwebtoken";
 
 class jwtService {
-  static sign(payload, secret = JWT_ACCESS_SECRET, expiry = "15m") {
+  static sign(
+    payload,
+    secret = JWT_ACCESS_SECRET,
+    expiry = ACCESS_TOKEN_EXIRY
+  ) {
     return jwt.sign(payload, secret, { expiresIn: expiry });
   }
   static verify(token, secret = JWT_ACCESS_SECRET) {

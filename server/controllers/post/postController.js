@@ -2,15 +2,15 @@ import { PostModel } from "../../models";
 
 const postController = {
   async createPost(req, res, next) {
-    const userId = req.user._Id;
+    const userId = req.user._id;
 
-    const { content, imageUrl } = req.body;
+    const { content, images } = req.body;
 
     try {
       const newPost = new PostModel({
         postedBy: userId,
         postContent: content,
-        postImage: imageUrl,
+        postImages: images,
       });
 
       await newPost.save();
@@ -22,15 +22,28 @@ const postController = {
   },
 
   async deletePost(req, res, next) {
-    const postId = req.postId;
+    const postId = req.body.postId;
 
     try {
-      await PostModel.deleteOne({ postId: postId });
+      await PostModel.deleteOne({ _id: postId });
     } catch (error) {
       return next(error);
     }
 
     res.json({ status: "ok" });
+  },
+
+  async getPost(req, res, next) {
+    const userId = req.user._id;
+
+    let allPost;
+    try {
+      allPost = await PostModel.find({ postedBy: userId });
+    } catch (error) {
+      return next(error);
+    }
+
+    res.json({ allPost });
   },
 
   async addComment(req, res, next) {

@@ -2,7 +2,7 @@ import Joi from "joi";
 import bcrypt from "bcrypt";
 import { RefreshTokenModel, UserModel } from "../../models";
 import { customErrorHandler, jwtService } from "../../services";
-import { JWT_REFRESH_SECRET } from "../../config";
+import { JWT_REFRESH_SECRET, REFRESH_TOKEN_EXIRY } from "../../config";
 
 const loginController = {
   async login(req, res, next) {
@@ -52,7 +52,7 @@ const loginController = {
       refresh_token = jwtService.sign(
         { _id: user._id, role: user.role },
         JWT_REFRESH_SECRET,
-        "7d"
+        REFRESH_TOKEN_EXIRY
       );
 
       await RefreshTokenModel.create({ savedRefreshToken: refresh_token });
@@ -60,7 +60,7 @@ const loginController = {
       return next(error);
     }
 
-    res.json({ refresh_token });
+    res.json({ access_token, refresh_token });
   },
 };
 

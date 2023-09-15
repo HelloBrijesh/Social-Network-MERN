@@ -1,16 +1,18 @@
+import { UserModel } from "../../models";
+
 const friendRequestController = {
   async createRequest(req, res, next) {
-    const userId = req.user._Id;
-    const friendId = req.friendId;
+    const userId = req.user._id;
+    const friendId = req.body.friendId;
 
     try {
-      await UserModel.update(
+      await UserModel.updateOne(
         { _id: userId },
-        { $push: { requestSent: friendId } }
+        { $addToSet: { requestSent: [friendId] } }
       );
-      await UserModel.update(
+      await UserModel.updateOne(
         { _id: friendId },
-        { $push: { requestReceived: userId } }
+        { $addToSet: { requestReceived: [userId] } }
       );
     } catch (error) {
       return next(error);
@@ -19,8 +21,52 @@ const friendRequestController = {
     res.json({ status: "ok" });
   },
 
-  async cancelRequest(req, res, next) {},
-  async addRequest(req, res, next) {},
+  async cancelRequest(req, res, next) {
+    const userId = req.user._id;
+    const friendId = req.body.friendId;
+
+    try {
+      await UserModel.updateOne(
+        { _id: userId },
+        { $pullAll: { requestSent: [friendId] } }
+      );
+      await UserModel.updateOne(
+        { _id: friendId },
+        { $pullAll: { requestReceived: [userId] } }
+      );
+    } catch (error) {
+      return next(error);
+    }
+
+    res.json({ status: "ok" });
+  },
+  async addFriend(req, res, next) {
+    const userId = req.user._id;
+    const friendId = req.body.friendId;
+
+    try {
+      await UserModel.updateOne(
+        { _id: userId },
+        { $addToSet: { friends: [friendId] } }
+      );
+      await UserModel.updateOne(
+        { _id: friendId },
+        { $addToSet: { friends: [userId] } }
+      );
+      await UserModel.updateOne(
+        { _id: userId },
+        { $pullAll: { requestSent: [friendId] } }
+      );
+      await UserModel.updateOne(
+        { _id: friendId },
+        { $pullAll: { requestReceived: [userId] } }
+      );
+    } catch (error) {
+      return next(error);
+    }
+
+    res.json({ status: "ok" });
+  },
 };
 
 export default friendRequestController;

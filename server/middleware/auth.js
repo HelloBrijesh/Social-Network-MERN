@@ -10,10 +10,10 @@ const auth = async (req, res, next) => {
 
   //Verifying the access token
   try {
-    const { _id, role } = jwtService.verify(authAccessToken);
+    const { _id } = jwtService.verify(authAccessToken);
+
     const user = {
       _id,
-      role,
     };
     req.user = user;
     next();

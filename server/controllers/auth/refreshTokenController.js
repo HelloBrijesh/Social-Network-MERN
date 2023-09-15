@@ -1,14 +1,14 @@
-import { JWT_REFRESH_SECRET } from "../../config";
+import { JWT_REFRESH_SECRET, REFRESH_TOKEN_EXIRY } from "../../config";
 import { RefreshTokenModel, UserModel } from "../../models";
 import { customErrorHandler, jwtService } from "../../services";
 
 const refreshTokenController = {
-  async refreshToken() {
+  async refreshToken(req, res, next) {
     let cookieToken = req.headers.cookie;
     if (!cookieToken) {
       return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
     }
-    const cookieRefreshtoken = cookieToken.split("=")[1];
+    const cookieRefreshtoken = cookieToken.split(" ")[1];
 
     try {
       let verifiedRefreshToken = await RefreshTokenModel.findOne({
@@ -31,8 +31,9 @@ const refreshTokenController = {
     }
 
     // Finding the user from database
+    let user;
     try {
-      const user = await UserModel.findOne({ _id: userId });
+      user = await UserModel.findOne({ _id: userId });
       if (!user) return next(customErrorHandler.unAuthorized("No user found!"));
     } catch (error) {
       return next(error);
@@ -46,7 +47,7 @@ const refreshTokenController = {
       refresh_token = jwtService.sign(
         { _id: user._id, firstName: user.firstName },
         JWT_REFRESH_SECRET,
-        "7d"
+        REFRESH_TOKEN_EXIRY
       );
 
       // Adding new refresh_token in database
@@ -60,7 +61,7 @@ const refreshTokenController = {
       return next(new Error("Something went wrong " + error.message));
     }
 
-    res.json({ access_token });
+    res.json({ access_token, refresh_token });
   },
 };
 

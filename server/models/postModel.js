@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
-  postId: { type: Number, required: true },
-  postedBy: { type: Number, required: true },
+  postedBy: { type: mongoose.ObjectId, required: true },
   postContent: { type: String, required: true },
-  postImage: { type: String },
+  postImages: [String],
   comments: {
-    commentDetail: { type: String },
-    commentedBy: { type: Number },
+    commentDetail: { type: String, default: "" },
+    commentedBy: { type: Number, default: "" },
   },
   likes: [Number],
   disLikes: [Number],
