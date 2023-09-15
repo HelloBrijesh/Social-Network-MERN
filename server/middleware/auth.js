@@ -1,4 +1,6 @@
-import { customErrorHandler, jwtService } from "../services";
+import jwt from "jsonwebtoken";
+import { JWT_ACCESS_SECRET } from "../config";
+import { customErrorHandler } from "../services";
 
 const auth = async (req, res, next) => {
   // Accessing the access token from headers
@@ -10,12 +12,9 @@ const auth = async (req, res, next) => {
 
   //Verifying the access token
   try {
-    const { _id } = jwtService.verify(authAccessToken);
+    const { userId } = jwt.verify(authAccessToken, JWT_ACCESS_SECRET);
 
-    const user = {
-      _id,
-    };
-    req.user = user;
+    req.userId = userId;
     next();
   } catch (error) {
     return next(customErrorHandler.unAuthorized(error.message));

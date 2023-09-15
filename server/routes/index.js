@@ -1,48 +1,44 @@
 import express from "express";
+
+import { signup } from "../controllers/auth/signup";
+import { login } from "../controllers/auth/login";
+import { tokenRefresh } from "../controllers/auth/tokenRefresh";
+import { changePassword } from "../controllers/auth/changePassword";
+import { verifyEmail, sendEmail } from "../controllers/auth/verifyEmail";
+import { getProfile, addProfile } from "../controllers/profile";
+
 import {
-  signupController,
-  loginController,
-  emailVerificationController,
-  changePasswordController,
-  refreshTokenController,
-  aboutController,
-  friendlistController,
-  friendRequestController,
-  postController,
-} from "../controllers";
+  createRequest,
+  cancelRequest,
+  addFriend,
+  friendlist,
+  removeFriend,
+} from "../controllers/friend";
+
+import { createPost, getPost, deletePost } from "../controllers/post";
+
 import { auth } from "../middleware";
 
 const router = express.Router();
 
-router.post(
-  "/signup",
-  signupController.signup,
-  emailVerificationController.sendEmail
-);
-router.post("/login", loginController.login);
-router.post("/forgotpassword", emailVerificationController.sendEmail);
-router.get("/verify/:emailtoken", emailVerificationController.verifyEmail);
-router.post("/changepassword", auth, changePasswordController.changePassword);
-router.get("/refreshtoken", refreshTokenController.refreshToken);
+router.post("/signup", signup, sendEmail);
+router.get("/verify/:emailtoken", verifyEmail);
+router.post("/login", login);
+router.post("/forgotpassword", sendEmail);
+router.post("/changepassword", auth, changePassword);
+router.get("/tokenrefresh", tokenRefresh);
 
-router.post("/addprofiledetail", auth, aboutController.addProfileDetails);
-router.get("/getprofiledetail", auth, aboutController.getProfileDetail);
-router.get("/friendlist", auth, friendlistController.friendlist);
+router.post("/addprofile", auth, addProfile);
+router.get("/getprofile", auth, getProfile);
 
-router.post(
-  "/createfriendrequest",
-  auth,
-  friendRequestController.createRequest
-);
-router.post(
-  "/cancelfriendrequest",
-  auth,
-  friendRequestController.cancelRequest
-);
-router.post("/addfriend", auth, friendRequestController.addFriend);
+router.get("/friendlist", auth, friendlist);
+router.post("/createfriendrequest", auth, createRequest);
+router.post("/cancelfriendrequest", auth, cancelRequest);
+router.post("/addfriend", auth, addFriend);
+router.post("/removefriend", auth, removeFriend);
 
-router.get("/post", auth, postController.getPost);
-router.post("/createpost", auth, postController.createPost);
-router.delete("/deletepost", auth, postController.deletePost);
+router.get("/post", auth, getPost);
+router.post("/createpost", auth, createPost);
+router.delete("/deletepost", auth, deletePost);
 
 export default router;

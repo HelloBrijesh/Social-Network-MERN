@@ -12,4 +12,15 @@ const postSchema = new mongoose.Schema({
   disLikes: [Number],
 });
 
-export default mongoose.model("Post", postSchema, "posts");
+const virtual = postSchema.virtual("id");
+virtual.get(function () {
+  return this._id;
+});
+postSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+  },
+});
+export const Post = mongoose.model("Post", postSchema, "posts");

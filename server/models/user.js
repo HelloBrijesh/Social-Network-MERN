@@ -22,4 +22,16 @@ const userSchema = new mongoose.Schema({
   verified: { type: Boolean, default: false },
 });
 
-export default mongoose.model("User", userSchema, "users");
+const virtual = userSchema.virtual("id");
+virtual.get(function () {
+  return this._id;
+});
+userSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+  },
+});
+
+export const User = mongoose.model("User", userSchema, "users");
