@@ -1,7 +1,9 @@
 import { UserModel, EmailTokenModel, RefreshTokenModel } from "../../models";
 import { customErrorHandler, jwtService } from "../../services";
 import {
+  SERVER_URL,
   JWT_REFRESH_SECRET,
+  REFRESH_TOKEN_EXIRY,
   EMAIL_PORT,
   USER,
   PASS,
@@ -9,6 +11,7 @@ import {
   SERVICE,
 } from "../../config";
 import nodemailer from "nodemailer";
+import bcrypt from "bcrypt";
 
 const emailVerificationController = {
   async sendEmail(req, res, next) {
@@ -34,7 +37,7 @@ const emailVerificationController = {
           firstName: existingUser.firstName,
         },
         JWT_REFRESH_SECRET,
-        "30d"
+        REFRESH_TOKEN_EXIRY
       );
 
       const COST_FACTOR = 10;
@@ -65,7 +68,7 @@ const emailVerificationController = {
         text: `Hi! There, You have recently visited 
            our Bookstore website and entered your email.
            Please follow the given link to verify your email
-           http://localhost:5173/verifyemail/${emailVerificationToken}
+           ${SERVER_URL}/api/verify/${emailVerificationToken}
            Thanks`,
       };
 
@@ -123,7 +126,7 @@ const emailVerificationController = {
     let refresh_token;
 
     try {
-      const { _id, role } = await UserModel.findOne({
+      const { _id } = await UserModel.findOne({
         _id: verificationDetail.userId,
       });
       // Creating Tokens
@@ -131,10 +134,9 @@ const emailVerificationController = {
       refresh_token = jwtService.sign(
         {
           _id,
-          firstName,
         },
         JWT_REFRESH_SECRET,
-        "7d"
+        REFRESH_TOKEN_EXIRY
       );
 
       // Adding refresh_token in Database

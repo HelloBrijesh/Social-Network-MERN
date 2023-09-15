@@ -21,11 +21,12 @@ router.post(
 );
 router.post("/login", loginController.login);
 router.post("/forgotpassword", emailVerificationController.sendEmail);
-router.post("/verify/:emailtoken", emailVerificationController.verifyEmail);
+router.get("/verify/:emailtoken", emailVerificationController.verifyEmail);
 router.post("/changepassword", auth, changePasswordController.changePassword);
 router.get("/refreshtoken", refreshTokenController.refreshToken);
 
-router.get("/about", auth, aboutController.about);
+router.post("/addprofiledetail", auth, aboutController.addProfileDetails);
+router.get("/getprofiledetail", auth, aboutController.getProfileDetail);
 router.get("/friendlist", auth, friendlistController.friendlist);
 
 router.post(
@@ -38,9 +39,10 @@ router.post(
   auth,
   friendRequestController.cancelRequest
 );
-router.post("/addfriend", auth, friendRequestController.addRequest);
+router.post("/addfriend", auth, friendRequestController.addFriend);
 
+router.get("/post", auth, postController.getPost);
 router.post("/createpost", auth, postController.createPost);
-router.post("/deletepost", auth, postController.deletePost);
+router.delete("/deletepost", auth, postController.deletePost);
 
 export default router;
