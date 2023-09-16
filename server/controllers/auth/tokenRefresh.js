@@ -22,7 +22,7 @@ export const tokenRefresh = async (req, res, next) => {
     });
 
     if (!verifiedRefreshToken) {
-      return next(customErrorHandler.unAuthorised("Invalid Refresh Token"));
+      return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
     }
   } catch (error) {
     return next(error);
@@ -33,7 +33,7 @@ export const tokenRefresh = async (req, res, next) => {
     const tokenData = jwt.verify(cookieRefreshtoken, JWT_REFRESH_SECRET);
     userId = tokenData.userId;
   } catch (error) {
-    return next(customErrorHandler.unAuthorised("Invalid Refresh Token"));
+    return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
   }
 
   // Finding the user from database
