@@ -1,4 +1,4 @@
-import { Post } from "../models/post";
+import { Post } from "../models/Post";
 
 export const createPost = async (req, res, next) => {
   const userId = req.userId;

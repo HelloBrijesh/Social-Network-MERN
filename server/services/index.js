@@ -1,1 +1,1 @@
-export { default as customErrorHandler } from "./customErrorHandler";
+export { default as CustomErrorHandler } from "./CustomErrorHandler";

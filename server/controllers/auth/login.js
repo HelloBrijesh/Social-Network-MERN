@@ -1,9 +1,9 @@
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { RefreshToken } from "../../models/refreshToken";
-import { User } from "../../models/user";
-import { customErrorHandler } from "../../services";
+import { RefreshToken } from "../../models/RefreshToken";
+import { User } from "../../models/User";
+import { CustomErrorHandler } from "../../services";
 import {
   JWT_REFRESH_SECRET,
   JWT_ACCESS_SECRET,
@@ -31,7 +31,7 @@ export const login = async (req, res, next) => {
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
-    if (!existingUser) return next(customErrorHandler.wrongCredentials());
+    if (!existingUser) return next(CustomErrorHandler.wrongCredentials());
   } catch (error) {
     return next(error);
   }
@@ -43,8 +43,8 @@ export const login = async (req, res, next) => {
       password,
       existingUser.password
     );
-    if (!verifyPassword) return next(customErrorHandler.wrongCredentials());
-    if (!existingUser.verified) return next(customErrorHandler.notVerified());
+    if (!verifyPassword) return next(CustomErrorHandler.wrongCredentials());
+    if (!existingUser.verified) return next(CustomErrorHandler.notVerified());
   } catch (error) {
     return next(error);
   }

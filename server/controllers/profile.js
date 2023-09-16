@@ -1,4 +1,4 @@
-import { User } from "../models/user";
+import { User } from "../models/User";
 
 export const getProfile = async (req, res, next) => {
   const userId = req.userId;

@@ -1,6 +1,6 @@
-import { RefreshToken } from "../../models/refreshToken";
-import { User } from "../../models/user";
-import { customErrorHandler } from "../../services";
+import { RefreshToken } from "../../models/RefreshToken";
+import { User } from "../../models/User";
+import { CustomErrorHandler } from "../../services";
 import {
   JWT_REFRESH_SECRET,
   REFRESH_TOKEN_EXIRY,
@@ -12,7 +12,7 @@ import jwt from "jsonwebtoken";
 export const tokenRefresh = async (req, res, next) => {
   let cookieToken = req.headers.cookie;
   if (!cookieToken) {
-    return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
+    return next(CustomErrorHandler.unAuthorized("Invalid Refresh Token"));
   }
   const cookieRefreshtoken = cookieToken.split(" ")[1];
 
@@ -22,7 +22,7 @@ export const tokenRefresh = async (req, res, next) => {
     });
 
     if (!verifiedRefreshToken) {
-      return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
+      return next(CustomErrorHandler.unAuthorized("Invalid Refresh Token"));
     }
   } catch (error) {
     return next(error);
@@ -33,7 +33,7 @@ export const tokenRefresh = async (req, res, next) => {
     const tokenData = jwt.verify(cookieRefreshtoken, JWT_REFRESH_SECRET);
     userId = tokenData.userId;
   } catch (error) {
-    return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
+    return next(CustomErrorHandler.unAuthorized("Invalid Refresh Token"));
   }
 
   // Finding the user from database
@@ -41,7 +41,7 @@ export const tokenRefresh = async (req, res, next) => {
   try {
     existingUser = await User.findOne({ id: userId });
     if (!existingUser)
-      return next(customErrorHandler.unAuthorized("No user found!"));
+      return next(CustomErrorHandler.unAuthorized("No user found!"));
   } catch (error) {
     return next(error);
   }

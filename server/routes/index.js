@@ -1,11 +1,11 @@
 import express from "express";
 
-import { signup } from "../controllers/auth/signup";
-import { login } from "../controllers/auth/login";
-import { tokenRefresh } from "../controllers/auth/tokenRefresh";
-import { changePassword } from "../controllers/auth/changePassword";
-import { verifyEmail, sendEmail } from "../controllers/auth/verifyEmail";
-import { getProfile, addProfile } from "../controllers/profile";
+import { signup } from "../controllers/auth/Signup";
+import { login } from "../controllers/auth/Login";
+import { tokenRefresh } from "../controllers/auth/TokenRefresh";
+import { changePassword } from "../controllers/auth/ChangePassword";
+import { verifyEmail, sendEmail } from "../controllers/auth/VerifyEmail";
+import { getProfile, addProfile } from "../controllers/Profile";
 
 import {
   createRequest,
@@ -13,9 +13,9 @@ import {
   addFriend,
   friendlist,
   removeFriend,
-} from "../controllers/friend";
+} from "../controllers/Friend";
 
-import { createPost, getPost, deletePost } from "../controllers/post";
+import { createPost, getPost, deletePost } from "../controllers/Post";
 
 import { auth } from "../middleware";
 

@@ -1,7 +1,7 @@
-import { User } from "../../models/user";
-import { EmailToken } from "../../models/emailToken";
-import { RefreshToken } from "../../models/refreshToken";
-import { customErrorHandler } from "../../services";
+import { User } from "../../models/User";
+import { EmailToken } from "../../models/EmailToken";
+import { RefreshToken } from "../../models/RefreshToken";
+import { CustomErrorHandler } from "../../services";
 import {
   SERVER_URL,
   JWT_ACCESS_SECRET,
@@ -26,7 +26,7 @@ export const sendEmail = async (req, res, next) => {
   try {
     existingUser = await User.findOne({ email: email });
     if (!existingUser) {
-      return next(customErrorHandler.notFound("User Not Found"));
+      return next(CustomErrorHandler.notFound("User Not Found"));
     }
   } catch (error) {
     return next(error);
@@ -110,7 +110,7 @@ export const verifyEmail = async (req, res, next) => {
     });
 
     if (!verificationDetail) {
-      return next(customErrorHandler.notFound("Token does not exists"));
+      return next(CustomErrorHandler.notFound("Token does not exists"));
     }
   } catch (error) {
     return next(error);
