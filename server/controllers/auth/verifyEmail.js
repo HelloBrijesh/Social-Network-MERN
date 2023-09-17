@@ -1,18 +1,18 @@
-import { User } from "../../models/User";
-import { EmailToken } from "../../models/EmailToken";
-import { RefreshToken } from "../../models/RefreshToken";
-import { CustomErrorHandler } from "../../services";
+import { User } from "../../models/user";
+import { EmailToken } from "../../models/emailToken";
+import { RefreshToken } from "../../models/refreshToken";
+import { customErrorHandler } from "../../services";
 import {
   SERVER_URL,
-  JWT_ACCESS_SECRET,
-  ACCESS_TOKEN_EXIRY,
-  JWT_REFRESH_SECRET,
-  REFRESH_TOKEN_EXIRY,
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRY,
+  REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_EXPIRY,
+  EMAIL_SERVICE,
   EMAIL_PORT,
-  USER,
-  PASS,
-  SECURE,
-  SERVICE,
+  EMAIL_SECURE,
+  EMAIL_USERID,
+  EMAIL_PASSWORD,
 } from "../../config";
 import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
@@ -26,7 +26,7 @@ export const sendEmail = async (req, res, next) => {
   try {
     existingUser = await User.findOne({ email: email });
     if (!existingUser) {
-      return next(CustomErrorHandler.notFound("User Not Found"));
+      return next(customErrorHandler.notFound("User Not Found"));
     }
   } catch (error) {
     return next(error);
@@ -39,8 +39,8 @@ export const sendEmail = async (req, res, next) => {
       {
         userId: existingUser.id,
       },
-      JWT_REFRESH_SECRET,
-      REFRESH_TOKEN_EXIRY
+      REFRESH_TOKEN_SECRET,
+      { expiresIn: REFRESH_TOKEN_EXPIRY }
     );
 
     const COST_FACTOR = 10;
@@ -55,12 +55,12 @@ export const sendEmail = async (req, res, next) => {
   // send emailtoken to user email ID
   try {
     const transporter = nodemailer.createTransport({
-      service: SERVICE,
-      secure: SECURE,
+      service: EMAIL_SERVICE,
+      secure: EMAIL_SECURE,
       port: EMAIL_PORT,
       auth: {
-        user: USER,
-        pass: PASS,
+        user: EMAIL_USERID,
+        pass: EMAIL_PASSWORD,
       },
     });
 
@@ -100,17 +100,17 @@ export const sendEmail = async (req, res, next) => {
 };
 
 export const verifyEmail = async (req, res, next) => {
-  const emailVerificationToken = req.params.emailtoken;
+  const emailToken = req.params.emailtoken;
   let verificationDetail;
 
   // find token
   try {
     verificationDetail = await EmailToken.findOne({
-      emailToken: emailVerificationToken,
+      emailToken: emailToken,
     });
 
     if (!verificationDetail) {
-      return next(CustomErrorHandler.notFound("Token does not exists"));
+      return next(customErrorHandler.notFound("Token does not exists"));
     }
   } catch (error) {
     return next(error);
@@ -127,20 +127,16 @@ export const verifyEmail = async (req, res, next) => {
 
   let access_token;
   let refresh_token;
-
   try {
-    const existingUser = await User.findOne({
-      id: verificationDetail.userId,
-    });
+    const existingUser = await User.findById(verificationDetail.userId);
     let userId = existingUser.id;
-    console.log(userId);
     // Creating Tokens
-    access_token = jwt.sign({ userId }, JWT_ACCESS_SECRET, ACCESS_TOKEN_EXIRY);
-    refresh_token = jwt.sign(
-      { userId },
-      JWT_REFRESH_SECRET,
-      REFRESH_TOKEN_EXIRY
-    );
+    access_token = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
+      expiresIn: ACCESS_TOKEN_EXPIRY,
+    });
+    refresh_token = jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
+      expiresIn: REFRESH_TOKEN_EXPIRY,
+    });
 
     // Adding refresh_token in Database
     await RefreshToken.create({ savedRefreshToken: refresh_token });

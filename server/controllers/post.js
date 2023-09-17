@@ -1,4 +1,4 @@
-import { Post } from "../models/Post";
+import { Post } from "../models/post";
 
 export const createPost = async (req, res, next) => {
   const userId = req.userId;
@@ -24,7 +24,7 @@ export const deletePost = async (req, res, next) => {
   const postId = req.body.postId;
 
   try {
-    await Post.deleteOne({ id: postId });
+    await Post.findByIdAndDelete(postId);
   } catch (error) {
     return next(error);
   }
@@ -32,7 +32,7 @@ export const deletePost = async (req, res, next) => {
   res.json({ status: "ok" });
 };
 
-export const getPost = async (req, res, next) => {
+export const getAllPost = async (req, res, next) => {
   const userId = req.userId;
 
   let allPost;

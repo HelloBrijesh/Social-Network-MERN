@@ -1,7 +1,7 @@
 import Joi from "joi";
 import bcrypt from "bcrypt";
-import { User } from "../../models/User";
-import { CustomErrorHandler } from "../../services";
+import { User } from "../../models/user";
+import { customErrorHandler } from "../../services";
 
 export const signup = async (req, res, next) => {
   const signupSchema = Joi.object({
@@ -27,7 +27,7 @@ export const signup = async (req, res, next) => {
     const userExist = await User.exists({ email: email });
     if (userExist) {
       return next(
-        CustomErrorHandler.alreadyExists("This email is already exists")
+        customErrorHandler.alreadyExists("This email is already exists")
       );
     }
   } catch (error) {

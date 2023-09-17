@@ -1,14 +1,14 @@
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { RefreshToken } from "../../models/RefreshToken";
-import { User } from "../../models/User";
-import { CustomErrorHandler } from "../../services";
+import { RefreshToken } from "../../models/refreshToken";
+import { User } from "../../models/user";
+import { customErrorHandler } from "../../services";
 import {
-  JWT_REFRESH_SECRET,
-  JWT_ACCESS_SECRET,
-  REFRESH_TOKEN_EXIRY,
-  ACCESS_TOKEN_EXIRY,
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRY,
+  REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_EXPIRY,
 } from "../../config";
 
 export const login = async (req, res, next) => {
@@ -31,7 +31,7 @@ export const login = async (req, res, next) => {
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
-    if (!existingUser) return next(CustomErrorHandler.wrongCredentials());
+    if (!existingUser) return next(customErrorHandler.wrongCredentials());
   } catch (error) {
     return next(error);
   }
@@ -43,8 +43,8 @@ export const login = async (req, res, next) => {
       password,
       existingUser.password
     );
-    if (!verifyPassword) return next(CustomErrorHandler.wrongCredentials());
-    if (!existingUser.verified) return next(CustomErrorHandler.notVerified());
+    if (!verifyPassword) return next(customErrorHandler.wrongCredentials());
+    if (!existingUser.verified) return next(customErrorHandler.notVerified());
   } catch (error) {
     return next(error);
   }
@@ -58,13 +58,13 @@ export const login = async (req, res, next) => {
       {
         userId: existingUser.id,
       },
-      JWT_ACCESS_SECRET,
-      ACCESS_TOKEN_EXIRY
+      ACCESS_TOKEN_SECRET,
+      { expiresIn: ACCESS_TOKEN_EXPIRY }
     );
     refresh_token = jwt.sign(
       { userId: existingUser.id },
-      JWT_REFRESH_SECRET,
-      REFRESH_TOKEN_EXIRY
+      REFRESH_TOKEN_SECRET,
+      { expiresIn: REFRESH_TOKEN_EXPIRY }
     );
 
     await RefreshToken.create({ savedRefreshToken: refresh_token });

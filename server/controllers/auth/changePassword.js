@@ -1,7 +1,7 @@
 import Joi from "joi";
 import bcrypt from "bcrypt";
-import { User } from "../../models/User";
-import { CustomErrorHandler } from "../../services";
+import { User } from "../../models/user";
+import { customErrorHandler } from "../../services";
 
 export const changePassword = async (req, res, next) => {
   // Validate the request
@@ -27,8 +27,8 @@ export const changePassword = async (req, res, next) => {
   // Find the user from database
   let existingUser;
   try {
-    existingUser = await User.findOne({ id: userId });
-    if (!existingUser) return next(CustomErrorHandler.wrongCredentials());
+    existingUser = await User.findById(userId);
+    if (!existingUser) return next(customErrorHandler.wrongCredentials());
   } catch (error) {
     return next(error);
   }

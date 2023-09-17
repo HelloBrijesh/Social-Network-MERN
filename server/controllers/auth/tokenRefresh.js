@@ -1,18 +1,18 @@
-import { RefreshToken } from "../../models/RefreshToken";
-import { User } from "../../models/User";
-import { CustomErrorHandler } from "../../services";
+import { RefreshToken } from "../../models/refreshToken";
+import { User } from "../../models/user";
+import { customErrorHandler } from "../../services";
 import {
-  JWT_REFRESH_SECRET,
-  REFRESH_TOKEN_EXIRY,
-  JWT_ACCESS_SECRET,
-  ACCESS_TOKEN_EXIRY,
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRY,
+  REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_EXPIRY,
 } from "../../config";
 import jwt from "jsonwebtoken";
 
 export const tokenRefresh = async (req, res, next) => {
   let cookieToken = req.headers.cookie;
   if (!cookieToken) {
-    return next(CustomErrorHandler.unAuthorized("Invalid Refresh Token"));
+    return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
   }
   const cookieRefreshtoken = cookieToken.split(" ")[1];
 
@@ -22,7 +22,7 @@ export const tokenRefresh = async (req, res, next) => {
     });
 
     if (!verifiedRefreshToken) {
-      return next(CustomErrorHandler.unAuthorized("Invalid Refresh Token"));
+      return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
     }
   } catch (error) {
     return next(error);
@@ -30,18 +30,18 @@ export const tokenRefresh = async (req, res, next) => {
 
   let userId;
   try {
-    const tokenData = jwt.verify(cookieRefreshtoken, JWT_REFRESH_SECRET);
+    const tokenData = jwt.verify(cookieRefreshtoken, REFRESH_TOKEN_SECRET);
     userId = tokenData.userId;
   } catch (error) {
-    return next(CustomErrorHandler.unAuthorized("Invalid Refresh Token"));
+    return next(customErrorHandler.unAuthorized("Invalid Refresh Token"));
   }
 
   // Finding the user from database
   let existingUser;
   try {
-    existingUser = await User.findOne({ id: userId });
+    existingUser = await User.findById(userId);
     if (!existingUser)
-      return next(CustomErrorHandler.unAuthorized("No user found!"));
+      return next(customErrorHandler.unAuthorized("No user found!"));
   } catch (error) {
     return next(error);
   }
@@ -50,16 +50,12 @@ export const tokenRefresh = async (req, res, next) => {
   let access_token;
   let refresh_token;
   try {
-    access_token = jwt.sign(
-      { id: userId },
-      JWT_ACCESS_SECRET,
-      ACCESS_TOKEN_EXIRY
-    );
-    refresh_token = jwt.sign(
-      { id: userId },
-      JWT_REFRESH_SECRET,
-      REFRESH_TOKEN_EXIRY
-    );
+    access_token = jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
+      expiresIn: ACCESS_TOKEN_EXPIRY,
+    });
+    refresh_token = jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
+      expiresIn: REFRESH_TOKEN_EXPIRY,
+    });
 
     // Adding new refresh_token in database
     await RefreshToken.create({ savedRefreshToken: refresh_token });

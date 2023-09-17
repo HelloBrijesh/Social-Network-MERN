@@ -1,4 +1,4 @@
-import { User } from "../models/User";
+import { User } from "../models/user";
 
 export const getProfile = async (req, res, next) => {
   const userId = req.userId;
@@ -6,7 +6,7 @@ export const getProfile = async (req, res, next) => {
   let existingUser;
   let profileDetail;
   try {
-    existingUser = await User.findOne({ id: userId });
+    existingUser = await User.findById(userId);
     profileDetail = existingUser.about;
   } catch (error) {
     return next(error);

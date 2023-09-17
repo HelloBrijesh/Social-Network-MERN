@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { JWT_ACCESS_SECRET } from "../config";
+import { ACCESS_TOKEN_SECRET } from "../config";
 import { customErrorHandler } from "../services";
 
 const auth = async (req, res, next) => {
@@ -12,7 +12,7 @@ const auth = async (req, res, next) => {
 
   //Verifying the access token
   try {
-    const { userId } = jwt.verify(authAccessToken, JWT_ACCESS_SECRET);
+    const { userId } = jwt.verify(authAccessToken, ACCESS_TOKEN_SECRET);
 
     req.userId = userId;
     next();
