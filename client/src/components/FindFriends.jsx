@@ -1,9 +1,5 @@
 const FindFriends = () => {
-  return (
-    <>
-      <div>Find Friends</div>
-    </>
-  );
+  return <div>FindFriends</div>;
 };
 
 export default FindFriends;

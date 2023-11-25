@@ -13,30 +13,12 @@ const Navbar = () => {
         </div>
 
         <ul className="flex justify-around basis-1/5">
-          <NavLink
-            to="/user/"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-blue border-b-4 border-b-blue"
-                : ""
-            }
-          >
+          <NavLink to="/user/">
             <li className="p-5">
               <FontAwesomeIcon icon={faHouse} />
             </li>
           </NavLink>
-          <NavLink
-            to="/user/friends"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-blue border-b-4 border-b-blue"
-                : ""
-            }
-          >
+          <NavLink to="/user/friends">
             <li className="p-5">
               <FontAwesomeIcon icon={faUserGroup} />
             </li>
@@ -48,7 +30,7 @@ const Navbar = () => {
             <FontAwesomeIcon icon={faBell} />
           </div>
           <img
-            src="profileImage.jpg"
+            src="/profileImage.jpg"
             alt=""
             className="w-[30px] h-[30px] rounded-full mx-5"
           />
