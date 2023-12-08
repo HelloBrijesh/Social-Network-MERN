@@ -2,23 +2,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <>
       <nav className="flex justify-between items-center shadow-md fixed w-full z-10 bg-white">
         <div className="text-blue text-2xl font-bold ms-4 basis-2/5">
-          <Link to="/user/"> Social Network </Link>
+          <NavLink to="/"> Social Network </NavLink>
         </div>
 
         <ul className="flex justify-around basis-1/5">
-          <NavLink to="/user/">
+          <NavLink to="">
             <li className="p-5">
               <FontAwesomeIcon icon={faHouse} />
             </li>
           </NavLink>
-          <NavLink to="/user/friends">
+          <NavLink to="/friends/">
             <li className="p-5">
               <FontAwesomeIcon icon={faUserGroup} />
             </li>

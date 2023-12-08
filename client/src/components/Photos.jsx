@@ -1,5 +1,9 @@
 const Photos = () => {
-  return <div>Photos</div>;
+  return (
+    <div className="">
+      <div></div>
+    </div>
+  );
 };
 
 export default Photos;
