@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 const CreatePost = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
 
@@ -37,8 +39,12 @@ const CreatePost = ({ isVisible, onClose }) => {
                 placeholder="What's on your mind, Brijesh ?"
               ></textarea>
             </div>
+            <div className="flex justify-between py-5 px-3 mb-5 border rounded-lg">
+              <p className="">Add to your post</p>
+              <FontAwesomeIcon icon={faImage} className="text-2xl" />
+            </div>
             <div className="text-center">
-              <button className="w-3/5 p-3 bg-blue font-bold text-white text-lg border border-none rounded-lg">
+              <button className="w-full p-3 bg-blue font-bold text-white text-lg border border-none rounded-lg">
                 Post
               </button>
             </div>

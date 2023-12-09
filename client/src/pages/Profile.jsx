@@ -34,7 +34,7 @@ const Profile = () => {
             </ul>
           </div>
           <hr className="my-5"></hr>
-          <div className="">
+          <div className="pt-10 pb-28">
             <Outlet />
           </div>
         </div>

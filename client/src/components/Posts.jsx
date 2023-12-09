@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 const Posts = () => {
   // const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +64,22 @@ const Posts = () => {
       <div className="p-5 flex justify-around">
         <span>Like</span>
         <span>Comment</span>
+      </div>
+      <hr></hr>
+      <div className="flex items-center px-3 py-2 gap-3">
+        <img
+          src="/profileImage.jpg"
+          alt=""
+          className="w-[30px] h-[30px] rounded-full"
+        />
+        <input
+          type="text"
+          placeholder="Write a comment..."
+          className="focus:outline-none font-bolder text-start p-2 bg-white-smoke w-full rounded-3xl text-slate-500"
+        />
+        <button className="">
+          <FontAwesomeIcon icon={faRightToBracket} />
+        </button>
       </div>
     </div>
   );
