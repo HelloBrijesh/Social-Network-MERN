@@ -55,16 +55,21 @@ const SignUpForm = ({ isVisible, onClose }) => {
               <p>Gender</p>
               <div className="flex gap-5">
                 <div>
-                  <label for="male" className="me-5">
+                  <label htmlFor="male" className="me-5">
                     Male
                   </label>
-                  <input type="radio" id="html" name="gender" value="male" />
+                  <input type="radio" id="male" name="gender" value="male" />
                 </div>
                 <div>
-                  <label for="female" className="me-5">
+                  <label htmlFor="female" className="me-5">
                     Female
                   </label>
-                  <input type="radio" id="html" name="gender" value="female" />
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="female"
+                  />
                 </div>
               </div>
             </div>

@@ -5,8 +5,20 @@ export default {
     extend: {
       colors: {
         blue: "#1877F2",
-        "white-smoke": "#F6F6F6",
+        "white-smoke": "#f0f2f5",
       },
+      fontFamily: {
+        custom: [
+          "Segoe UI Historic",
+          "Segoe UI",
+          "Helvetica",
+          "Arial",
+          "sans-serif",
+        ],
+      },
+    },
+    backgroundImage: {
+      "cover-image": "url('/profileImage.jpg')",
     },
   },
   plugins: [],

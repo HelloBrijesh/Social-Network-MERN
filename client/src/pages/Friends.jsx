@@ -1,23 +1,23 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 const Friends = () => {
   return (
     <>
-      <div className="">
-        <div className="w-1/6 border h-screen fixed">
+      <div className="relative">
+        <div className="w-1/6 h-screen fixed shadow-[-5px_0_5px_-5px_#000000] bg-white">
           <ul className="mt-10 ms-5">
-            <li className="">
-              <NavLink to="/user/friends/">Friends</NavLink>
+            <NavLink to="/friends/">
+              <li className="">Friends</li>
+            </NavLink>
+            <li className="mt-3">
+              <NavLink to="/friends/friend-request/">Friends Requests</NavLink>
             </li>
             <li className="mt-3">
-              <NavLink to="friend-request">Friends Requests</NavLink>
-            </li>
-            <li className="mt-3">
-              <NavLink to="find-friends">Find Friends</NavLink>
+              <NavLink to="/friends/find-friends/">Find Friends</NavLink>
             </li>
           </ul>
         </div>
-        <div className="absolute right-0 w-5/6 pt-10">
+        <div className="flex justify-center min-h-screen pt-10 bg-white-smoke">
           <Outlet />
         </div>
       </div>
