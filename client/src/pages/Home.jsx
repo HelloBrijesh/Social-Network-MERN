@@ -1,9 +1,25 @@
 import { Link } from "react-router-dom";
 import POSTS from "../components/Posts";
 import CreatePost from "../components/CreatePost";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUserContext } from "../context/UserContext";
+import { axiosInstance } from "../services/api-client";
 const Home = () => {
   const [showCreatePost, setCreatePost] = useState(false);
+  const { userDetails } = useUserContext();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await axiosInstance.post(
+        "/users",
+        {},
+        { withCredentials: true }
+      );
+      console.log(res);
+    };
+
+    getUser();
+  }, []);
 
   return (
     <>

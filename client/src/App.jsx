@@ -10,11 +10,13 @@ import Timeline from "./components/Timeline";
 import About from "./components/About";
 import Photos from "./components/Photos";
 import NotFound from "./pages/NotFound";
+import VerifyEmail from "./pages/VerifyEmail";
 
 const App = () => {
   return (
     <>
       <Routes>
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/" element={<LandingPage />}>
           <Route path="" element={<Home />} />
           <Route path="friends" element={<Friends />}>

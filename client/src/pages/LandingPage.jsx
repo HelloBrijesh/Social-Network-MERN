@@ -1,10 +1,14 @@
-import { useState } from "react";
 import Login from "./Login";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useUserContext } from "../context/UserContext";
+import { useEffect } from "react";
+import axios from "axios";
+import { axiosInstance } from "../services/api-client";
 const LandingPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  if (!isLoggedIn) {
+  const { userDetails } = useUserContext();
+
+  if (!userDetails) {
     return <Login></Login>;
   }
   return (
