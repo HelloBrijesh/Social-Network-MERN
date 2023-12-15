@@ -1,5 +1,24 @@
+import { useFormik } from "formik";
+import useSignup from "../hooks/useSignup";
+
 const SignUpForm = ({ isVisible, onClose }) => {
+  const { isError, submitting, isSignedup, signup } = useSignup();
+  const { handleSubmit, errors, touched, getFieldProps } = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      dateOfBirth: "",
+      gender: "",
+    },
+    onSubmit: async (values) => {
+      await signup(values);
+    },
+  });
+
   if (!isVisible) return null;
+
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
@@ -16,40 +35,65 @@ const SignUpForm = ({ isVisible, onClose }) => {
               X
             </button>
           </div>
-          <form className="p-5">
+          {isError && (
+            <p className="text-center py-3 text-red-500">Error...{isError}</p>
+          )}
+          {submitting && (
+            <p className="text-center py-3 text-red-500">Loading...</p>
+          )}
+          {isSignedup && (
+            <p className="text-center py-3">
+              Registered Successfully please click on the link you received in
+              email to varify the account
+            </p>
+          )}
+          <form className="p-5" onSubmit={handleSubmit}>
             <div className="mb-4 flex justify-between">
-              <div className="border p-2 rounded-lg">
+              <div className="">
                 <input
                   placeholder="First Name"
                   type="text"
-                  className="focus:outline-none"
+                  id="firstName"
+                  className="border p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-600"
+                  {...getFieldProps("firstName")}
                 />
               </div>
-              <div className="border p-2 rounded-lg">
+              <div className="">
                 <input
                   placeholder="Last Name"
                   type="text"
-                  className="focus:outline-none"
+                  id="lastName"
+                  className="border p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-600"
+                  {...getFieldProps("lastName")}
                 />
               </div>
             </div>
-            <div className="mb-4 border p-2 rounded-lg">
+            <div className="">
               <input
-                placeholder="Mobile number or email"
-                type="tel"
-                className="focus:outline-none"
+                placeholder="Enter email"
+                type="email"
+                id="email"
+                className="w-full mb-4 border p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-600"
+                {...getFieldProps("email")}
               />
             </div>
-            <div className="mb-4 border p-2 rounded-lg">
+            <div className="">
               <input
-                placeholder="New Password"
+                placeholder="Password"
                 type="password"
-                className="focus:outline-none"
+                id="password"
+                className="w-full mb-4 border p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-600"
+                {...getFieldProps("password")}
               />
             </div>
             <div className="mb-4">
               <p>Birthday</p>
-              <input type="date" className="focus:outline-none"></input>
+              <input
+                type="date"
+                id="dateOfBirth"
+                className="focus:outline-none"
+                {...getFieldProps("dateOfBirth")}
+              ></input>
             </div>
             <div className="mb-5">
               <p>Gender</p>
@@ -58,7 +102,14 @@ const SignUpForm = ({ isVisible, onClose }) => {
                   <label htmlFor="male" className="me-5">
                     Male
                   </label>
-                  <input type="radio" id="male" name="gender" value="male" />
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    {...getFieldProps("gender")}
+                    checked={getFieldProps("gender").value === "male"}
+                    value="male"
+                  />
                 </div>
                 <div>
                   <label htmlFor="female" className="me-5">
@@ -68,6 +119,8 @@ const SignUpForm = ({ isVisible, onClose }) => {
                     type="radio"
                     id="female"
                     name="gender"
+                    {...getFieldProps("gender")}
+                    checked={getFieldProps("gender").value === "female"}
                     value="female"
                   />
                 </div>

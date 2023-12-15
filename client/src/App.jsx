@@ -10,11 +10,17 @@ import Timeline from "./components/Timeline";
 import About from "./components/About";
 import Photos from "./components/Photos";
 import NotFound from "./pages/NotFound";
+import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   return (
     <>
       <Routes>
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/" element={<LandingPage />}>
           <Route path="" element={<Home />} />
           <Route path="friends" element={<Friends />}>

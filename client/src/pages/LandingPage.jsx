@@ -1,10 +1,11 @@
-import { useState } from "react";
 import Login from "./Login";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useUserContext } from "../context/UserContext";
 const LandingPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  if (!isLoggedIn) {
+  const { loginStatus } = useUserContext();
+
+  if (!loginStatus) {
     return <Login></Login>;
   }
   return (

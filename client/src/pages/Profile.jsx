@@ -17,7 +17,7 @@ const Profile = () => {
             </p>
           </div>
           <hr className="my-5"></hr>
-          <div>
+          <div className="flex flex-col items-center">
             <ul className="flex gap-5">
               <li className="">
                 <NavLink to="/profile/">Timeline</NavLink>
