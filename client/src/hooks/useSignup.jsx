@@ -1,22 +1,22 @@
-import { axiosInstance } from "../services/api-client.js";
 import { useState } from "react";
-
+import axios from "axios";
 const useSignup = () => {
   const [submitting, setIsSubmitting] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isSignedup, setSignedup] = useState(false);
+  const [isError, setIsError] = useState(null);
+  const [isSignedup, setIsSignedup] = useState(false);
 
   const signup = async (values) => {
     setIsSubmitting(true);
     setIsError(false);
 
     try {
-      await axiosInstance.post("/auth/signup", values, {
-        withCredentials: true,
-      });
-      setSignedup(true);
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/signup`,
+        values
+      );
+      setIsSignedup(true);
     } catch (error) {
-      setIsError(true);
+      setIsError(error.response.data.message);
     } finally {
       setIsSubmitting(false);
     }

@@ -1,8 +1,9 @@
 import { useFormik } from "formik";
 import useLogin from "../hooks/useLogin";
+import { Link } from "react-router-dom";
 
 const LogInForm = () => {
-  const { isError, submitting, loggedin, login } = useLogin();
+  const { isError, submitting, login } = useLogin();
 
   const { handleSubmit, errors, touched, getFieldProps } = useFormik({
     initialValues: {
@@ -16,6 +17,8 @@ const LogInForm = () => {
 
   return (
     <>
+      {isError && <p className="text-center mt-5 text-red-500">{isError}</p>}
+
       <form className="p-5" onSubmit={handleSubmit}>
         <div className="">
           <input
@@ -43,7 +46,9 @@ const LogInForm = () => {
             Log In
           </button>
         </div>
-        <p className="mb-5 text-center">Forgot password?</p>
+        <p className="mb-5 text-center">
+          <Link to="/forgot-password">Forgot password?</Link>
+        </p>
         <hr className="my-5" />
       </form>
     </>

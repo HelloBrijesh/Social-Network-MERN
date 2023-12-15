@@ -35,7 +35,9 @@ const SignUpForm = ({ isVisible, onClose }) => {
               X
             </button>
           </div>
-          {isError && <p className="text-center py-3 text-red-500">Error...</p>}
+          {isError && (
+            <p className="text-center py-3 text-red-500">Error...{isError}</p>
+          )}
           {submitting && (
             <p className="text-center py-3 text-red-500">Loading...</p>
           )}

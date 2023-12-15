@@ -1,24 +1,32 @@
 import bcrypt from "bcrypt";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { loginSchema, registerSchema } from "../services/validation.service.js";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  registerSchema,
+  resetPasswordSchema,
+} from "../services/validation.service.js";
 import {
   getUserByEmail,
   getUserById,
   updateUserToVerified,
-  updatePasswordByUserId,
   createUser,
+  updatePasswordByUserId,
 } from "../services/user.service.js";
 import { sendEmail } from "../services/email.service.js";
 import {
   createAccessToken,
-  verifyAccessToken,
+  createRefreshToken,
+  deleteRefreshtoken,
+  saveRefreshToken,
+  verifyRefreshToken,
+  getRefreshToken,
 } from "../services/jwt.services.js";
 import { BCRYPT_COST_FACTOR } from "../constants.js";
 
 const signup = async (req, res, next) => {
   const { error } = registerSchema.validate(req.body);
-
   if (error) {
     return next(error);
   }
@@ -49,7 +57,7 @@ const signup = async (req, res, next) => {
 
     const newUser = await getUserById(createdUser.id);
 
-    const tokenForEmail = await createAccessToken(createdUser.id);
+    const tokenForEmail = await createRefreshToken(createdUser.id);
 
     const emailSubject = "Verify Email";
     const emailText = `Hi! There, You have recently visited 
@@ -66,6 +74,68 @@ const signup = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+};
+
+const verifyEmail = async (req, res, next) => {
+  const emailToken = req.query.token;
+  let userId;
+
+  if (!emailToken) {
+    return next(ApiError.notAuthorized("Not Authorized"));
+  }
+
+  try {
+    const tokenData = await verifyRefreshToken(emailToken);
+    if (tokenData.message === "jwt expired") {
+      return next(ApiError.notAuthorized("Invalid Refresh Token"));
+    }
+    userId = tokenData.userId;
+    if (!userId) {
+      return next(ApiError.forbidden());
+    }
+  } catch (error) {
+    return next(ApiError.badRequest());
+  }
+
+  let existingUser;
+
+  try {
+    existingUser = await getUserById(userId);
+    if (!existingUser) {
+      return next(ApiError.forbidden());
+    }
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
+
+  try {
+    await updateUserToVerified(existingUser.id);
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
+
+  const accessToken = await createAccessToken(existingUser.id);
+  const refreshToken = await createRefreshToken(existingUser.id);
+
+  try {
+    await saveRefreshToken(refreshToken);
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
+
+  const loginData = { existingUser, accessToken };
+
+  res.status(200).cookie("token", refreshToken, {
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    expires: new Date(Date.now() + 900000000),
+    httpOnly: true,
+  });
+
+  return res
+    .status(201)
+    .json(new ApiResponse(200, loginData, "User loggedin successfully"));
 };
 
 const login = async (req, res, next) => {
@@ -98,13 +168,13 @@ const login = async (req, res, next) => {
   }
 
   if (!existingUser.verified) {
-    const tokenForEmail = await createAccessToken(existingUser.id);
+    const tokenForEmail = await createRefreshToken(existingUser.id);
 
     const emailSubject = "Verify Email";
-    const emailText = `Hi! There, You have recently visited 
+    const emailText = `Hi! There, You have recently visited
     our Social Network website and entered your email.
     Please follow the given link to verify your email
-    ${process.env.CLIENT_URL}/verify-email?token=${tokenForEmail}&reason=registerUser
+    ${process.env.CLIENT_URL}/verify-email?token=${tokenForEmail}&verifiedFor=signup
     Thanks`;
 
     await sendEmail(email, emailSubject, emailText);
@@ -112,20 +182,29 @@ const login = async (req, res, next) => {
     return next(ApiError.notAuthorized("Please verify your email"));
   }
 
-  const accessToken = await createAccessToken(existingUser.id);
+  try {
+    const user = await getUserById(existingUser.id);
 
-  // Setting up the cookies
-  res.status(200).cookie("token", accessToken, {
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-    expires: new Date(Date.now() + 900000000),
-    httpOnly: true,
-  });
+    const accessToken = await createAccessToken(existingUser.id);
+    const refreshToken = await createRefreshToken(existingUser.id);
+    const loginData = { user, accessToken };
 
-  return res
-    .status(201)
-    .json(new ApiResponse(200, existingUser, "User loggedin successfully"));
+    await saveRefreshToken(refreshToken);
+
+    res.status(200).cookie("token", refreshToken, {
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      expires: new Date(Date.now() + 900000000),
+      httpOnly: true,
+    });
+
+    return res
+      .status(201)
+      .json(new ApiResponse(200, loginData, "User loggedin successfully"));
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
 };
 
 const logout = async (req, res, next) => {
@@ -133,10 +212,17 @@ const logout = async (req, res, next) => {
   if (!cookie) {
     return next(ApiError.badRequest());
   }
-
   const refreshTokenInCookie = cookie.split("=")[1];
 
-  // Deleting the cookies
+  if (!refreshTokenInCookie) {
+    return next(ApiError.badRequest());
+  }
+
+  try {
+    await deleteRefreshtoken(refreshTokenInCookie);
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
   res.status(200).clearCookie("token");
 
   return res
@@ -144,76 +230,145 @@ const logout = async (req, res, next) => {
     .json(new ApiResponse(200, "", "User loggedout successfully"));
 };
 
-const forgotPassword = async (req, res, next) => {
-  const email = req.body.email;
+const tokenRefresh = async (req, res, next) => {
+  let cookie = req.headers.cookie;
 
-  let existingUser;
+  if (!cookie) {
+    return next(ApiError.notAuthorized("Invalid Refresh Token"));
+  }
+  const refreshTokenInCookie = cookie.split("=")[1];
+
+  if (!refreshTokenInCookie) {
+    return next(ApiError.notAuthorized("Invalid Refresh Token"));
+  }
 
   try {
-    existingUser = await getUserByEmail(email);
-    if (!existingUser) {
-      return next(ApiError.notAuthorized("Email not registered"));
+    let refreshTokenExists = await getRefreshToken(refreshTokenInCookie);
+
+    if (!refreshTokenExists) {
+      res.clearCookie("token");
+      return next(ApiError.notAuthorized("Invalid Refresh Token"));
     }
   } catch (error) {
-    return next(ApiError.serverError());
+    res.clearCookie("token");
+    return next(ApiError.notAuthorized("Invalid Refresh Token"));
   }
 
-  const tokenForEmail = await createAccessToken(existingUser.id);
+  let userId;
+  try {
+    const tokenData = await verifyRefreshToken(refreshTokenInCookie);
+    if (tokenData.message === "jwt expired") {
+      await deleteRefreshtoken(refreshTokenInCookie);
+      res.clearCookie("token");
+      return next(ApiError.notAuthorized("Invalid Refresh Token"));
+    }
+    userId = tokenData.userId;
+    if (!userId) {
+      res.clearCookie("token");
+      return next(ApiError.notAuthorized("Invalid Refresh Token"));
+    }
+  } catch (err) {
+    res.clearCookie("token");
+    return next(ApiError.notAuthorized("Invalid Refresh Token"));
+  }
 
-  const emailSubject = "Reset Password";
-  const emailText = `Hi! There, You have Requested to reset the password.
-  Please follow the given link to reset your password
-  ${process.env.CLIENT_URL}/verify-email?token=${tokenForEmail}&verifiedFor=resetPassword
-  Thanks`;
+  let existingUser;
+  try {
+    existingUser = await getUserById(userId);
+    if (!existingUser) {
+      res.clearCookie("token");
+      return next(ApiError.notAuthorized("Invalid Refresh Token"));
+    }
+  } catch (error) {
+    res.clearCookie("token");
+    return next(ApiError.notAuthorized("Invalid Refresh Token"));
+  }
+  try {
+    const accessToken = await createAccessToken(existingUser.id);
+    const refreshToken = await createRefreshToken(existingUser.id);
+
+    await saveRefreshToken(refreshToken);
+    await deleteRefreshtoken(refreshTokenInCookie);
+
+    res.status(200).cookie("token", refreshToken, {
+      sameSite: "lax",
+      path: "/",
+      expires: new Date(Date.now() + 900000),
+      httpOnly: true,
+    });
+
+    return res
+      .status(201)
+      .json(new ApiResponse(200, accessToken, "Tokens refreshed"));
+  } catch (error) {
+    res.clearCookie("token");
+    return next(ApiError.notAuthorized("Invalid Refresh Token"));
+  }
+};
+
+const forgotPassword = async (req, res, next) => {
+  const { error } = forgotPasswordSchema.validate(req.body);
+
+  if (error) {
+    return next(error);
+  }
+
+  const { email } = req.body;
+
+  if (!email) {
+    return next(ApiError.notFound("Email is required"));
+  }
 
   try {
-    await sendEmail(email, emailSubject, emailText);
-  } catch (error) {
-    return next(ApiError.serverError());
-  }
+    const user = await getUserByEmail(email);
 
-  return res
-    .status(201)
-    .json(
-      new ApiResponse(
-        200,
-        "",
-        "Instruction Sent to your email for password reset"
-      )
-    );
+    if (!user) {
+      return next(ApiError.notFound("User does not exists"));
+    }
+
+    const tokenForEmail = await createRefreshToken(user.id);
+
+    const emailSubject = "Reset Password";
+    const emailText = `Hi! There, You have recently visited 
+    our Social Network website and entered your email.
+    Please follow the given link to verify your email
+    ${process.env.CLIENT_URL}/reset-password?token=${tokenForEmail}&verifiedFor=resetPassword
+    Thanks`;
+
+    await sendEmail(email, emailSubject, emailText);
+
+    return res
+      .status(201)
+      .json(new ApiResponse(200, "", "Verification Email has been sent"));
+  } catch (error) {
+    return next(ApiError.serverError("Something went wrong"));
+  }
 };
 
 const resetPassword = async (req, res, next) => {
-  const password = req.body.password;
-  const userId = req.userId;
-
-  try {
-    const userExist = await getUserById(userId);
-    if (!userExist) {
-      return next(ApiError.conflict("User does not Exists"));
-    }
-  } catch (error) {
-    return next(ApiError.serverError(error.message));
-  }
-
-  const hashedPassword = await bcrypt.hash(password, BCRYPT_COST_FACTOR);
-
-  try {
-    await updatePasswordByUserId(userId, hashedPassword);
-  } catch (error) {
-    return next(ApiError.serverError());
-  }
-
-  return res
-    .status(201)
-    .json(new ApiResponse(200, "", "Password reset successfull"));
-};
-
-const verifyEmail = async (req, res, next) => {
   const emailToken = req.query.token;
+  if (!emailToken) {
+    return next(ApiError.notAuthorized("You are not authorized"));
+  }
+
+  const { error } = resetPasswordSchema.validate(req.body);
+
+  if (error) {
+    return next(error);
+  }
+
+  const { password } = req.body;
+
+  if (!password) {
+    return next(ApiError.notFound("Password is required"));
+  }
+
   let userId;
   try {
-    const tokenData = await verifyAccessToken(emailToken);
+    const tokenData = await verifyRefreshToken(emailToken);
+    if (tokenData.message === "jwt expired") {
+      return next(ApiError.notAuthorized("Not authorized"));
+    }
     userId = tokenData.userId;
     if (!userId) {
       return next(ApiError.forbidden());
@@ -222,33 +377,48 @@ const verifyEmail = async (req, res, next) => {
     return next(ApiError.badRequest());
   }
 
-  await updateUserToVerified(userId);
-
-  let existingUser;
-
   try {
-    existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId);
+
     if (!existingUser) {
-      return next(ApiError.forbidden());
+      return next(ApiError.notFound("User not found"));
     }
+
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_COST_FACTOR);
+    await updatePasswordByUserId(existingUser.id, hashedPassword);
+
+    const accessToken = await createAccessToken(existingUser.id);
+    const refreshToken = await createRefreshToken(existingUser.id);
+
+    try {
+      await saveRefreshToken(refreshToken);
+    } catch (error) {
+      return next(ApiError.serverError());
+    }
+
+    const loginData = { existingUser, accessToken };
+    res.status(200).cookie("token", refreshToken, {
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      expires: new Date(Date.now() + 900000000),
+      httpOnly: true,
+    });
+
+    return res
+      .status(201)
+      .json(new ApiResponse(200, loginData, "Password Reset Successfully"));
   } catch (error) {
-    return next(ApiError.serverError());
+    return next(ApiError.serverError("something went wrong"));
   }
-
-  const accessToken = await createAccessToken(existingUser.id);
-
-  // Setting up the cookies
-  res.status(200).cookie("token", accessToken, {
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-    expires: new Date(Date.now() + 900000000),
-    httpOnly: true,
-  });
-
-  return res
-    .status(201)
-    .json(new ApiResponse(200, existingUser, "User loggedin successfully"));
 };
 
-export { signup, login, logout, verifyEmail, forgotPassword, resetPassword };
+export {
+  signup,
+  verifyEmail,
+  login,
+  logout,
+  tokenRefresh,
+  forgotPassword,
+  resetPassword,
+};

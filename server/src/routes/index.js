@@ -4,6 +4,7 @@ import {
   login,
   logout,
   verifyEmail,
+  tokenRefresh,
   forgotPassword,
   resetPassword,
 } from "../controllers/auth.controller.js";
@@ -13,11 +14,12 @@ const router = express.Router();
 
 router.post("/auth/signup", signup);
 router.get("/auth/verify-email", verifyEmail);
-router.post("/auth/forgot-password", forgotPassword);
-router.post("/auth/reset-password", auth, resetPassword);
 router.post("/auth/login", login);
-router.delete("/auth/logout", logout);
+router.post("/auth/logout", logout);
+router.get("/auth/refresh", tokenRefresh);
+router.post("/auth/forgot-password", forgotPassword);
+router.post("/auth/reset-password", resetPassword);
 
-router.post("/users", auth, getUser);
+router.get("/users", auth, getUser);
 
 export default router;

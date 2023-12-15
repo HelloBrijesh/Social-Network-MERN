@@ -2,9 +2,7 @@ import User from "../models/user.model.js";
 
 const getUserById = async (userId) => {
   try {
-    const user = await User.findById(userId).select(
-      "-password -verified -updatedAt -__V"
-    );
+    const user = await User.findById(userId);
     return user;
   } catch (error) {
     return error;
@@ -59,7 +57,7 @@ const updatePasswordByUserId = async (userId, newPassword) => {
       password: newPassword,
     });
   } catch (error) {
-    return error;
+    return Promise.reject(error);
   }
 };
 

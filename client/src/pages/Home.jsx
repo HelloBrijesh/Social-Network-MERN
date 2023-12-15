@@ -3,19 +3,20 @@ import POSTS from "../components/Posts";
 import CreatePost from "../components/CreatePost";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../context/UserContext";
-import { axiosInstance } from "../services/api-client";
+import { axiosAuthInstance } from "../services/api-client";
 const Home = () => {
   const [showCreatePost, setCreatePost] = useState(false);
-  const { userDetails } = useUserContext();
+  const { userDetails, updateUserDetails } = useUserContext();
 
   useEffect(() => {
     const getUser = async () => {
-      const res = await axiosInstance.post(
-        "/users",
-        {},
-        { withCredentials: true }
-      );
-      console.log(res);
+      try {
+        const res = await axiosAuthInstance.get("/users");
+        console.log(res.data.data);
+        updateUserDetails(res.data.data);
+      } catch (error) {
+        console.log("Errorrr : ", error);
+      }
     };
 
     getUser();
@@ -61,7 +62,7 @@ const Home = () => {
                 }}
                 className="font-bolder text-start p-3 bg-white-smoke w-full rounded-3xl text-slate-500"
               >
-                What&apos;s on your mind, Brijesh ?{" "}
+                What&apos;s on your mind, {userDetails?.firstName} ?{" "}
               </button>
             </div>
             <hr className="mx-3"></hr>
