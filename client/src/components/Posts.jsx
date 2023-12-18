@@ -2,27 +2,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useUserContext } from "../context/UserContext";
+import { useEffect, useState } from "react";
+import { axiosAuthInstance } from "../services/api-client";
 const Posts = () => {
   const { userDetails } = useUserContext();
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [isError, setIsError] = useState(false);
-  // const [post, setPost] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [post, setPost] = useState([]);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   axios
-  //     .get("https://dummyjson.com/posts")
-  //     .then((response) => {
-  //       setPost(response.data.posts);
-  //     })
-  //     .catch((error) => {
-  //       setIsError(true);
-  //       console.log(error);
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  // }, []);
+  useEffect(() => {
+    // setIsLoading(true);
+    axiosAuthInstance
+      .get("/users/posts")
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        setIsError(true);
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   // if (isLoading) {
   //   <div>Loading ... </div>;

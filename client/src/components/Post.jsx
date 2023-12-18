@@ -3,8 +3,28 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { faShareFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import { axiosAuthInstance } from "../services/api-client";
 
 const Post = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [post, setPost] = useState([]);
+  useEffect(() => {
+    setIsLoading(true);
+    axiosAuthInstance
+      .get("/users/posts")
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        setIsError(true);
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
   return (
     <>
       <div className="w-2/4 mx-auto border rounded-lg p-5 shadow-md">

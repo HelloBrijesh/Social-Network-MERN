@@ -18,6 +18,7 @@ import {
   deleteProfileImage,
   changePassword,
 } from "../controllers/user.controller.js";
+import { createPost, getPost } from "../controllers/post.controller.js";
 const router = express.Router();
 
 router.post("/auth/signup", signup);
@@ -35,5 +36,7 @@ router.delete("/users/cover-image", auth, deleteCoverImage);
 router.put("/users/profile-image", auth, updateProfileImage);
 router.delete("/users/profile-image", auth, deleteProfileImage);
 router.put("/users/change-password", auth, changePassword);
+router.post("/users/posts", auth, createPost);
+router.get("/users/posts", auth, getPost);
 
 export default router;
