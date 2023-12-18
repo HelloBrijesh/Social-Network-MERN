@@ -1,39 +1,37 @@
 import { Link } from "react-router-dom";
 import POSTS from "../components/Posts";
 import CreatePost from "../components/CreatePost";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserContext } from "../context/UserContext";
-import { axiosAuthInstance } from "../services/api-client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 const Home = () => {
   const [showCreatePost, setCreatePost] = useState(false);
-  const { userDetails, updateUserDetails } = useUserContext();
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await axiosAuthInstance.get("/users");
-        console.log(res.data.data);
-        updateUserDetails(res.data.data);
-      } catch (error) {
-        console.log("Errorrr : ", error);
-      }
-    };
-
-    getUser();
-  }, []);
+  const { userDetails } = useUserContext();
 
   return (
     <>
       <div className="bg-white-smoke min-h-screen">
         <div className="w-1/6 fixed">
-          <div className="mt-10">
-            <Link to="/profile/" className="hover:font-bold">
-              <img
-                src="/profileImage.jpg"
-                alt=""
-                className="w-[100px] h-[100px] mx-auto rounded-full border-white border-4"
-              />
-              <p className="text-center mt-4 font-bolder">Name </p>
+          <div className="mt-10 flex flex-col items-center">
+            <Link to="/profile/" className="hover:font-bold ">
+              <div className="">
+                {userDetails.profileImage === "" ? (
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="w-[60px] h-[60px]  rounded-full p-5 border-white border-4"
+                  />
+                ) : (
+                  <img
+                    src={`${userDetails.profileImage}`}
+                    alt=""
+                    className="w-[100px] h-[100px] rounded-full border-white border-4"
+                  />
+                )}
+              </div>
+              <p className="text-center mt-4 font-bolder">
+                {userDetails.firstName} {userDetails.lastName}
+              </p>
             </Link>
             <ul className="pt-5">
               <Link to="/friends/">
@@ -51,11 +49,21 @@ const Home = () => {
         <div className=" flex flex-col items-center justify-center pt-10">
           <div className="w-[500px] bg-white rounded-lg shadow-lg">
             <div className="flex gap-3 m-3 items-center">
-              <img
-                src="/profileImage.jpg"
-                alt=""
-                className="w-[50px] h-[50px] rounded-full"
-              />
+              <div className="">
+                {userDetails.profileImage === "" ? (
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="w-[20px] h-[20px] bg-white-smoke p-3 rounded-full border-white border-4"
+                  />
+                ) : (
+                  <img
+                    src={`${userDetails.profileImage}`}
+                    alt=""
+                    className="w-[60px] h-[50px] rounded-full border-white border-4"
+                  />
+                )}
+              </div>
+
               <button
                 onClick={() => {
                   setCreatePost(true);

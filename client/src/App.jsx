@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import ChangePassword from "./pages/ChangePassword";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="friendlist" element={<FriendList />} />
             <Route path="photos" element={<Photos />} />
           </Route>
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

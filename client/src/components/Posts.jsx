@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { useUserContext } from "../context/UserContext";
 const Posts = () => {
+  const { userDetails } = useUserContext();
   // const [isLoading, setIsLoading] = useState(false);
   // const [isError, setIsError] = useState(false);
   // const [post, setPost] = useState([]);
@@ -34,13 +34,22 @@ const Posts = () => {
 
   return (
     <div className="bg-white  w-[500px] rounded-lg shadow-lg">
-      <div className="flex p-5 justify-between">
+      <div className="flex p-3 justify-between">
         <div className="flex gap-3">
-          <img
-            src="/profileImage.jpg"
-            alt=""
-            className="w-[40px] h-[40px] rounded-full"
-          />
+          <div className="">
+            {userDetails.profileImage === "" ? (
+              <FontAwesomeIcon
+                icon={faUser}
+                className="w-[20px] h-[20px] p-3 bg-white-smoke rounded-full border-white border-4"
+              />
+            ) : (
+              <img
+                src={`${userDetails.profileImage}`}
+                alt=""
+                className="w-[50px] h-[50px] rounded-full border-white border-4"
+              />
+            )}
+          </div>
           <div className="text-sm">
             <p className="font-bold">Brijesh</p>
             <p className="text-slate-500">time</p>
@@ -66,12 +75,21 @@ const Posts = () => {
         <span>Comment</span>
       </div>
       <hr></hr>
-      <div className="flex items-center px-3 py-2 gap-3">
-        <img
-          src="/profileImage.jpg"
-          alt=""
-          className="w-[30px] h-[30px] rounded-full"
-        />
+      <div className="flex items-center px-2 py-2 gap-3">
+        <div className="">
+          {userDetails.profileImage === "" ? (
+            <FontAwesomeIcon
+              icon={faUser}
+              className="w-[20px] h-[20px] p-3 bg-white-smoke rounded-full border-white border-4"
+            />
+          ) : (
+            <img
+              src={`${userDetails.profileImage}`}
+              alt=""
+              className="w-[60px] h-[50px] rounded-full border-white border-4"
+            />
+          )}
+        </div>
         <input
           type="text"
           placeholder="Write a comment..."

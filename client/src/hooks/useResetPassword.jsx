@@ -10,10 +10,10 @@ const useResetPassword = (token) => {
   const [isError, setIsError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const { loginStatus, updateLoginStatus } = useUserContext();
+  const { userDetails, updateUserDetails } = useUserContext();
 
   useEffect(() => {
-    if (!token || loginStatus) {
+    if (!token || userDetails) {
       return navigate("/");
     }
   }, []);
@@ -30,7 +30,7 @@ const useResetPassword = (token) => {
       axiosAuthInstance.defaults.headers.common[
         "authorization"
       ] = `Bearer ${response.data.data.accessToken}`;
-      updateLoginStatus(true);
+      updateUserDetails(response.data.data.existingUser);
       setSubmitted(true);
     } catch (error) {
       setIsError(error.response.data.message);

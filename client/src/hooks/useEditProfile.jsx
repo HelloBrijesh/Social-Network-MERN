@@ -3,28 +3,22 @@ import { axiosAuthInstance } from "../services/api-client.js";
 import { useState } from "react";
 import { useUserContext } from "../context/UserContext";
 
-const useLogin = () => {
+const useEditProfile = () => {
   const [submitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState(null);
 
-  const { userDetails, updateUserDetails } = useUserContext();
+  const { updateUserDetails } = useUserContext();
 
-  const login = async (values) => {
+  const editProfile = async (values) => {
     setIsSubmitting(true);
     setIsError(false);
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/login`,
-        values,
-        {
-          withCredentials: true,
-        }
+      const response = await axiosAuthInstance.put(
+        `${import.meta.env.VITE_SERVER_URL}/users`,
+        values
       );
-      axiosAuthInstance.defaults.headers.common[
-        "authorization"
-      ] = `Bearer ${response.data.data.accessToken}`;
-      updateUserDetails(response.data.data.user);
+      updateUserDetails(response.data.data);
     } catch (error) {
       setIsError(error.response.data.message);
     } finally {
@@ -35,8 +29,8 @@ const useLogin = () => {
   return {
     isError,
     submitting,
-    login,
+    editProfile,
   };
 };
 
-export default useLogin;
+export default useEditProfile;

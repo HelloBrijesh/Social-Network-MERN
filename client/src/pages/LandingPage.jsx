@@ -3,9 +3,9 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useUserContext } from "../context/UserContext";
 const LandingPage = () => {
-  const { loginStatus } = useUserContext();
+  const { userDetails } = useUserContext();
 
-  if (!loginStatus) {
+  if (!userDetails) {
     return <Login></Login>;
   }
   return (

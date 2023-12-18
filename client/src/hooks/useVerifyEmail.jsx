@@ -10,9 +10,9 @@ const useVerifyEmail = (token) => {
   const [isError, setIsError] = useState(null);
   const [isVerified, setIsVerified] = useState(false);
 
-  const { loginStatus, updateLoginStatus } = useUserContext();
+  const { userDetails, updateUserDetails } = useUserContext();
   useEffect(() => {
-    if (!token || loginStatus) {
+    if (!token || userDetails) {
       return navigate("/");
     }
     const verifyEmail = async () => {
@@ -26,7 +26,7 @@ const useVerifyEmail = (token) => {
         axiosAuthInstance.defaults.headers.common[
           "authorization"
         ] = `Bearer ${response.data.data.accessToken}`;
-        updateLoginStatus(true);
+        updateUserDetails(response.data.data.existingUser);
         setIsVerified(true);
       } catch (error) {
         setIsError(error.response.data.message);

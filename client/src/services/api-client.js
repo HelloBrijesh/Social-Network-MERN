@@ -31,7 +31,6 @@ axiosAuthInstance.interceptors.request.use(
     } catch (error) {
       if (error.response.data.message === "Invalid Refresh Token") {
         delete axiosAuthInstance.defaults.headers.common["authorization"];
-        localStorage.setItem("loginStatus", false);
         localStorage.setItem("userDetails", null);
         window.location = "/";
       }
@@ -58,7 +57,6 @@ axiosAuthInstance.interceptors.response.use(
         console.log(err);
       }
       delete axiosAuthInstance.defaults.headers.common["authorization"];
-      localStorage.setItem("loginStatus", false);
       localStorage.setItem("userDetails", null);
       window.location = "/";
     }
