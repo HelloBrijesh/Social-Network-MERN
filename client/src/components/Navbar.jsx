@@ -33,7 +33,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="flex justify-between items-center shadow-md fixed w-full z-10 bg-white">
+      <nav className="flex justify-between items-center shadow-md fixed w-full bg-white">
         <div className="text-blue text-2xl font-bold ms-4 basis-2/5">
           <NavLink to="/"> Social Network </NavLink>
         </div>
