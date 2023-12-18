@@ -70,7 +70,7 @@ const signup = async (req, res, next) => {
 
     return res
       .status(201)
-      .json(new ApiResponse(200, newUser, "User Created successfully"));
+      .json(new ApiResponse(200, "", "User Created successfully"));
   } catch (error) {
     return next(error);
   }
