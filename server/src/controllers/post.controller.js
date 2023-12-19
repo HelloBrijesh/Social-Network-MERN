@@ -1,8 +1,11 @@
-import { savePost, fetchPostsById } from "../services/post.service.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import {
+  savePost,
+  fetchPostsById,
+  likePostById,
+} from "../services/post.service.js";
 
-import { getUserById } from "../services/user.service.js";
 const createPost = async (req, res, next) => {
   const userId = req.userId;
   const { postContent, postImage } = req.body;
@@ -19,14 +22,23 @@ const createPost = async (req, res, next) => {
 
 const getPost = async (req, res, next) => {
   const userId = req.userId;
-  console.log("Post", userId);
   try {
     const posts = await fetchPostsById(userId);
-    console.log(posts);
     return res.status(201).json(new ApiResponse(200, posts, "Posts"));
   } catch (error) {
     return next(ApiError.serverError("Something went Wrong"));
   }
 };
 
-export { createPost, getPost };
+const likePost = async (req, res, next) => {
+  const userId = req.userId;
+  const postId = req.params.postId;
+  try {
+    const updatedPost = await likePostById(userId, postId);
+    return res.status(201).json(new ApiResponse(200, updatedPost, "Posts"));
+  } catch (error) {
+    return next(ApiError.serverError("Something went wrong"));
+  }
+};
+
+export { createPost, getPost, likePost };

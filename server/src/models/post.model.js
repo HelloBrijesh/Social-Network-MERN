@@ -5,11 +5,11 @@ const postSchema = new mongoose.Schema(
     postedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     postContent: { type: String, required: true },
     postImage: { type: String },
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     // comments: {
     //   commentDetail: { type: String, required: true },
     //   commentedBy: { type: Number, required: true },
     // },
-    // likes: [Number],
   },
   { timestamps: true }
 );
