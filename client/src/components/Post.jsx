@@ -1,84 +1,118 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import { faMessage } from "@fortawesome/free-solid-svg-icons";
-import { faShareFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { axiosAuthInstance } from "../services/api-client";
+import { useUserContext } from "../context/UserContext";
+import { useEffect, useState } from "react";
 
-const Post = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [post, setPost] = useState([]);
+const Post = (post) => {
+  const [like, setLike] = useState(false);
+  const [likeCount, setLikeCount] = useState(false);
+  const { userDetails } = useUserContext();
+
   useEffect(() => {
-    setIsLoading(true);
-    axiosAuthInstance
-      .get("/users/posts")
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        setIsError(true);
-        console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (post.likes.includes(userDetails.id)) {
+      setLike(true);
+    }
+    setLikeCount(post.likes.length);
   }, []);
+
+  const handleLike = async (postId) => {
+    try {
+      const response = await axiosAuthInstance.put(
+        `/users/posts/${postId}/like`,
+        {}
+      );
+      if (response.data.data.likes.includes(userDetails.id)) {
+        setLike(true);
+        setLikeCount(likeCount + 1);
+      } else {
+        setLike(false);
+        setLikeCount(likeCount - 1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <>
-      <div className="w-2/4 mx-auto border rounded-lg p-5 shadow-md">
-        <div className="flex items-center border-b-2 pb-3">
-          <img
-            src="profileImage.jpg"
-            alt=""
-            className="w-[50px] h-[50px] rounded-full me-4"
-          />
-          <p>User Name</p>
-        </div>
-        <div className="my-3 border-b-2 pb-5">
-          <p className="my-5">
-            We are hiring! Looking for applicants who are interested full-time
-            employment opportunity. Open Work permit holders welcome to contact.
-            Check the post for more details and requirements of the position.
-            Please contact at Ksm.hiring.2082@gmail.com Thanks!
-          </p>
-          <img src="banner.jpg" alt="" />
-        </div>
-        <div className="flex justify-around border-b-2 pb-3">
-          <div>
-            <FontAwesomeIcon icon={faThumbsUp} className="me-3" />
-            Like
+    <div className="bg-white mb-5 w-[500px] rounded-lg shadow-lg">
+      <div className="flex px-4 py-2 justify-between items-center">
+        <div className="flex gap-3 items-center">
+          <div className="">
+            {post.postedBy.profileImage === "" ? (
+              <FontAwesomeIcon
+                icon={faUser}
+                className="w-[20px] h-[20px] p-3 bg-white-smoke rounded-full border-white border-4"
+              />
+            ) : (
+              <img
+                src={`${post.postedBy.profileImage}`}
+                alt=""
+                className="w-[50px] h-[50px] rounded-full border-white border-4"
+              />
+            )}
           </div>
-          <div>
-            <FontAwesomeIcon icon={faMessage} className="me-3" />
-            Comment
-          </div>
-          <div>
-            <FontAwesomeIcon icon={faShareFromSquare} className="me-3" />
-            Share
+          <div className="text-sm">
+            <p className="font-bold">
+              {post.postedBy.firstName} {post.postedBy.lastName}
+            </p>
+            <p className="text-slate-500">time</p>
           </div>
         </div>
-        <div className="mt-5 flex justify-around items-center">
-          <img
-            src="profileImage.jpg"
-            alt=""
-            className="w-[50px] h-[50px] rounded-full me-4"
-          />
-          <textarea
-            name=""
-            id=""
-            cols="30"
-            rows="1"
-            placeholder="write a comment..."
-            className="bg-white-smoke px-2 rounded-md leading-6 focus:outline-none"
-          ></textarea>
-          <button>
-            <FontAwesomeIcon icon={faAnglesRight} />
-          </button>
+        <div className="flex gap-5">
+          <p>...</p>
+          <p>X</p>
         </div>
       </div>
-    </>
+      <hr></hr>
+      <div className="mx-5 my-3 mb-5">
+        <p>{post.postContent}</p>
+      </div>
+      {post.postImage !== "" && (
+        <div>
+          <img
+            src={`${post.postImage}`}
+            className="max-h-[500px] w-full"
+            alt=""
+          />
+        </div>
+      )}
+      <hr></hr>
+      <div className="p-5 flex justify-around">
+        <button
+          className={`${like ? "text-blue" : ""}`}
+          onClick={() => handleLike(post.id)}
+        >
+          Like {likeCount}
+        </button>
+        <button>Comment</button>
+      </div>
+      <hr></hr>
+      <div className="flex items-center px-2 py-2 gap-3">
+        <div className="">
+          {userDetails.profileImage === "" ? (
+            <FontAwesomeIcon
+              icon={faUser}
+              className="w-[20px] h-[20px] p-3 bg-white-smoke rounded-full border-white border-4"
+            />
+          ) : (
+            <img
+              src={`${userDetails.profileImage}`}
+              alt=""
+              className="w-[60px] h-[50px] rounded-full border-white border-4"
+            />
+          )}
+        </div>
+        <input
+          type="text"
+          placeholder="Write a comment..."
+          className="focus:outline-none font-bolder text-start p-2 bg-white-smoke w-full rounded-3xl text-slate-500"
+        />
+        <button className="">
+          <FontAwesomeIcon icon={faRightToBracket} />
+        </button>
+      </div>
+    </div>
   );
 };
 
