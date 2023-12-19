@@ -4,6 +4,9 @@ import {
   savePost,
   fetchPostsById,
   likePostById,
+  addCommentToPost,
+  getCommentsByPostId,
+  deleteCommentByPostId,
 } from "../services/post.service.js";
 
 const createPost = async (req, res, next) => {
@@ -40,5 +43,52 @@ const likePost = async (req, res, next) => {
     return next(ApiError.serverError("Something went wrong"));
   }
 };
+const addPostComment = async (req, res, next) => {
+  const userId = req.userId;
+  const postId = req.params.postId;
+  const { commentContent } = req.body;
 
-export { createPost, getPost, likePost };
+  try {
+    const updatedComments = await addCommentToPost(
+      userId,
+      postId,
+      commentContent
+    );
+
+    return res.status(201).json(new ApiResponse(200, updatedComments, "Posts"));
+  } catch (error) {
+    return next(ApiError.serverError("Something went wrong"));
+  }
+};
+const getPostComments = async (req, res, next) => {
+  const userId = req.userId;
+  const postId = req.params.postId;
+
+  try {
+    const postComments = await getCommentsByPostId(postId);
+    return res.status(201).json(new ApiResponse(200, postComments, "Posts"));
+  } catch (error) {
+    return next(ApiError.serverError("Something went wrong"));
+  }
+};
+const deleteComment = async (req, res, next) => {
+  const userId = req.userId;
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
+
+  try {
+    const updatedComments = await deleteCommentByPostId(postId, commentId);
+    return res.status(201).json(new ApiResponse(200, updatedComments, "Posts"));
+  } catch (error) {
+    return next(ApiError.serverError("Something went wrong"));
+  }
+};
+
+export {
+  createPost,
+  getPost,
+  likePost,
+  addPostComment,
+  getPostComments,
+  deleteComment,
+};

@@ -6,10 +6,7 @@ const postSchema = new mongoose.Schema(
     postContent: { type: String, required: true },
     postImage: { type: String },
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    // comments: {
-    //   commentDetail: { type: String, required: true },
-    //   commentedBy: { type: Number, required: true },
-    // },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
   { timestamps: true }
 );

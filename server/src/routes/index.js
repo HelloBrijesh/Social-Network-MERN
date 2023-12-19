@@ -22,6 +22,9 @@ import {
   createPost,
   getPost,
   likePost,
+  addPostComment,
+  getPostComments,
+  deleteComment,
 } from "../controllers/post.controller.js";
 const router = express.Router();
 
@@ -44,5 +47,8 @@ router.put("/users/change-password", auth, changePassword);
 router.post("/users/posts", auth, createPost);
 router.get("/users/posts", auth, getPost);
 router.put("/users/posts/:postId/like", auth, likePost);
+router.post("/users/posts/:postId/comment", auth, addPostComment);
+router.get("/users/posts/:postId/comments", auth, getPostComments);
+router.delete("/users/posts/:postId/comments/:commentId", auth, deleteComment);
 
 export default router;

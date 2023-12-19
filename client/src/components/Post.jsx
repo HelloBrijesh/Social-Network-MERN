@@ -1,13 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { axiosAuthInstance } from "../services/api-client";
 import { useUserContext } from "../context/UserContext";
 import { useEffect, useState } from "react";
+import Comments from "./Comments";
 
 const Post = (post) => {
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(false);
+  const [comment, setComment] = useState(false);
+
   const { userDetails } = useUserContext();
 
   useEffect(() => {
@@ -17,10 +19,10 @@ const Post = (post) => {
     setLikeCount(post.likes.length);
   }, []);
 
-  const handleLike = async (postId) => {
+  const handleLike = async () => {
     try {
       const response = await axiosAuthInstance.put(
-        `/users/posts/${postId}/like`,
+        `/users/posts/${post.id}/like`,
         {}
       );
       if (response.data.data.likes.includes(userDetails.id)) {
@@ -34,6 +36,7 @@ const Post = (post) => {
       console.log(error);
     }
   };
+
   return (
     <div className="bg-white mb-5 w-[500px] rounded-lg shadow-lg">
       <div className="flex px-4 py-2 justify-between items-center">
@@ -79,39 +82,17 @@ const Post = (post) => {
       )}
       <hr></hr>
       <div className="p-5 flex justify-around">
-        <button
-          className={`${like ? "text-blue" : ""}`}
-          onClick={() => handleLike(post.id)}
-        >
+        <button className={`${like ? "text-blue" : ""}`} onClick={handleLike}>
           Like {likeCount}
         </button>
-        <button>Comment</button>
+        <button onClick={() => setComment((prev) => !prev)}>Comment</button>
       </div>
-      <hr></hr>
-      <div className="flex items-center px-2 py-2 gap-3">
-        <div className="">
-          {userDetails.profileImage === "" ? (
-            <FontAwesomeIcon
-              icon={faUser}
-              className="w-[20px] h-[20px] p-3 bg-white-smoke rounded-full border-white border-4"
-            />
-          ) : (
-            <img
-              src={`${userDetails.profileImage}`}
-              alt=""
-              className="w-[60px] h-[50px] rounded-full border-white border-4"
-            />
-          )}
+
+      {comment && (
+        <div>
+          <Comments postId={post.id}></Comments>
         </div>
-        <input
-          type="text"
-          placeholder="Write a comment..."
-          className="focus:outline-none font-bolder text-start p-2 bg-white-smoke w-full rounded-3xl text-slate-500"
-        />
-        <button className="">
-          <FontAwesomeIcon icon={faRightToBracket} />
-        </button>
-      </div>
+      )}
     </div>
   );
 };
