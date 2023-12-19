@@ -10,7 +10,6 @@ const Posts = () => {
     axiosAuthInstance
       .get("/users/posts")
       .then((response) => {
-        console.log(response.data.data);
         setPosts(response.data.data);
       })
       .catch((error) => {
