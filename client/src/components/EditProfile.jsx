@@ -19,6 +19,7 @@ const EditProfile = ({ isVisible, onClose }) => {
     },
     onSubmit: async (values) => {
       await editProfile(values);
+      onClose();
     },
   });
 

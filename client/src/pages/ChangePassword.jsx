@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 import useChangePassword from "../hooks/useChangePassword";
 const ChangePassword = () => {
   const { isError, submitting, submitted, changePassword } =
@@ -49,11 +50,21 @@ const ChangePassword = () => {
           <div className="my-3">
             <button
               type="submit"
-              className="bg-blue w-full p-3 font-semibold text-white text-xl border border-none rounded-lg"
+              className="bg-blue disabled:opacity-75 w-full p-3 font-semibold text-white text-xl border border-none rounded-lg"
+              disabled={submitted}
             >
               Submit
             </button>
           </div>
+          {!submitted && (
+            <div className="my-5">
+              <Link to="/">
+                <button className="bg-blue w-full p-3  text-white text-xl border border-none rounded-lg">
+                  Home Page
+                </button>
+              </Link>
+            </div>
+          )}
         </form>
       </div>
     </div>

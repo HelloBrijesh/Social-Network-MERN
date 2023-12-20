@@ -1,11 +1,21 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [isError, setIsError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const { userDetails } = useUserContext();
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (userDetails) {
+      return navigate("/");
+    }
+  }, []);
 
   const { handleSubmit, errors, touched, getFieldProps } = useFormik({
     initialValues: {
@@ -28,6 +38,7 @@ const ForgotPassword = () => {
       }
     },
   });
+
   return (
     <div className="bg-white-smoke h-screen font-custom flex flex-col justify-center items-center">
       {isError && <p className="text-red-500 ">Error : {isError}</p>}
@@ -46,7 +57,8 @@ const ForgotPassword = () => {
         <div className="my-3">
           <button
             type="submit"
-            className="bg-blue w-full p-3 font-semibold text-white text-xl border border-none rounded-lg"
+            className="bg-blue disabled:opacity-80 w-full p-3 font-semibold text-white text-xl border border-none rounded-lg"
+            disabled={submitted}
           >
             Submit
           </button>
