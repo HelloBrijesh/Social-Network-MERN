@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js";
 import Comment from "../models/comment.model.js";
+
 const savePost = async (userId, postContent, postImage) => {
   const newPost = new Post({
     postedBy: userId,
@@ -75,12 +76,12 @@ const likePostById = async (userId, postId) => {
         }
       );
     }
-
     return updatedpost;
   } catch (error) {
     return Promise.reject(error);
   }
 };
+
 const addCommentToPost = async (userId, postId, commentContent) => {
   try {
     const newComment = new Comment({
@@ -111,6 +112,7 @@ const addCommentToPost = async (userId, postId, commentContent) => {
     return Promise.reject(error);
   }
 };
+
 const getCommentsByPostId = async (postId) => {
   try {
     const post = await Post.findById(postId).populate([
@@ -128,6 +130,7 @@ const getCommentsByPostId = async (postId) => {
     return Promise.reject(error);
   }
 };
+
 const deleteCommentByPostId = async (postId, commentId) => {
   try {
     const post = await Post.findByIdAndUpdate(

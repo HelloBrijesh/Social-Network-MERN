@@ -38,11 +38,14 @@ const likePost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
     const updatedPost = await likePostById(userId, postId);
-    return res.status(201).json(new ApiResponse(200, updatedPost, "Posts"));
+    return res
+      .status(201)
+      .json(new ApiResponse(200, updatedPost, "Posts Like updated"));
   } catch (error) {
     return next(ApiError.serverError("Something went wrong"));
   }
 };
+
 const addPostComment = async (req, res, next) => {
   const userId = req.userId;
   const postId = req.params.postId;
@@ -60,6 +63,7 @@ const addPostComment = async (req, res, next) => {
     return next(ApiError.serverError("Something went wrong"));
   }
 };
+
 const getPostComments = async (req, res, next) => {
   const userId = req.userId;
   const postId = req.params.postId;
@@ -71,6 +75,7 @@ const getPostComments = async (req, res, next) => {
     return next(ApiError.serverError("Something went wrong"));
   }
 };
+
 const deleteComment = async (req, res, next) => {
   const userId = req.userId;
   const postId = req.params.postId;
