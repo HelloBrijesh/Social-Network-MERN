@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -15,9 +15,9 @@ const userSchema = new mongoose.Schema(
     password: { type: String, requied: true },
     coverImage: { type: String, default: "" },
     profileImage: { type: String, default: "" },
-    friends: [String],
-    requestReceived: [String],
-    requestSent: [String],
+    friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    requestReceived: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    requestSent: [{ type: Schema.Types.ObjectId, ref: "User" }],
     verified: { type: Boolean, default: false },
   },
   { timestamps: true }
