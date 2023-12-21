@@ -10,7 +10,7 @@ const getFriendsById = async (userId) => {
     return Promise.reject(error);
   }
 };
-const removeFriendsById = async (userId, userIdOfFriend) => {
+const removeFriendById = async (userId, userIdOfFriend) => {
   try {
     const userFriends = await User.findByIdAndUpdate(
       userId,
@@ -112,7 +112,7 @@ const refuseFriendRequest = async (userId, userIdForFriend) => {
 
 export {
   getFriendsById,
-  removeFriendsById,
+  removeFriendById,
   addFriendRequest,
   removeFriendRequest,
   approveFriendRequest,
