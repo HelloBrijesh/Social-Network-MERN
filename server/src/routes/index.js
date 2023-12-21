@@ -12,11 +12,11 @@ import { auth } from "../middleware/auth.middleware.js";
 import {
   getUser,
   updateUser,
-  updateCoverImage,
-  updateProfileImage,
-  deleteCoverImage,
-  deleteProfileImage,
   changePassword,
+  updateUserCoverImage,
+  updateUserProfileImage,
+  deleteUserCoverImage,
+  deleteUserProfileImage,
 } from "../controllers/user.controller.js";
 import {
   createPost,
@@ -38,11 +38,11 @@ router.post("/auth/reset-password", resetPassword);
 
 router.get("/users", auth, getUser);
 router.put("/users", auth, updateUser);
-router.put("/users/cover-image", auth, updateCoverImage);
-router.delete("/users/cover-image", auth, deleteCoverImage);
-router.put("/users/profile-image", auth, updateProfileImage);
-router.delete("/users/profile-image", auth, deleteProfileImage);
 router.put("/users/change-password", auth, changePassword);
+router.put("/users/cover-image", auth, updateUserCoverImage);
+router.delete("/users/cover-image", auth, deleteUserCoverImage);
+router.put("/users/profile-image", auth, updateUserProfileImage);
+router.delete("/users/profile-image", auth, deleteUserProfileImage);
 
 router.post("/users/posts", auth, createPost);
 router.get("/users/posts", auth, getPost);

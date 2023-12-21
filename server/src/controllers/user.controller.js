@@ -3,84 +3,58 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import {
   getUserById,
-  updateUserProfile,
-  updateCoverImageById,
-  updateProfileImageById,
-  deleteCoverImageById,
-  deleteProfileImageById,
   getPasswordById,
   updatePasswordByUserId,
+  updateUserProfile,
+  updateUserCoverImageById,
+  updateUserProfileImageById,
+  deleteUserCoverImageById,
+  deleteUserProfileImageById,
 } from "../services/user.service.js";
 import { changePasswordSchema } from "../services/validation.service.js";
 import { BCRYPT_COST_FACTOR } from "../constants.js";
+
 const getUser = async (req, res, next) => {
   const userId = req.userId;
-
   try {
     const user = await getUserById(userId);
     if (!user) {
       return next(ApiError.notFound("User not found"));
     }
-    return res.status(201).json(new ApiResponse(200, user, "getUser"));
+    return res.status(201).json(new ApiResponse(200, user, "User Details"));
   } catch (error) {
     return next(ApiError.serverError("Something Went wrong"));
   }
 };
 
 const updateUser = async (req, res, next) => {
-  const userId = req.userId;
-  const {
-    firstName,
-    lastName,
-    city,
-    homeTown,
-    college,
-    highSchool,
-    workplace,
-  } = req.body;
-  const updatedUser = await updateUserProfile(
-    userId,
-    firstName,
-    lastName,
-    city,
-    homeTown,
-    college,
-    highSchool,
-    workplace
-  );
-  return res
-    .status(201)
-    .json(new ApiResponse(200, updatedUser, "User updated"));
-};
-const updateCoverImage = async (req, res, next) => {
-  const userId = req.userId;
-  const { coverImageUrl } = req.body;
-  const updatedUser = await updateCoverImageById(userId, coverImageUrl);
-  return res
-    .status(201)
-    .json(new ApiResponse(200, updatedUser, "User updated"));
-};
-const updateProfileImage = async (req, res, next) => {
-  const userId = req.userId;
-  const { profileImageUrl } = req.body;
-  const updatedUser = await updateProfileImageById(userId, profileImageUrl);
-  return res
-    .status(201)
-    .json(new ApiResponse(200, updatedUser, "User updated"));
-};
-const deleteCoverImage = async (req, res, next) => {
-  const userId = req.userId;
-  const updatedUser = await deleteCoverImageById(userId);
-  return res
-    .status(201)
-    .json(new ApiResponse(200, updatedUser, "User updated"));
-};
-const deleteProfileImage = async (req, res, next) => {
-  const userId = req.userId;
-  const updatedUser = await deleteProfileImageById(userId);
-  return res
-    .status(201)
-    .json(new ApiResponse(200, updatedUser, "User updated"));
+  try {
+    const userId = req.userId;
+    const {
+      firstName,
+      lastName,
+      city,
+      homeTown,
+      college,
+      highSchool,
+      workplace,
+    } = req.body;
+    const updatedUser = await updateUserProfile(
+      userId,
+      firstName,
+      lastName,
+      city,
+      homeTown,
+      college,
+      highSchool,
+      workplace
+    );
+    return res
+      .status(201)
+      .json(new ApiResponse(200, updatedUser, "User updated"));
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
 };
 
 const changePassword = async (req, res, next) => {
@@ -122,12 +96,65 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const updateUserCoverImage = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { coverImageUrl } = req.body;
+    const updatedUser = await updateUserCoverImageById(userId, coverImageUrl);
+    return res
+      .status(201)
+      .json(new ApiResponse(200, updatedUser, "User Cover Image updated"));
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
+};
+
+const deleteUserCoverImage = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const updatedUser = await deleteUserCoverImageById(userId);
+    return res
+      .status(201)
+      .json(new ApiResponse(200, updatedUser, "User Cover Image deleted"));
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
+};
+
+const updateUserProfileImage = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { profileImageUrl } = req.body;
+    const updatedUser = await updateUserProfileImageById(
+      userId,
+      profileImageUrl
+    );
+    return res
+      .status(201)
+      .json(new ApiResponse(200, updatedUser, "User Profile Image Updated"));
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
+};
+
+const deleteUserProfileImage = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const updatedUser = await deleteUserProfileImageById(userId);
+    return res
+      .status(201)
+      .json(new ApiResponse(200, updatedUser, "User Profile Image deleted"));
+  } catch (error) {
+    return next(ApiError.serverError());
+  }
+};
+
 export {
   getUser,
   updateUser,
-  updateCoverImage,
-  deleteCoverImage,
-  updateProfileImage,
-  deleteProfileImage,
+  updateUserCoverImage,
+  deleteUserCoverImage,
+  updateUserProfileImage,
+  deleteUserProfileImage,
   changePassword,
 };

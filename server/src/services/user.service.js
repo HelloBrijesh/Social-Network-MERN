@@ -19,12 +19,13 @@ const getPasswordById = async (userId) => {
     return Promise.reject(error);
   }
 };
+
 const getUserByEmail = async (email) => {
   try {
     const user = await User.findOne({ email: email });
     return user;
   } catch (error) {
-    return error;
+    return Promise.reject(error);
   }
 };
 
@@ -36,19 +37,20 @@ const createUser = async (
   dateOfBirth,
   gender
 ) => {
-  const newUser = new User({
-    firstName,
-    lastName,
-    email,
-    password,
-    dateOfBirth,
-    gender,
-  });
   try {
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      dateOfBirth,
+      gender,
+    });
+
     const createdUser = await newUser.save();
     return createdUser;
   } catch (error) {
-    return error;
+    return Promise.reject(error);
   }
 };
 
@@ -58,7 +60,7 @@ const updateUserToVerified = async (userId) => {
       verified: true,
     });
   } catch (error) {
-    return error;
+    return Promise.reject(error);
   }
 };
 
@@ -103,7 +105,8 @@ const updateUserProfile = async (
     return Promise.reject(error);
   }
 };
-const updateCoverImageById = async (userId, coverImageUrl) => {
+
+const updateUserCoverImageById = async (userId, coverImageUrl) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -119,7 +122,8 @@ const updateCoverImageById = async (userId, coverImageUrl) => {
     return Promise.reject(error);
   }
 };
-const deleteCoverImageById = async (userId) => {
+
+const deleteUserCoverImageById = async (userId) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -135,7 +139,8 @@ const deleteCoverImageById = async (userId) => {
     return Promise.reject(error);
   }
 };
-const updateProfileImageById = async (userId, profileImageUrl) => {
+
+const updateUserProfileImageById = async (userId, profileImageUrl) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -151,7 +156,8 @@ const updateProfileImageById = async (userId, profileImageUrl) => {
     return Promise.reject(error);
   }
 };
-const deleteProfileImageById = async (userId) => {
+
+const deleteUserProfileImageById = async (userId) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -176,8 +182,8 @@ export {
   updateUserToVerified,
   updatePasswordByUserId,
   updateUserProfile,
-  updateCoverImageById,
-  updateProfileImageById,
-  deleteProfileImageById,
-  deleteCoverImageById,
+  updateUserCoverImageById,
+  updateUserProfileImageById,
+  deleteUserProfileImageById,
+  deleteUserCoverImageById,
 };
