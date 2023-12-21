@@ -7,7 +7,7 @@ const getUserById = async (userId) => {
     );
     return user;
   } catch (error) {
-    return error;
+    return Promise.reject(error);
   }
 };
 

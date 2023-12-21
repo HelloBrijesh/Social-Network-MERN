@@ -26,6 +26,14 @@ import {
   getPostComments,
   deleteComment,
 } from "../controllers/post.controller.js";
+import {
+  getFriends,
+  unFriend,
+  sendFriendRequest,
+  acceptFriendRequest,
+  rejectFriendRequest,
+  cancelFriendRequest,
+} from "../controllers/friend.controller.js";
 const router = express.Router();
 
 router.post("/auth/signup", signup);
@@ -50,5 +58,12 @@ router.put("/users/posts/:postId/like", auth, likePost);
 router.post("/users/posts/:postId/comment", auth, addPostComment);
 router.get("/users/posts/:postId/comments", auth, getPostComments);
 router.delete("/users/posts/:postId/comments/:commentId", auth, deleteComment);
+
+router.get("/users/friends", auth, getFriends);
+router.delete("/users/friends/remove", auth, unFriend);
+router.post("/users/friends/send-request", auth, sendFriendRequest);
+router.delete("/users/friends/remove-request", auth, cancelFriendRequest);
+router.post("/users/friends/accept-request", auth, acceptFriendRequest);
+router.post("/users/friends/reject-request", auth, rejectFriendRequest);
 
 export default router;
