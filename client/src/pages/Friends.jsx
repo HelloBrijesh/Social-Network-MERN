@@ -4,7 +4,7 @@ const Friends = () => {
   return (
     <>
       <div className="relative">
-        <div className="w-1/6 h-screen fixed shadow-[-5px_0_5px_-5px_#000000] bg-white">
+        <div className="w-1/6 h-screen fixed border-r-2 bg-white">
           <ul className="mt-10 ms-5">
             <NavLink to="/friends/">
               <li className="">Friends</li>

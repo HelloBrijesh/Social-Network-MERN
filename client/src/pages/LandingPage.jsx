@@ -14,7 +14,9 @@ const LandingPage = () => {
         <div className="h-[60px]">
           <Navbar />
         </div>
-        <Outlet />
+        <div className="">
+          <Outlet />
+        </div>
       </div>
     </>
   );
