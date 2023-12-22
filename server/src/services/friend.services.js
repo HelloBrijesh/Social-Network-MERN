@@ -1,10 +1,39 @@
 import User from "../models/user.model.js";
 
+const findFriends = async (userId, page, limit) => {
+  try {
+    const usersList = await User.find({ _id: { $ne: userId } })
+      .select(
+        "-friends -requestReceived -requestSent -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+    const count = await User.find({ _id: { $ne: userId } }).count();
+    const totalPages = Math.ceil((count - 1) / limit);
+    return { usersList, totalPages };
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 const getFriendsById = async (userId) => {
   try {
-    const userFriends = await User.findById(userId).select(
-      "-password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
-    );
+    const userFriends = await User.findById(userId)
+      .select(
+        "-id -firstName -lastName -profileImage -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestReceived",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestSent",
+        select: "firstName lastName profileImage",
+      });
     return userFriends;
   } catch (error) {
     return Promise.reject(error);
@@ -12,15 +41,30 @@ const getFriendsById = async (userId) => {
 };
 const removeFriendById = async (userId, userIdOfFriend) => {
   try {
+    console.log(userIdOfFriend);
+
     const userFriends = await User.findByIdAndUpdate(
       userId,
       {
         $pull: { friends: userIdOfFriend },
       },
       { new: true }
-    ).select(
-      "-password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
-    );
+    )
+      .select(
+        "-firstName -lastName -profileImage -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestReceived",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestSent",
+        select: "firstName lastName profileImage",
+      });
 
     await User.findByIdAndUpdate(userIdOfFriend, {
       $pull: { friends: userId },
@@ -28,9 +72,11 @@ const removeFriendById = async (userId, userIdOfFriend) => {
 
     return userFriends;
   } catch (error) {
+    console.log(error);
     return Promise.reject(error);
   }
 };
+
 const addFriendRequest = async (userId, userIdForFriend) => {
   try {
     const userFriends = await User.findByIdAndUpdate(
@@ -39,9 +85,22 @@ const addFriendRequest = async (userId, userIdForFriend) => {
         $push: { requestSent: userIdForFriend },
       },
       { new: true }
-    ).select(
-      "-password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
-    );
+    )
+      .select(
+        "-firstName -lastName -profileImage -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestReceived",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestSent",
+        select: "firstName lastName profileImage",
+      });
 
     await User.findByIdAndUpdate(userIdForFriend, {
       $push: { requestReceived: userId },
@@ -61,9 +120,22 @@ const removeFriendRequest = async (userId, userIdForFriend) => {
         $pull: { requestSent: userIdForFriend },
       },
       { new: true }
-    ).select(
-      "-password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
-    );
+    )
+      .select(
+        "-firstName -lastName -profileImage -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestReceived",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestSent",
+        select: "firstName lastName profileImage",
+      });
 
     await User.findByIdAndUpdate(userIdForFriend, {
       $pull: { requestReceived: userId },
@@ -77,12 +149,29 @@ const removeFriendRequest = async (userId, userIdForFriend) => {
 
 const approveFriendRequest = async (userId, userIdForFriend) => {
   try {
-    const userFriends = await User.findByIdAndUpdate(userId, {
-      $push: { friends: userIdForFriend },
-      $pull: { requestReceived: userIdForFriend },
-    }).select(
-      "-password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
-    );
+    const userFriends = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: { friends: userIdForFriend },
+        $pull: { requestReceived: userIdForFriend },
+      },
+      { new: true }
+    )
+      .select(
+        "-firstName -lastName -profileImage -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestReceived",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestSent",
+        select: "firstName lastName profileImage",
+      });
 
     await User.findByIdAndUpdate(userIdForFriend, {
       $push: { friends: userId },
@@ -95,12 +184,28 @@ const approveFriendRequest = async (userId, userIdForFriend) => {
 };
 const refuseFriendRequest = async (userId, userIdForFriend) => {
   try {
-    const userFriends = await User.findByIdAndUpdate(userId, {
-      $pull: { requestReceived: userIdForFriend },
-    }).select(
-      "-password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
-    );
-
+    const userFriends = await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: { requestReceived: userIdForFriend },
+      },
+      { new: true }
+    )
+      .select(
+        "-firstName -lastName -profileImage -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestReceived",
+        select: "firstName lastName profileImage",
+      })
+      .populate({
+        path: "requestSent",
+        select: "firstName lastName profileImage",
+      });
     await User.findByIdAndUpdate(userIdForFriend, {
       $pull: { requestSent: userId },
     });
@@ -111,6 +216,7 @@ const refuseFriendRequest = async (userId, userIdForFriend) => {
 };
 
 export {
+  findFriends,
   getFriendsById,
   removeFriendById,
   addFriendRequest,

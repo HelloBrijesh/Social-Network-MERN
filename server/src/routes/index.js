@@ -33,6 +33,7 @@ import {
   acceptFriendRequest,
   rejectFriendRequest,
   cancelFriendRequest,
+  getUsersListForFriends,
 } from "../controllers/friend.controller.js";
 const router = express.Router();
 
@@ -59,10 +60,11 @@ router.post("/users/posts/:postId/comment", auth, addPostComment);
 router.get("/users/posts/:postId/comments", auth, getPostComments);
 router.delete("/users/posts/:postId/comments/:commentId", auth, deleteComment);
 
+router.get("/users/find-friends", auth, getUsersListForFriends);
 router.get("/users/friends", auth, getFriends);
-router.delete("/users/friends/remove", auth, unFriend);
+router.delete("/users/friends/:userIdOfFriend", auth, unFriend);
 router.post("/users/friends/send-request", auth, sendFriendRequest);
-router.delete("/users/friends/remove-request", auth, cancelFriendRequest);
+router.post("/users/friends/remove-request", auth, cancelFriendRequest);
 router.post("/users/friends/accept-request", auth, acceptFriendRequest);
 router.post("/users/friends/reject-request", auth, rejectFriendRequest);
 
