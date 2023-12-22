@@ -8,7 +8,23 @@ import {
   removeFriendRequest,
   approveFriendRequest,
   refuseFriendRequest,
+  findFriends,
 } from "../services/friend.services.js";
+
+const getUsersListForFriends = async (req, res, next) => {
+  const userId = req.userId;
+  const limit = Number(req.query.limit);
+  const page = Number(req.query.page);
+  try {
+    const { usersList, totalPages } = await findFriends(userId, page, limit);
+
+    return res
+      .status(201)
+      .json(new ApiResponse(200, { usersList, totalPages }, "User List"));
+  } catch (error) {
+    return next(ApiError.serverError("Something Went wrong"));
+  }
+};
 
 const getFriends = async (req, res, next) => {
   const userId = req.userId;
@@ -23,8 +39,7 @@ const getFriends = async (req, res, next) => {
 };
 const unFriend = async (req, res, next) => {
   const userId = req.userId;
-  const { userIdOfFriend } = req.body;
-
+  const userIdOfFriend = req.params.userIdOfFriend;
   try {
     const userFriends = await removeFriendById(userId, userIdOfFriend);
     return res
@@ -94,6 +109,7 @@ const rejectFriendRequest = async (req, res, next) => {
 };
 
 export {
+  getUsersListForFriends,
   getFriends,
   unFriend,
   sendFriendRequest,
