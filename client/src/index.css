@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'custom', sans-serif;
+  }
+
+a.active {
+    color: #1877F2;
+  }
