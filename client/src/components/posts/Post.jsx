@@ -5,6 +5,7 @@ import { useUserContext } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import Comments from "./Comments";
 import { Link, Navigate } from "react-router-dom";
+import EditPost from "./EditPost";
 
 const Post = (post) => {
   const [like, setLike] = useState(false);
@@ -12,6 +13,7 @@ const Post = (post) => {
   const [comment, setComment] = useState(false);
   const [showPostMenu, setShowPostMenu] = useState(false);
   const { userDetails } = useUserContext();
+  const [showEditPost, setShowEditPost] = useState(false);
 
   useEffect(() => {
     if (post.likes.includes(userDetails.id)) {
@@ -41,6 +43,7 @@ const Post = (post) => {
   const handleDeletePost = async (postId) => {
     try {
       const response = await axiosAuthInstance.delete(`/users/posts/${postId}`);
+      setShowPostMenu(!showPostMenu);
     } catch (error) {
       console.log(error);
     }
@@ -53,6 +56,12 @@ const Post = (post) => {
     <div className="bg-white relative mb-5 w-[500px] rounded-lg shadow-lg">
       <div className="flex px-4 py-2 justify-between items-center">
         <div className="flex gap-3 items-center">
+          <EditPost
+            isVisible={showEditPost}
+            onClose={() => setShowEditPost(false)}
+            post={post}
+          ></EditPost>
+
           <div className="">
             {post.postedBy.profileImage === "" ? (
               <FontAwesomeIcon
@@ -88,7 +97,10 @@ const Post = (post) => {
           <div className="absolute bg-white top-[65px] right-0 border">
             <button
               className="py-2 px-3 w-full h-full hover:font-semibold"
-              onClick={() => handleEditPost(post.id)}
+              onClick={() => {
+                setShowEditPost(true);
+                setShowPostMenu(!showPostMenu);
+              }}
             >
               Edit Post
             </button>

@@ -2,6 +2,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import {
   savePost,
+  editPostById,
   fetchPostsForId,
   likePostById,
   addCommentToPost,
@@ -13,12 +14,40 @@ import {
 
 const createPost = async (req, res, next) => {
   const userId = req.userId;
-  const { postContent, postImage } = req.body;
+  const postImage = req.body.postImage;
+  let postContent = req.body.postContent;
+
+  if (!postContent && postImage) {
+    postContent = " ";
+  }
+
+  console.log("PostContent : ", postContent);
+
   try {
     const createdPost = await savePost(userId, postContent, postImage);
     return res
       .status(201)
       .json(new ApiResponse(200, createdPost, "Post Created"));
+  } catch (error) {
+    console.log(error.message);
+    return next(ApiError.serverError("Something went Wrong"));
+  }
+};
+
+const editPost = async (req, res, next) => {
+  const userId = req.userId;
+  const { postId } = req.params;
+  const postImage = req.body.postImage;
+  let postContent = req.body.postContent;
+
+  if (!postContent && postImage) {
+    postContent = " ";
+  }
+  try {
+    const editedPost = await editPostById(postId, postContent, postImage);
+    return res
+      .status(201)
+      .json(new ApiResponse(200, editedPost, "Post Edited"));
   } catch (error) {
     console.log(error.message);
     return next(ApiError.serverError("Something went Wrong"));
@@ -116,6 +145,7 @@ const deletePost = async (req, res, next) => {
 };
 export {
   createPost,
+  editPost,
   getPostsForUser,
   getPostsOfUser,
   likePost,

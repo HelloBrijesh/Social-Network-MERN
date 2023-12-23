@@ -21,6 +21,7 @@ import {
 } from "../controllers/user.controller.js";
 import {
   createPost,
+  editPost,
   getPostsForUser,
   likePost,
   addPostComment,
@@ -61,8 +62,9 @@ router.delete("/users/cover-image", auth, deleteUserCoverImage);
 router.put("/users/profile-image", auth, updateUserProfileImage);
 router.delete("/users/profile-image", auth, deleteUserProfileImage);
 
-router.post("/users/posts", auth, createPost);
 router.get("/users/posts", auth, getPostsForUser);
+router.post("/users/posts", auth, createPost);
+router.put("/users/posts/:postId", auth, editPost);
 router.put("/users/posts/:postId/like", auth, likePost);
 router.post("/users/posts/:postId/comment", auth, addPostComment);
 router.get("/users/posts/:postId/comments", auth, getPostComments);

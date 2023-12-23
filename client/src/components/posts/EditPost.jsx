@@ -2,49 +2,52 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useUserContext } from "../../context/UserContext";
-import usePost from "../../hooks/usePost";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import usePost from "../../hooks/usePost";
 
-const CreatePost = ({ isVisible, onClose }) => {
-  const [postContent, setPostContent] = useState("");
+const EditPost = ({ isVisible, onClose, post }) => {
+  const [postContent, setPostContent] = useState(post.postContent);
 
-  const { userDetails } = useUserContext();
   const {
     submitting,
     isError,
     postImage,
+    setPostImage,
     addPostImage,
     deletePostImage,
-    createPost,
+    editPost,
   } = usePost();
+
+  useEffect(() => {
+    setPostImage(post.postImage);
+  }, []);
+
+  const { userDetails } = useUserContext();
 
   const handlePostImage = async (e) => {
     await addPostImage(e);
   };
+
   const deleteImage = async () => {
     await deletePostImage();
   };
 
-  const handleCreatePost = async () => {
-    await createPost(postContent);
+  const handleEditPost = async () => {
+    await editPost(postContent, post.id);
     onClose();
   };
 
-  const handleCloseCreatePost = async () => {
-    await deletePostImage();
-    onClose();
-  };
   if (!isVisible) return null;
 
   return (
     <>
-      <div className="fixed z-20 shadow-lg inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
+      <div className="fixed shadow-lg inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
         <div className="bg-white w-[500px] flex flex-col rounded-lg">
           <div className="relative text-center p-3">
             <h1 className="text-xl font-bold mb-2">Create Post</h1>
             <button
-              onClick={handleCloseCreatePost}
+              onClick={() => onClose()}
               className="absolute right-5 top-3 text-xl font-semibold "
             >
               X
@@ -85,6 +88,7 @@ const CreatePost = ({ isVisible, onClose }) => {
                 className="w-full my-3"
                 placeholder={`What's on your mind, ${userDetails.firstName} ?`}
                 onChange={(e) => setPostContent(e.target.value)}
+                value={postContent}
               ></textarea>
             </div>
             <div>
@@ -121,11 +125,11 @@ const CreatePost = ({ isVisible, onClose }) => {
             </div>
             <div className="text-center">
               <button
-                onClick={handleCreatePost}
+                onClick={handleEditPost}
                 disabled={!postContent && !postImage}
                 className="w-full p-3 disabled:opacity-50 bg-blue font-bold text-white text-lg border border-none rounded-lg"
               >
-                Post
+                Edit Post
               </button>
             </div>
           </div>
@@ -135,4 +139,4 @@ const CreatePost = ({ isVisible, onClose }) => {
   );
 };
 
-export default CreatePost;
+export default EditPost;

@@ -16,6 +16,24 @@ const savePost = async (userId, postContent, postImage) => {
   }
 };
 
+const editPostById = async (postId, postContent, postImage) => {
+  try {
+    const editedPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        postContent: postContent,
+        postImage: postImage,
+      },
+      {
+        new: true,
+      }
+    );
+    return editedPost;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const fetchPostsForId = async (userId) => {
   try {
     const posts = await Post.find()
@@ -170,6 +188,7 @@ const deleteCommentByPostId = async (postId, commentId) => {
     return Promise.reject(error);
   }
 };
+
 const deletePostById = async (postId) => {
   try {
     const post = await Post.findById(postId);
@@ -187,6 +206,7 @@ const deletePostById = async (postId) => {
 
 export {
   savePost,
+  editPostById,
   fetchPostsForId,
   likePostById,
   getPostByUserId,

@@ -70,6 +70,17 @@ const useCreatePost = () => {
       console.log(error);
     }
   };
+  const editPost = async (postContent, postId) => {
+    try {
+      const response = await axiosAuthInstance.put(`/users/posts/${postId}`, {
+        postImage,
+        postContent,
+      });
+      setPostImage("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     submitting,
@@ -79,6 +90,7 @@ const useCreatePost = () => {
     addPostImage,
     deletePostImage,
     createPost,
+    editPost,
   };
 };
 
