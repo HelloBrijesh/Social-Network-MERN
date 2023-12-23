@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import POSTS from "../components/Posts";
-import CreatePost from "../components/CreatePost";
+import POSTS from "../components/posts/Posts";
+import CreatePost from "../components/posts/CreatePost";
 import { useState } from "react";
 import { useUserContext } from "../context/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,7 +14,10 @@ const Home = () => {
       <div className="bg-white-smoke min-h-screen">
         <div className="w-1/6 fixed">
           <div className="mt-10 flex flex-col items-center">
-            <Link to="/profile/" className="hover:font-bold ">
+            <Link
+              to={`${userDetails.id}/profile/`}
+              className="hover:font-bold "
+            >
               <div className="">
                 {userDetails.profileImage === "" ? (
                   <FontAwesomeIcon

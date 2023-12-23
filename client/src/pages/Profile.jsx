@@ -2,50 +2,82 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, Outlet } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
-import ProfileImage from "../components/ProfileImage";
-import CoverImage from "../components/CoverImage";
-import { useState } from "react";
+import ProfileImage from "../components/profile/ProfileImage";
+import CoverImage from "../components/profile/CoverImage";
+import { useEffect, useState } from "react";
+import { axiosAuthInstance } from "../services/api-client";
+import { useParams } from "react-router-dom";
 const Profile = () => {
   const { userDetails } = useUserContext();
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [showCoverImage, setShowCoverImage] = useState(false);
+  const [profileDetails, setProfileDetails] = useState(null);
+  let { userId } = useParams();
+  useEffect(() => {
+    axiosAuthInstance
+      .get(`/users/${userId}/profile-details`)
+      .then((response) => {
+        setProfileDetails(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId]);
+
+  if (profileDetails === null) {
+    return <p>Loading</p>;
+  }
+
   return (
     <>
       <div>
-        {userDetails.coverImage === "" ? (
-          <div
-            onClick={() => setShowCoverImage(true)}
-            className="h-[300px] cursor-pointer border-y-2 flex justify-center items-center"
-          >
-            <FontAwesomeIcon
-              icon={faUser}
-              className=" bg-white-smoke p-4 cursor-pointer  w-[50px] h-[50px] border-white border-4 rounded-full"
-            />
+        {profileDetails.coverImage === "" ? (
+          <div className="h-[300px] cursor-pointer border-y-2 flex justify-center items-center">
+            <button
+              className="h-full w-full"
+              onClick={() => setShowCoverImage(true)}
+              disabled={userDetails.id !== profileDetails.id}
+            >
+              <FontAwesomeIcon
+                icon={faUser}
+                className=" bg-white-smoke p-4 w-[50px] h-[50px] border-white border-4 rounded-full"
+              />
+            </button>
           </div>
         ) : (
           <div
-            onClick={() => setShowCoverImage(true)}
-            style={{ "--image-url": `url(${userDetails.coverImage})` }}
-            className="h-[300px] cursor-pointer bg-[image:var(--image-url)] bg-no-repeat bg-cover bg-center"
-          ></div>
+            style={{ "--image-url": `url(${profileDetails.coverImage})` }}
+            className="h-[300px] bg-[image:var(--image-url)] bg-no-repeat bg-cover bg-center"
+          >
+            <button
+              onClick={() => setShowCoverImage(true)}
+              className="h-full w-full"
+              disabled={userDetails.id !== profileDetails.id}
+            ></button>
+          </div>
         )}
 
         <div className="max-w-5xl mx-auto">
           <div className="flex ms-10 gap-x-10 ">
-            <div className="" onClick={() => setShowProfileImage(true)}>
-              {userDetails.profileImage === "" ? (
+            <button
+              className=""
+              disabled={userDetails.id !== profileDetails.id}
+              onClick={() => setShowProfileImage(true)}
+            >
+              {profileDetails.profileImage === "" ? (
                 <FontAwesomeIcon
                   icon={faUser}
-                  className=" bg-white-smoke p-4 relative cursor-pointer top-[-40px] w-[50px] h-[50px] border-white border-4 rounded-full"
+                  className=" bg-white-smoke p-4 relative top-[-40px] w-[50px] h-[50px] border-white border-4 rounded-full"
                 />
               ) : (
                 <img
-                  src={`${userDetails.profileImage}`}
+                  src={`${profileDetails.profileImage}`}
                   alt=""
-                  className="relative cursor-pointer top-[-50px] w-[100px] h-[100px] border-white border-4 rounded-full"
+                  className="relative top-[-50px] w-[100px] h-[100px] border-white border-4 rounded-full"
                 />
               )}
-            </div>
+            </button>
 
             <ProfileImage
               isVisible={showProfileImage}
@@ -56,23 +88,20 @@ const Profile = () => {
               onClose={() => setShowCoverImage(false)}
             />
             <p className="text-center mt-5 font-bold tracking-wide text-xl">
-              {userDetails.firstName} {userDetails.lastName}
+              {profileDetails.firstName} {profileDetails.lastName}
             </p>
           </div>
           <hr className="my-5"></hr>
           <div className="flex flex-col items-center">
             <ul className="flex gap-5">
               <li className="">
-                <NavLink to="/profile/">Timeline</NavLink>
+                <NavLink to={`/${userId}/profile/`}>Timeline</NavLink>
               </li>
               <li className="">
                 <NavLink to="about">About</NavLink>
               </li>
               <li className="">
                 <NavLink to="friendlist">Friends</NavLink>
-              </li>
-              <li className="">
-                <NavLink to="photos">Photos</NavLink>
               </li>
             </ul>
           </div>

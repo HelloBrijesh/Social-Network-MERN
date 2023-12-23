@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useUserContext } from "../context/UserContext";
-import useUpdateImage from "../hooks/useUpdateImage";
+import { useUserContext } from "../../context/UserContext";
+import useUpdateImage from "../../hooks/useUpdateImage";
 const ProfileImage = ({ isVisible, onClose }) => {
   const { userDetails } = useUserContext();
   const { submitting, isError, updateProfileImage, deleteProfileImage } =

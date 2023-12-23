@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
-import { axiosAuthInstance } from "../services/api-client";
-import { useUserContext } from "../context/UserContext";
+import { axiosAuthInstance } from "../../services/api-client";
+import { useUserContext } from "../../context/UserContext";
 
 const Comments = ({ postId }) => {
   const [comments, setComments] = useState([]);

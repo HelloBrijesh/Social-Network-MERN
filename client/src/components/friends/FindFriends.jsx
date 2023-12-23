@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../services/api-client";
+import { axiosAuthInstance } from "../../services/api-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import UserList from "./UserList";

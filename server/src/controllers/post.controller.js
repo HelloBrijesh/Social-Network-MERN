@@ -2,11 +2,13 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import {
   savePost,
-  fetchPostsById,
+  fetchPostsForId,
   likePostById,
   addCommentToPost,
   getCommentsByPostId,
   deleteCommentByPostId,
+  getPostByUserId,
+  deletePostById,
 } from "../services/post.service.js";
 
 const createPost = async (req, res, next) => {
@@ -23,10 +25,20 @@ const createPost = async (req, res, next) => {
   }
 };
 
-const getPost = async (req, res, next) => {
+const getPostsForUser = async (req, res, next) => {
   const userId = req.userId;
   try {
-    const posts = await fetchPostsById(userId);
+    const posts = await fetchPostsForId(userId);
+    return res.status(201).json(new ApiResponse(200, posts, "Posts"));
+  } catch (error) {
+    return next(ApiError.serverError("Something went Wrong"));
+  }
+};
+
+const getPostsOfUser = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const posts = await getPostByUserId(userId);
     return res.status(201).json(new ApiResponse(200, posts, "Posts"));
   } catch (error) {
     return next(ApiError.serverError("Something went Wrong"));
@@ -83,17 +95,32 @@ const deleteComment = async (req, res, next) => {
 
   try {
     const updatedComments = await deleteCommentByPostId(postId, commentId);
-    return res.status(201).json(new ApiResponse(200, updatedComments, "Posts"));
+    return res
+      .status(201)
+      .json(new ApiResponse(200, updatedComments, "Comment Deleted"));
   } catch (error) {
     return next(ApiError.serverError("Something went wrong"));
   }
 };
 
+const deletePost = async (req, res, next) => {
+  const userId = req.userId;
+  const postId = req.params.postId;
+
+  try {
+    await deletePostById(postId);
+    return res.status(201).json(new ApiResponse(200, "", "Posts Deleted"));
+  } catch (error) {
+    return next(ApiError.serverError("Something went wrong"));
+  }
+};
 export {
   createPost,
-  getPost,
+  getPostsForUser,
+  getPostsOfUser,
   likePost,
   addPostComment,
   getPostComments,
   deleteComment,
+  deletePost,
 };

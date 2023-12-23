@@ -1,15 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { axiosAuthInstance } from "../services/api-client";
-import { useUserContext } from "../context/UserContext";
+import { axiosAuthInstance } from "../../services/api-client";
+import { useUserContext } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import Comments from "./Comments";
+import { Link, Navigate } from "react-router-dom";
 
 const Post = (post) => {
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(false);
   const [comment, setComment] = useState(false);
-
+  const [showPostMenu, setShowPostMenu] = useState(false);
   const { userDetails } = useUserContext();
 
   useEffect(() => {
@@ -37,8 +38,19 @@ const Post = (post) => {
     }
   };
 
+  const handleDeletePost = async (postId) => {
+    try {
+      const response = await axiosAuthInstance.delete(`/users/posts/${postId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleEditPost = async (postId) => {
+    console.log(postId);
+  };
+
   return (
-    <div className="bg-white mb-5 w-[500px] rounded-lg shadow-lg">
+    <div className="bg-white relative mb-5 w-[500px] rounded-lg shadow-lg">
       <div className="flex px-4 py-2 justify-between items-center">
         <div className="flex gap-3 items-center">
           <div className="">
@@ -56,16 +68,39 @@ const Post = (post) => {
             )}
           </div>
           <div className="text-sm">
-            <p className="font-bold">
-              {post.postedBy.firstName} {post.postedBy.lastName}
-            </p>
+            <Link to={`${post.postedBy.id}/profile/`}>
+              <p className="font-bold">
+                {post.postedBy.firstName} {post.postedBy.lastName}
+              </p>
+            </Link>
             <p className="text-slate-500">time</p>
           </div>
         </div>
-        <div className="flex gap-5">
-          <p>...</p>
-          <p>X</p>
-        </div>
+
+        <button
+          disabled={userDetails.id !== post.postedBy.id}
+          className=""
+          onClick={() => setShowPostMenu(!showPostMenu)}
+        >
+          ...
+        </button>
+        {showPostMenu && (
+          <div className="absolute bg-white top-[65px] right-0 border">
+            <button
+              className="py-2 px-3 w-full h-full hover:font-semibold"
+              onClick={() => handleEditPost(post.id)}
+            >
+              Edit Post
+            </button>
+            <hr></hr>
+            <button
+              className="py-2 px-3 w-full h-full hover:font-semibold"
+              onClick={() => handleDeletePost(post.id)}
+            >
+              Delete Post
+            </button>
+          </div>
+        )}
       </div>
       <hr></hr>
       <div className="mx-5 my-3 mb-5">

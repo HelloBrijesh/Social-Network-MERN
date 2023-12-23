@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
-import { useUserContext } from "../context/UserContext";
-import useEditProfile from "../hooks/useEditProfile";
+import { useUserContext } from "../../context/UserContext";
+import useEditProfile from "../../hooks/useEditProfile";
 
 const EditProfile = ({ isVisible, onClose }) => {
   const { userDetails } = useUserContext();

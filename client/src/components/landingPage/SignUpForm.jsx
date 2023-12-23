@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import useSignup from "../hooks/useSignup";
+import useSignup from "../../hooks/useSignup";
 
 const SignUpForm = ({ isVisible, onClose }) => {
   const { isError, submitting, isSignedup, signup } = useSignup();

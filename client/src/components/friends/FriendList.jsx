@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../services/api-client";
+import { axiosAuthInstance } from "../../services/api-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 const FriendList = () => {
   const [friends, setFriends] = useState([]);
 
@@ -35,19 +36,20 @@ const FriendList = () => {
             key={friend.id}
             className="w-[150px] border rounded-lg overflow-hidden shadow-2xl "
           >
-            {friend.profileImage === "" ? (
-              <FontAwesomeIcon icon={faUser} className="w-full h-[150px] " />
-            ) : (
-              <img
-                src={`${friend.profileImage}`}
-                alt=""
-                className="w-full h-[150px]"
-              />
-            )}
-
-            <h1 className="bg-white p-3">
-              {friend.firstName} {friend.lastName}
-            </h1>
+            <Link to={`/${friend.id}/profile`}>
+              {friend.profileImage === "" ? (
+                <FontAwesomeIcon icon={faUser} className="w-full h-[150px] " />
+              ) : (
+                <img
+                  src={`${friend.profileImage}`}
+                  alt=""
+                  className="w-full h-[150px]"
+                />
+              )}
+              <h1 className="bg-white p-3">
+                {friend.firstName} {friend.lastName}
+              </h1>
+            </Link>
             <button
               onClick={() => handleUnfriend(friend.id)}
               className="py-2 w-full bg-red-500 text-white"

@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useUserContext } from "../context/UserContext";
-import useCreatePost from "../hooks/useCreatePost";
+import { useUserContext } from "../../context/UserContext";
+import useCreatePost from "../../hooks/useCreatePost";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const CreatePost = ({ isVisible, onClose }) => {
   const [postContent, setPostContent] = useState("");
@@ -62,14 +63,16 @@ const CreatePost = ({ isVisible, onClose }) => {
                   <img
                     src={`${userDetails.profileImage}`}
                     alt=""
-                    className="w-[60px] h-[50px] rounded-full border-white border-4"
+                    className="w-[50px] h-[50px] rounded-full border-white border-4"
                   />
                 )}
               </div>
               <div className="text-sm">
-                <p className="font-bold">
-                  {userDetails.firstName} {userDetails.lastName}
-                </p>
+                <Link to={`${userDetails.id}/profile/`}>
+                  <p className="font-bold">
+                    {userDetails.firstName} {userDetails.lastName}
+                  </p>
+                </Link>
                 <p className="text-slate-500">time</p>
               </div>
             </div>

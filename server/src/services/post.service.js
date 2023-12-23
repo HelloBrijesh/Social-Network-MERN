@@ -16,7 +16,7 @@ const savePost = async (userId, postContent, postImage) => {
   }
 };
 
-const fetchPostsById = async (userId) => {
+const fetchPostsForId = async (userId) => {
   try {
     const posts = await Post.find()
       .populate({
@@ -38,10 +38,23 @@ const fetchPostsById = async (userId) => {
   }
 };
 
-const getPostById = async (postId) => {
+const getPostByUserId = async (userId) => {
   try {
-    const post = await Post.findById(postId);
-    return post;
+    const posts = await Post.find({ postedBy: userId })
+      .populate({
+        path: "postedBy",
+        select: "firstName lastName profileImage",
+      })
+      .populate([
+        {
+          path: "comments",
+          populate: {
+            path: "commentedBy",
+            select: "firstName lastName profileImage",
+          },
+        },
+      ]);
+    return posts;
   } catch (error) {
     return Promise.reject(error);
   }
@@ -49,7 +62,7 @@ const getPostById = async (postId) => {
 
 const likePostById = async (userId, postId) => {
   try {
-    const post = await getPostById(postId);
+    const post = await Post.findById(postId);
 
     let updatedpost;
 
@@ -157,13 +170,28 @@ const deleteCommentByPostId = async (postId, commentId) => {
     return Promise.reject(error);
   }
 };
+const deletePostById = async (postId) => {
+  try {
+    const post = await Post.findById(postId);
+
+    const comments = post.comments;
+
+    for (let comment of comments) {
+      await Comment.findByIdAndDelete(comment);
+    }
+    await Post.findByIdAndDelete(postId);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 
 export {
   savePost,
-  fetchPostsById,
+  fetchPostsForId,
   likePostById,
-  getPostById,
+  getPostByUserId,
   addCommentToPost,
   getCommentsByPostId,
   deleteCommentByPostId,
+  deletePostById,
 };

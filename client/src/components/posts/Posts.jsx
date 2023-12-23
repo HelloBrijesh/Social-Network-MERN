@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../services/api-client";
+import { axiosAuthInstance } from "../../services/api-client";
 import Post from "./Post";
 const Posts = () => {
   const [isLoading, setIsLoading] = useState(false);

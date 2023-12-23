@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../services/api-client";
+import { axiosAuthInstance } from "../../services/api-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 const FriendRequest = () => {
   const [requestReceived, setRequestReceived] = useState([]);
 
@@ -45,21 +46,23 @@ const FriendRequest = () => {
           className="w-[500px] h-full flex justify-between items-center gap-5 p-5 bg-white rounded-lg shadow-xl "
         >
           <div className=" flex items-center gap-5 ">
-            {request.profileImage === "" ? (
-              <FontAwesomeIcon
-                icon={faUser}
-                className="w-[50px] h-[50px] rounded-full "
-              />
-            ) : (
-              <img
-                src={`${request.profileImage}`}
-                alt=""
-                className="w-[50px] h-[50px] rounded-full"
-              />
-            )}
-            <h1 className="">
-              {request.fistName} {request.lastName}
-            </h1>
+            <Link to={`/${request.id}/profile`}>
+              {request.profileImage === "" ? (
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="w-[50px] h-[50px] rounded-full "
+                />
+              ) : (
+                <img
+                  src={`${request.profileImage}`}
+                  alt=""
+                  className="w-[50px] h-[50px] rounded-full"
+                />
+              )}
+              <h1 className="">
+                {request.fistName} {request.lastName}
+              </h1>
+            </Link>
           </div>
           <div className="flex gap-3">
             <button

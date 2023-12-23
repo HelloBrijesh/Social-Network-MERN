@@ -39,6 +39,21 @@ const getFriendsById = async (userId) => {
     return Promise.reject(error);
   }
 };
+const fetchFriendsOfUser = async (userId) => {
+  try {
+    const userFriends = await User.findById(userId)
+      .select(
+        "-id -firstName -lastName -requestReceived -requestSent -profileImage -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
+      )
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      });
+    return userFriends;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 const removeFriendById = async (userId, userIdOfFriend) => {
   try {
     console.log(userIdOfFriend);
@@ -218,6 +233,7 @@ const refuseFriendRequest = async (userId, userIdForFriend) => {
 export {
   findFriends,
   getFriendsById,
+  fetchFriendsOfUser,
   removeFriendById,
   addFriendRequest,
   removeFriendRequest,

@@ -12,6 +12,7 @@ import { auth } from "../middleware/auth.middleware.js";
 import {
   getUser,
   updateUser,
+  getProfile,
   changePassword,
   updateUserCoverImage,
   updateUserProfileImage,
@@ -20,14 +21,17 @@ import {
 } from "../controllers/user.controller.js";
 import {
   createPost,
-  getPost,
+  getPostsForUser,
   likePost,
   addPostComment,
   getPostComments,
   deleteComment,
+  getPostsOfUser,
+  deletePost,
 } from "../controllers/post.controller.js";
 import {
   getFriends,
+  getFriendsOfUser,
   unFriend,
   sendFriendRequest,
   acceptFriendRequest,
@@ -46,6 +50,10 @@ router.post("/auth/forgot-password", forgotPassword);
 router.post("/auth/reset-password", resetPassword);
 
 router.get("/users", auth, getUser);
+router.get("/users/:userId/profile-details", auth, getProfile);
+router.get("/users/:userId/posts", auth, getPostsOfUser);
+router.get("/users/:userId/friends", auth, getFriendsOfUser);
+
 router.put("/users", auth, updateUser);
 router.put("/users/change-password", auth, changePassword);
 router.put("/users/cover-image", auth, updateUserCoverImage);
@@ -54,11 +62,12 @@ router.put("/users/profile-image", auth, updateUserProfileImage);
 router.delete("/users/profile-image", auth, deleteUserProfileImage);
 
 router.post("/users/posts", auth, createPost);
-router.get("/users/posts", auth, getPost);
+router.get("/users/posts", auth, getPostsForUser);
 router.put("/users/posts/:postId/like", auth, likePost);
 router.post("/users/posts/:postId/comment", auth, addPostComment);
 router.get("/users/posts/:postId/comments", auth, getPostComments);
 router.delete("/users/posts/:postId/comments/:commentId", auth, deleteComment);
+router.delete("/users/posts/:postId", auth, deletePost);
 
 router.get("/users/find-friends", auth, getUsersListForFriends);
 router.get("/users/friends", auth, getFriends);

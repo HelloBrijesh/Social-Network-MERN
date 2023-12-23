@@ -57,6 +57,19 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const getProfile = async (req, res, next) => {
+  const userId = req.params.userId;
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      return next(ApiError.notFound("User not found"));
+    }
+    return res.status(201).json(new ApiResponse(200, user, "User Details"));
+  } catch (error) {
+    return next(ApiError.serverError("Something Went wrong"));
+  }
+};
+
 const changePassword = async (req, res, next) => {
   const userId = req.userId;
   const { error } = changePasswordSchema.validate(req.body);
@@ -152,6 +165,7 @@ const deleteUserProfileImage = async (req, res, next) => {
 export {
   getUser,
   updateUser,
+  getProfile,
   updateUserCoverImage,
   deleteUserCoverImage,
   updateUserProfileImage,

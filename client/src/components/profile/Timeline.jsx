@@ -1,4 +1,20 @@
+import { useEffect, useState } from "react";
+import { axiosAuthInstance } from "../../services/api-client";
+import { useParams } from "react-router-dom";
+
 const Timeline = () => {
+  let { userId } = useParams();
+  useEffect(() => {
+    axiosAuthInstance
+      .get(`/users/${userId}/posts`)
+      .then((response) => {
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="flex flex-col items-center">
       <div className="bg-white  w-[500px] rounded-lg shadow-lg">
