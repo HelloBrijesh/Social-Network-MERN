@@ -72,14 +72,12 @@ const Comments = ({ postId }) => {
               <div className=" bg-slate-100 w-full px-3 py-3 rounded-2xl">
                 <div className="font-semibold">
                   {comment.commentedBy.firstName} {comment.commentedBy.lastName}
-                  {comment.commentedBy.id === userDetails.id && (
-                    <button
-                      className="ms-5"
-                      onClick={() => deleteComment(comment.id)}
-                    >
-                      Delete
-                    </button>
-                  )}
+                  <button
+                    className="ms-5"
+                    onClick={() => deleteComment(comment.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
                 <p>{comment.commentContent}</p>
               </div>
