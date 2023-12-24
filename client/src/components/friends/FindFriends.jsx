@@ -7,9 +7,8 @@ const FindFriends = () => {
   const [usersList, setUsersList] = useState([]);
   const [userFriends, setUserFriends] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   const [firstPage, setFirstPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const LIMIT = 1;
 
   useEffect(() => {
@@ -34,7 +33,10 @@ const FindFriends = () => {
   };
 
   const handlePageChange = async (selectedPage) => {
+    const pageSet = Math.ceil(selectedPage / 3);
+    setFirstPage(pageSet * 3 - 3 + 1);
     setCurrentPage(selectedPage);
+
     try {
       const response = await axiosAuthInstance.get(
         `/users/find-friends?page=${selectedPage}&limit=${LIMIT}`
@@ -85,18 +87,18 @@ const FindFriends = () => {
             Prev
           </button>
         </div>
-        {Array.from(Array(totalPages), (e, i) => {
+        {Array.from(Array(3), (e, i) => {
           return (
             <button
               key={i}
-              onClick={() => handlePageChange(i + 1)}
+              onClick={() => handlePageChange(i + firstPage)}
               className={
-                currentPage === i + 1
+                currentPage === i + firstPage
                   ? "bg-blue text-white font-semibold border px-4 py-2 rounded-full"
                   : " bg-slate-500 text-white font-semibold border px-4 py-2 rounded-full"
               }
             >
-              {i + 1}
+              {firstPage + i}
             </button>
           );
         })}
@@ -105,7 +107,7 @@ const FindFriends = () => {
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
-            Prev
+            Next
           </button>
         </div>
       </div>
