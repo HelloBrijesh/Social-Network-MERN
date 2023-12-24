@@ -12,8 +12,8 @@ const Post = (post) => {
   const [likeCount, setLikeCount] = useState(false);
   const [comment, setComment] = useState(false);
   const [showPostMenu, setShowPostMenu] = useState(false);
-  const { userDetails } = useUserContext();
   const [showEditPost, setShowEditPost] = useState(false);
+  const { userDetails } = useUserContext();
 
   useEffect(() => {
     if (post.likes.includes(userDetails.id)) {
