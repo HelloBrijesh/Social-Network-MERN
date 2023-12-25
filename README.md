@@ -116,4 +116,4 @@ We welcome contributions from the community. To contribute to this project, plea
 
 ## License
 
-This project is licensed under the [MIT License](lhttps://github.com/HelloBrijesh/Social-Network-MERN/blob/main/LICENSE).
+This project is licensed under the [MIT License](https://github.com/HelloBrijesh/Social-Network-MERN/blob/main/LICENSE).
