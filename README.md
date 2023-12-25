@@ -2,6 +2,13 @@
 
 Welcome to the Social Networking Site project! This repository contains the source code and documentation for social networking application built using the MERN (MongoDB, Express.js, React.js, Node.js) stack.
 
+## Technologies Used
+
+- **Frontend:** React.js
+- **Backend:** Node.js with Express.js
+- **Database:** MongoDB
+- **Storage:** Firebase Storage
+
 ## Table of Contents
 
 - [About the Project](#about-the-project)
@@ -10,6 +17,7 @@ Welcome to the Social Networking Site project! This repository contains the sour
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
+- [Future Improvements](#future-improvements)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -19,14 +27,21 @@ Our Social Networking Site project aims to create a platform where users can con
 
 ## Features
 
-- User Registration and Authentication
-- User Profiles
-- Create, Edit, and Delete Posts
-- Comment on Posts
-- Like and Share Posts
-- Friend Requests and Acceptance
-- Real-time Notifications
-- Messaging System
+- **User Management:** JWT token-based authentication for secure user management.
+- **Profile Management:**
+
+  - User Profiles
+  - Profile Image and Cover Image upload using Firebase Storage
+
+- **Post Management:** Users can create, edit, and delete posts.
+- **Commenting System:** Users can comment on posts and delete their own comments.
+- **Like System:** Users can like posts.
+- **Friendship System:**
+
+  - Send Friend Requests
+  - Accept or Reject Friend Requests
+  - Find Friends
+
 - Search and Explore Users and Posts
 - Responsive Design
 
@@ -90,10 +105,15 @@ Make sure you have the following software installed on your system:
 Visit the application in your browser at http://localhost:5173.
 Sign up for an account, create posts, add friends, and explore the features of the social networking site.
 
+## Future Improvements
+
+- Implement real-time notifications.
+- Enhance user interface and experience.
+
 ## Contributing
 
 We welcome contributions from the community. To contribute to this project, please follow our Contribution Guidelines.
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](lhttps://github.com/HelloBrijesh/Social-Network-MERN/blob/main/LICENSE).
