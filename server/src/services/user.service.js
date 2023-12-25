@@ -2,9 +2,12 @@ import User from "../models/user.model.js";
 
 const getUserById = async (userId) => {
   try {
-    const user = await User.findById(userId).select(
-      "-password -verified -updatedAt"
-    );
+    const user = await User.findById(userId)
+      .select("-password -verified -updatedAt")
+      .populate({
+        path: "friends",
+        select: "firstName lastName profileImage",
+      });
     return user;
   } catch (error) {
     return Promise.reject(error);

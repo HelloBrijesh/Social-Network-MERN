@@ -21,8 +21,6 @@ const createPost = async (req, res, next) => {
     postContent = " ";
   }
 
-  console.log("PostContent : ", postContent);
-
   try {
     const createdPost = await savePost(userId, postContent, postImage);
     return res
@@ -49,7 +47,6 @@ const editPost = async (req, res, next) => {
       .status(201)
       .json(new ApiResponse(200, editedPost, "Post Edited"));
   } catch (error) {
-    console.log(error.message);
     return next(ApiError.serverError("Something went Wrong"));
   }
 };

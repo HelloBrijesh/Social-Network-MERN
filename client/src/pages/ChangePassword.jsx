@@ -56,7 +56,7 @@ const ChangePassword = () => {
               Submit
             </button>
           </div>
-          {!submitted && (
+          {submitted && (
             <div className="my-5">
               <Link to="/">
                 <button className="bg-blue w-full p-3  text-white text-xl border border-none rounded-lg">

@@ -6,14 +6,11 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { axiosAuthInstance } from "../services/api-client";
-import { useUserContext } from "../context/UserContext";
 import { useState } from "react";
 
-const useCreatePost = () => {
-  const [submitting, setIsSubmitting] = useState(false);
-  const [isError, setIsError] = useState(false);
+const usePost = () => {
+  const [status, setStatus] = useState("");
   const [postImage, setPostImage] = useState("");
-  const { userDetails } = useUserContext();
 
   const addPostImage = async (e) => {
     if (postImage !== "") {
@@ -26,17 +23,15 @@ const useCreatePost = () => {
     }
 
     try {
-      setIsSubmitting(true);
-      setIsError(false);
+      setStatus("Loading");
       const imageName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
       const storageRef = ref(storage, `SocialNetwork/postImages/${imageName}`);
       const snapshot = await uploadBytes(storageRef, e.target.files[0]);
       const downloaded_url = await getDownloadURL(storageRef);
       setPostImage(downloaded_url);
+      setStatus("Success");
     } catch (error) {
-      setIsError(true);
-    } finally {
-      setIsSubmitting(false);
+      setStatus("Error");
     }
   };
 
@@ -47,44 +42,47 @@ const useCreatePost = () => {
         storage,
         `SocialNetwork/postImages/${imageTobeDeleted}`
       );
+      setStatus("Loading");
       try {
-        setIsSubmitting(true);
-        setIsError(false);
         await deleteObject(desertRef);
         setPostImage("");
+        setStatus("Success");
       } catch (error) {
-        setIsError(true);
-      } finally {
-        setIsSubmitting(false);
+        setStatus("Error");
       }
     }
   };
   const createPost = async (postContent) => {
+    setStatus("Loading");
     try {
       const response = await axiosAuthInstance.post("/users/posts", {
         postImage,
         postContent,
       });
       setPostImage("");
+      setStatus("Success");
     } catch (error) {
-      console.log(error);
+      setStatus("Error");
     }
   };
   const editPost = async (postContent, postId) => {
+    setStatus("Loading");
     try {
       const response = await axiosAuthInstance.put(`/users/posts/${postId}`, {
         postImage,
         postContent,
       });
       setPostImage("");
+      setStatus("Success");
     } catch (error) {
-      console.log(error);
+      setStatus("Error");
     }
   };
-
+  const isLoading = status === "Loading";
+  const error = status === "Error";
   return {
-    submitting,
-    isError,
+    isLoading,
+    error,
     postImage,
     setPostImage,
     addPostImage,
@@ -94,4 +92,4 @@ const useCreatePost = () => {
   };
 };
 
-export default useCreatePost;
+export default usePost;

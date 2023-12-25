@@ -11,8 +11,8 @@ const CreatePost = ({ isVisible, onClose }) => {
 
   const { userDetails } = useUserContext();
   const {
-    submitting,
-    isError,
+    isLoading,
+    error,
     postImage,
     addPostImage,
     deletePostImage,
@@ -36,6 +36,14 @@ const CreatePost = ({ isVisible, onClose }) => {
     onClose();
   };
   if (!isVisible) return null;
+
+  if (isLoading) {
+    return <p>{isLoading}</p>;
+  }
+
+  if (error) {
+    return <p>Something Went wrong</p>;
+  }
 
   return (
     <>

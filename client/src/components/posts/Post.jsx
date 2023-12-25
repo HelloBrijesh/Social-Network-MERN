@@ -48,9 +48,6 @@ const Post = (post) => {
       console.log(error);
     }
   };
-  const handleEditPost = async (postId) => {
-    console.log(postId);
-  };
 
   return (
     <div className="bg-white relative mb-5 w-[500px] rounded-lg shadow-lg">

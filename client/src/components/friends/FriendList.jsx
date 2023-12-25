@@ -1,30 +1,10 @@
-import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../../services/api-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import useFriend from "../../hooks/useFriend";
+
 const FriendList = () => {
-  const [friends, setFriends] = useState([]);
-
-  useEffect(() => {
-    axiosAuthInstance
-      .get("/users/friends")
-      .then((response) => {
-        setFriends(response.data.data.friends);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  const handleUnfriend = async (userIdOfFriend) => {
-    try {
-      const response = await axiosAuthInstance.delete(
-        `/users/friends/${userIdOfFriend}`
-      );
-      setFriends(response.data.data.friends);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { isLoading, error, friends, unfriend } = useFriend();
 
   return (
     <div className="w-[700px] ml-auto h-full">
@@ -51,7 +31,7 @@ const FriendList = () => {
               </h1>
             </Link>
             <button
-              onClick={() => handleUnfriend(friend.id)}
+              onClick={() => unfriend(friend.id)}
               className="py-2 w-full bg-red-500 text-white"
             >
               Unfriend

@@ -1,42 +1,16 @@
-import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../../services/api-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import useFriend from "../../hooks/useFriend";
+
 const FriendRequest = () => {
-  const [requestReceived, setRequestReceived] = useState([]);
-
-  useEffect(() => {
-    axiosAuthInstance
-      .get("/users/friends")
-      .then((response) => {
-        setRequestReceived(response.data.data.requestReceived);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  const handleAcceptFriendRequest = async (userIdForFriend) => {
-    try {
-      const response = await axiosAuthInstance.post(
-        "/users/friends/accept-request",
-        { userIdForFriend }
-      );
-      setRequestReceived(response.data.data.requestReceived);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleRejectFriendRequest = async (userIdForFriend) => {
-    try {
-      const response = await axiosAuthInstance.post(
-        "/users/friends/reject-request",
-        { userIdForFriend }
-      );
-      setRequestReceived(response.data.data.requestReceived);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const {
+    isLoading,
+    error,
+    requestReceived,
+    acceptFriendRequest,
+    rejectFriendRequest,
+  } = useFriend();
 
   return (
     <div className="flex flex-col gap-y-10 h-full">
@@ -66,13 +40,13 @@ const FriendRequest = () => {
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => handleAcceptFriendRequest(request.id)}
+              onClick={() => acceptFriendRequest(request.id)}
               className=" bg-green-500 text-white px-3 py-2"
             >
               Accept
             </button>
             <button
-              onClick={() => handleRejectFriendRequest(request.id)}
+              onClick={() => rejectFriendRequest(request.id)}
               className=" bg-red-500 text-white px-3 py-2"
             >
               Reject

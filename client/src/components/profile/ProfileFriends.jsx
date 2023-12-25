@@ -1,28 +1,21 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../../services/api-client";
 import { useParams } from "react-router-dom";
+import useProfile from "../../hooks/useProfile";
 
 const ProfileFriends = () => {
-  const [friends, setFriends] = useState([]);
-
   let { userId } = useParams();
-  useEffect(() => {
-    axiosAuthInstance
-      .get(`/users/${userId}/friends`)
-      .then((response) => {
-        setFriends(response.data.data.friends);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+
+  const { isLoading, error, friends } = useProfile(userId);
 
   return (
     <div>
-      <div>{friends.length === 0 && <p>No Friends</p>}</div>
+      <div>
+        {friends.length === 0 && (
+          <p className="text-center font-semibold">No Friends</p>
+        )}
+      </div>
       <div>
         {friends.map((friend) => (
           <div
