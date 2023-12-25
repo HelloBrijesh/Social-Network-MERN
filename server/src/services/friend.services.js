@@ -56,8 +56,6 @@ const fetchFriendsOfUser = async (userId) => {
 };
 const removeFriendById = async (userId, userIdOfFriend) => {
   try {
-    console.log(userIdOfFriend);
-
     const userFriends = await User.findByIdAndUpdate(
       userId,
       {
@@ -87,7 +85,6 @@ const removeFriendById = async (userId, userIdOfFriend) => {
 
     return userFriends;
   } catch (error) {
-    console.log(error);
     return Promise.reject(error);
   }
 };

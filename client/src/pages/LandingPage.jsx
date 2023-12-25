@@ -14,7 +14,7 @@ const LandingPage = () => {
         <div className="h-[60px]">
           <Navbar />
         </div>
-        <div className="">
+        <div className="w-full">
           <Outlet />
         </div>
       </div>

@@ -10,13 +10,13 @@ const ProfileFriends = () => {
   const { isLoading, error, friends } = useProfile(userId);
 
   return (
-    <div>
+    <div className="mx-10">
       <div>
         {friends.length === 0 && (
           <p className="text-center font-semibold">No Friends</p>
         )}
       </div>
-      <div>
+      <div className="flex gap-5 flex-wrap">
         {friends.map((friend) => (
           <div
             key={friend.id}
@@ -32,16 +32,16 @@ const ProfileFriends = () => {
                   className="w-full h-[150px]"
                 />
               )}
-              <h1 className="bg-white p-3">
+              <h1 className="bg-white p-3 text-center">
                 {friend.firstName} {friend.lastName}
               </h1>
             </Link>
-            <button
+            {/* <button
               onClick={() => handleUnfriend(friend.id)}
               className="py-2 w-full bg-red-500 text-white"
             >
               Unfriend
-            </button>
+            </button> */}
           </div>
         ))}
       </div>

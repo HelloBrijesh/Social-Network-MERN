@@ -23,7 +23,7 @@ const Timeline = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="mx-6">
       {posts.length === 0 && <p className=" font-semibold">No Posts</p>}
 
       {posts.map((post) => (

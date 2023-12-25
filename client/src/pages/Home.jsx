@@ -1,19 +1,36 @@
 import { Link } from "react-router-dom";
 import POSTS from "../components/posts/Posts";
 import CreatePost from "../components/posts/CreatePost";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUserContext } from "../context/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { axiosAuthInstance } from "../services/api-client";
 const Home = () => {
   const [showCreatePost, setCreatePost] = useState(false);
   const { userDetails } = useUserContext();
+  const [status, setStatus] = useState("");
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    setStatus("Loading");
+    axiosAuthInstance
+      .get("/users/posts")
+      .then((response) => {
+        setPosts(response.data.data);
+        setStatus("Success");
+      })
+      .catch((error) => {
+        setStatus("Error");
+      });
+  }, []);
+  const isLoading = status === "Loading";
+  const error = status === "Error";
 
   return (
     <>
-      <div className="bg-white-smoke min-h-screen">
-        <div className="w-1/6 fixed">
-          <div className="mt-10 flex flex-col items-center">
+      <div className="bg-white-smoke min-h-screen w-full">
+        <div className="md:w-1/6 fixed">
+          <div className="mt-10 hidden md:flex flex-col items-center">
             <Link
               to={`${userDetails.id}/profile/`}
               className="hover:font-bold "
@@ -49,8 +66,8 @@ const Home = () => {
             </ul>
           </div>
         </div>
-        <div className=" flex flex-col items-center justify-center pt-10">
-          <div className="w-[500px] bg-white rounded-lg shadow-lg">
+        <div className="md:w-4/6 md:mx-auto mx-5 flex flex-col items-center gap-y-5 pt-10">
+          <div className="w-full md:w-[500px] bg-white rounded-lg shadow-lg">
             <div className="flex gap-3 m-3 items-center">
               <div className="">
                 {userDetails.profileImage === "" ? (
@@ -87,8 +104,8 @@ const Home = () => {
             isVisible={showCreatePost}
             onClose={() => setCreatePost(false)}
           ></CreatePost>
-          <div className="flex justify-center pt-10">
-            <POSTS />
+          <div className="w-full ">
+            <POSTS posts={posts} status={status} />
           </div>
         </div>
       </div>

@@ -90,9 +90,12 @@ function UserList({ user, userFriends }) {
   };
 
   return (
-    <div className="w-[500px] flex justify-between items-center p-5 bg-white rounded-lg shadow-xl">
-      <div className=" flex items-center gap-5 ">
-        <Link to={`/${user.id}/profile`}>
+    <div className="w-full md:w-[500px] mb-5 flex justify-between items-center p-5 bg-white rounded-lg shadow-xl">
+      <div>
+        <Link
+          to={`/${user.id}/profile`}
+          className=" flex md:flex-row flex-col items-center gap-5 "
+        >
           {user.profileImage === "" ? (
             <FontAwesomeIcon
               icon={faUser}

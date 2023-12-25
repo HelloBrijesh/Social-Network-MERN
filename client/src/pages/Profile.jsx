@@ -49,7 +49,7 @@ const Profile = () => {
         )}
 
         <div className="max-w-5xl mx-auto">
-          <div className="flex ms-10 gap-x-10 ">
+          <div className="flex ms-10 md:gap-x-10 ">
             <button
               className=""
               disabled={userDetails.id !== profileDetails.id}

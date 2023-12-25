@@ -27,7 +27,6 @@ const createPost = async (req, res, next) => {
       .status(201)
       .json(new ApiResponse(200, createdPost, "Post Created"));
   } catch (error) {
-    console.log(error.message);
     return next(ApiError.serverError("Something went Wrong"));
   }
 };

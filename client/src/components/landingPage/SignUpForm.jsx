@@ -22,11 +22,11 @@ const SignUpForm = ({ isVisible, onClose }) => {
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
-        <div className="bg-white w-[500px] flex flex-col rounded-lg">
+        <div className="bg-white max-w-[500px] flex flex-col rounded-lg">
           <div className="flex justify-between items-start border-0 border-b-2">
             <div className="p-5">
-              <h1 className="text-4xl font-bold mb-2">Sign Up</h1>
-              <p>It’s quick and easy.</p>
+              <h1 className="text-2xl md:text-4xl font-bold mb-2">Sign Up</h1>
+              <p className="text-base md:text-xl">It’s quick and easy.</p>
             </div>
             <button
               onClick={() => onClose()}
@@ -48,7 +48,7 @@ const SignUpForm = ({ isVisible, onClose }) => {
             </p>
           )}
           <form className="p-5" onSubmit={handleSubmit}>
-            <div className="mb-4 flex justify-between">
+            <div className="mb-4 flex flex-col md:flex-row gap-5 justify-between">
               <div className="">
                 <input
                   placeholder="First Name"

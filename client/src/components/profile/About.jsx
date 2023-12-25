@@ -22,7 +22,7 @@ const About = () => {
 
   return (
     <div className="">
-      <div className="relative text-right">
+      <div className="relative text-center md:text-right">
         {userDetails.id === profileDetails.id && (
           <div>
             <EditProfile
@@ -31,7 +31,7 @@ const About = () => {
             />
             <button
               onClick={() => setShowEditProfile(true)}
-              className="px-5 py-2 mt-5 bg-blue text-white rounded-lg"
+              className="px-5 py-2 my-5 bg-blue text-white rounded-lg"
             >
               Edit Profile
             </button>
@@ -41,35 +41,35 @@ const About = () => {
           <tbody>
             <tr>
               <td className="px-6 py-4 font-bold">First Name</td>
-              <td className="px-6 py-4">{profileDetails.firstName}</td>
+              <td className="md:px-6 py-4">{profileDetails.firstName}</td>
             </tr>
             <tr>
               <td className="px-6 py-4 font-bold">Last Name</td>
-              <td className="px-6 py-4">{profileDetails.lastName}</td>
+              <td className="md:px-6 py-4">{profileDetails.lastName}</td>
             </tr>
             <tr>
               <td className="px-6 py-4 font-bold">Workplace</td>
-              <td className="px-6 py-4">{profileDetails.workplace}</td>
+              <td className="md:px-6 py-4">{profileDetails.workplace}</td>
             </tr>
             <tr>
               <td className="px-6 py-4 font-bold">College</td>
-              <td className="px-6 py-4">{profileDetails.college}</td>
+              <td className="md:px-6 py-4">{profileDetails.college}</td>
             </tr>
             <tr>
               <td className="px-6 py-4 font-bold">HighSchool</td>
-              <td className="px-6 py-4">{profileDetails.highSchool}</td>
+              <td className="md:px-6 py-4">{profileDetails.highSchool}</td>
             </tr>
             <tr>
               <td className="px-6 py-4 font-bold">Home town</td>
-              <td className="px-6 py-4">{profileDetails.homeTown}</td>
+              <td className="md:px-6 py-4">{profileDetails.homeTown}</td>
             </tr>
             <tr>
               <td className="px-6 py-4 font-bold">City</td>
-              <td className="px-6 py-4">{profileDetails.city}</td>
+              <td className="md:px-6 py-4">{profileDetails.city}</td>
             </tr>
             <tr>
               <td className="px-6 py-4 font-bold">E mail</td>
-              <td className="px-6 py-4">{profileDetails.email}</td>
+              <td className="md:px-6 py-4">{profileDetails.email}</td>
             </tr>
           </tbody>
         </table>

@@ -7,9 +7,9 @@ const FriendList = () => {
   const { isLoading, error, friends, unfriend } = useFriend();
 
   return (
-    <div className="w-[700px] ml-auto h-full">
-      <div className="flex gap-4 justify-start">
-        {friends.length === 0 && <p>No Friends</p>}
+    <div className="h-full mx-5 md:mx-12">
+      <div className="flex gap-7 flex-wrap justify-start">
+        {friends.length === 0 && <p className="font-semibold">No Friends</p>}
 
         {friends.map((friend) => (
           <div

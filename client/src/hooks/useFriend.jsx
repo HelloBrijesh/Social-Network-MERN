@@ -31,7 +31,7 @@ const useFriend = () => {
   }, []);
 
   const unfriend = async (userIdOfFriend) => {
-    status("Loading");
+    setStatus("Loading");
     try {
       const response = await axiosAuthInstance.delete(
         `/users/friends/${userIdOfFriend}`
@@ -44,7 +44,7 @@ const useFriend = () => {
   };
 
   const acceptFriendRequest = async (userIdForFriend) => {
-    status("Loading");
+    setStatus("Loading");
     try {
       const response = await axiosAuthInstance.post(
         "/users/friends/accept-request",
@@ -58,7 +58,7 @@ const useFriend = () => {
   };
 
   const rejectFriendRequest = async (userIdForFriend) => {
-    status("Loading");
+    setStatus("Loading");
     try {
       const response = await axiosAuthInstance.post(
         "/users/friends/reject-request",
