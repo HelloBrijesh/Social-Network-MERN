@@ -48,9 +48,9 @@ const CreatePost = ({ isVisible, onClose }) => {
   return (
     <>
       <div className="fixed z-20 shadow-lg inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
-        <div className="bg-white w-[500px] flex flex-col rounded-lg">
+        <div className="bg-white mx-5 w-[500px] flex flex-col rounded-lg">
           <div className="relative text-center p-3">
-            <h1 className="text-xl font-bold mb-2">Create Post</h1>
+            <h1 className="text-base md:text-xl font-bold mb-2">Create Post</h1>
             <button
               onClick={handleCloseCreatePost}
               className="absolute right-5 top-3 text-xl font-semibold "
@@ -90,7 +90,7 @@ const CreatePost = ({ isVisible, onClose }) => {
                 id=""
                 cols="20"
                 rows="5"
-                className="w-full my-3"
+                className="w-full my-3 focus:outline-none focus:ring-1 focus:ring-gray-600"
                 placeholder={`What's on your mind, ${userDetails.firstName} ?`}
                 onChange={(e) => setPostContent(e.target.value)}
               ></textarea>
@@ -109,7 +109,7 @@ const CreatePost = ({ isVisible, onClose }) => {
               )}
             </div>
             <div className="flex justify-between py-5 px-3 mb-5 border rounded-lg">
-              <p className="">Add to your post</p>
+              <p className="hidden md:block">Add to your post</p>
 
               <button className="w-auto">
                 <input

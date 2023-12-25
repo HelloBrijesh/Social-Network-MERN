@@ -18,7 +18,7 @@ const CoverImage = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
   return (
     <>
-      <div className="fixed z-999 inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
+      <div className="fixed z-20 inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
         <div className="bg-white flex flex-col justify-between pb-5 w-[800px] h-[350px] rounded-lg">
           <div className="flex border-b-2 py-2">
             {isError && (

@@ -18,7 +18,7 @@ const ProfileImage = ({ isVisible, onClose }) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
+      <div className="fixed inset-0 z-20 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
         <div className="bg-white flex flex-col justify-between h-[400px] w-[400px] rounded-lg pb-5">
           <div className="flex border-b-2 py-2">
             {isError && (

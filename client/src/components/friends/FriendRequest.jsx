@@ -11,16 +11,22 @@ const FriendRequest = () => {
     acceptFriendRequest,
     rejectFriendRequest,
   } = useFriend();
-
   return (
-    <div className="flex flex-col gap-y-10 h-full">
+    <div className="w-full mx-10 flex flex-col items-center gap-y-10 h-full">
+      {requestReceived.length === 0 && (
+        <p className="font-semibold">No Request</p>
+      )}
+
       {requestReceived.map((request) => (
         <div
           key={request.id}
-          className="w-[500px] h-full flex justify-between items-center gap-5 p-5 bg-white rounded-lg shadow-xl "
+          className="w-full md:w-[500px] h-full flex justify-between items-center gap-5 p-5 bg-white rounded-lg shadow-xl "
         >
-          <div className=" flex items-center gap-5 ">
-            <Link to={`/${request.id}/profile`}>
+          <div>
+            <Link
+              to={`/${request.id}/profile`}
+              className="flex flex-col md:flex-row items-center gap-5 "
+            >
               {request.profileImage === "" ? (
                 <FontAwesomeIcon
                   icon={faUser}
@@ -34,11 +40,11 @@ const FriendRequest = () => {
                 />
               )}
               <h1 className="">
-                {request.fistName} {request.lastName}
+                {request.firstName} {request.lastName}
               </h1>
             </Link>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             <button
               onClick={() => acceptFriendRequest(request.id)}
               className=" bg-green-500 text-white px-3 py-2"

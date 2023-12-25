@@ -50,7 +50,7 @@ const Post = (post) => {
   };
 
   return (
-    <div className="bg-white relative mb-5 w-[500px] rounded-lg shadow-lg">
+    <div className="bg-white relative mx-auto mb-5 md:w-[500px] rounded-lg shadow-lg">
       <div className="flex px-4 py-2 justify-between items-center">
         <div className="flex gap-3 items-center">
           <EditPost

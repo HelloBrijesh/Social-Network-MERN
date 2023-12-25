@@ -40,7 +40,7 @@ const EditProfile = ({ isVisible, onClose }) => {
         </div>
 
         <form className="p-5" onSubmit={handleSubmit}>
-          <div className="mb-4 flex justify-between gap-3">
+          <div className="mb-4 flex flex-col md:flex-row justify-between gap-3">
             <div className="flex flex-col items-start gap-3">
               <label htmlFor="firstName">First Name</label>
               <input
@@ -63,7 +63,7 @@ const EditProfile = ({ isVisible, onClose }) => {
               />
             </div>
           </div>
-          <div className="mb-4 flex justify-between gap-3">
+          <div className="mb-4 flex flex-col md:flex-row justify-between gap-3">
             <div className="flex flex-col items-start gap-3">
               <label htmlFor="city">City</label>
               <input
@@ -86,7 +86,7 @@ const EditProfile = ({ isVisible, onClose }) => {
               />
             </div>
           </div>
-          <div className="mb-4 flex justify-between gap-3">
+          <div className="mb-4 flex flex-col md:flex-row justify-between gap-3">
             <div className="flex flex-col items-start gap-3">
               <label htmlFor="college">College</label>
               <input

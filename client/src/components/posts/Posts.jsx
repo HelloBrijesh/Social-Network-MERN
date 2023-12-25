@@ -1,24 +1,8 @@
-import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../../services/api-client";
 import Post from "./Post";
-const Posts = () => {
-  const [status, setStatus] = useState("");
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    setStatus("Loading");
-    axiosAuthInstance
-      .get("/users/posts")
-      .then((response) => {
-        setPosts(response.data.data);
-        setStatus("Success");
-      })
-      .catch((error) => {
-        setStatus("Error");
-      });
-  }, []);
+
+const Posts = ({ posts, status }) => {
   const isLoading = status === "Loading";
   const error = status === "Error";
-
   if (isLoading) {
     return <div>Loading ... </div>;
   }
@@ -33,7 +17,7 @@ const Posts = () => {
 
   return (
     <>
-      <div>
+      <div className="">
         {posts.map((post) => (
           <div key={post.id}>
             <Post {...post}></Post>

@@ -34,25 +34,25 @@ const Navbar = () => {
   return (
     <>
       <nav className="flex fixed z-10 justify-between items-center shadow-md w-full bg-white">
-        <div className="text-blue text-2xl font-bold ms-4 basis-2/5">
+        <div className="text-blue text-base md:text-2xl font-bold ms-4 basis-2/5">
           <NavLink to="/"> Social Network </NavLink>
         </div>
 
         <ul className="flex justify-around basis-1/5">
           <NavLink to="">
-            <li className="p-5">
+            <li className="md:p-5 px-3 py-5">
               <FontAwesomeIcon icon={faHouse} />
             </li>
           </NavLink>
           <NavLink to="/friends/">
-            <li className="p-5">
+            <li className="md:p-5 px-3 py-5">
               <FontAwesomeIcon icon={faUserGroup} />
             </li>
           </NavLink>
         </ul>
 
         <div className="flex items-center justify-end basis-2/5">
-          <div className="me-5">
+          <div className="md:me-5">
             <FontAwesomeIcon icon={faBell} />
           </div>
           <div

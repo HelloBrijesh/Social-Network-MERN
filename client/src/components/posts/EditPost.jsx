@@ -49,7 +49,7 @@ const EditPost = ({ isVisible, onClose, post }) => {
 
   return (
     <>
-      <div className="fixed shadow-lg inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
+      <div className="fixed z-20 shadow-lg inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
         <div className="bg-white w-[500px] flex flex-col rounded-lg">
           <div className="relative text-center p-3">
             <h1 className="text-xl font-bold mb-2">Create Post</h1>
@@ -92,7 +92,7 @@ const EditPost = ({ isVisible, onClose, post }) => {
                 id=""
                 cols="20"
                 rows="5"
-                className="w-full my-3"
+                className="w-full my-3 focus:outline-none focus:ring-1 focus:ring-gray-600"
                 placeholder={`What's on your mind, ${userDetails.firstName} ?`}
                 onChange={(e) => setPostContent(e.target.value)}
                 value={postContent}
