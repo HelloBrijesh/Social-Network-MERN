@@ -4,26 +4,16 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import ProfileImage from "../components/profile/ProfileImage";
 import CoverImage from "../components/profile/CoverImage";
-import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../services/api-client";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
+import useProfile from "../hooks/useProfile";
 const Profile = () => {
   const { userDetails } = useUserContext();
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [showCoverImage, setShowCoverImage] = useState(false);
-  const [profileDetails, setProfileDetails] = useState(null);
+
   let { userId } = useParams();
-  useEffect(() => {
-    axiosAuthInstance
-      .get(`/users/${userId}/profile-details`)
-      .then((response) => {
-        setProfileDetails(response.data.data);
-        console.log(response.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [userId]);
+  const { isLoading, error, profileDetails } = useProfile(userId);
 
   if (profileDetails === null) {
     return <p>Loading</p>;

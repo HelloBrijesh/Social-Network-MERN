@@ -10,8 +10,8 @@ const EditPost = ({ isVisible, onClose, post }) => {
   const [postContent, setPostContent] = useState(post.postContent);
 
   const {
-    submitting,
-    isError,
+    isLoading,
+    error,
     postImage,
     setPostImage,
     addPostImage,
@@ -39,6 +39,13 @@ const EditPost = ({ isVisible, onClose, post }) => {
   };
 
   if (!isVisible) return null;
+
+  if (isLoading) {
+    return <p>{isLoading}</p>;
+  }
+  if (error) {
+    return <p>Something Went wrong</p>;
+  }
 
   return (
     <>

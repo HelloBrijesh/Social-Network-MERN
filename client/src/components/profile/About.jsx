@@ -1,26 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useUserContext } from "../../context/UserContext";
 import EditProfile from "./EditProfile";
 import { useParams } from "react-router-dom";
-import { axiosAuthInstance } from "../../services/api-client";
+import useProfile from "../../hooks/useProfile";
 
 const About = () => {
-  const [showEditProfile, setShowEditProfile] = useState(false);
   const { userDetails } = useUserContext();
-  const [profileDetails, setProfileDetails] = useState(null);
 
   let { userId } = useParams();
-  useEffect(() => {
-    axiosAuthInstance
-      .get(`/users/${userId}/profile-details`)
-      .then((response) => {
-        setProfileDetails(response.data.data);
-        console.log(response.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [showEditProfile]);
+  const {
+    isLoading,
+    error,
+    profileDetails,
+    showEditProfile,
+    setShowEditProfile,
+  } = useProfile(userId);
 
   if (profileDetails === null) {
     return <p>Loading</p>;

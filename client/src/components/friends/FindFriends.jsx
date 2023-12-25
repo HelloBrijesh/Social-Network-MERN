@@ -1,54 +1,16 @@
-import { useEffect, useState } from "react";
-import { axiosAuthInstance } from "../../services/api-client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import UserList from "./UserList";
+import useFriend from "../../hooks/useFriend";
 const FindFriends = () => {
-  const [usersList, setUsersList] = useState([]);
-  const [userFriends, setUserFriends] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [firstPage, setFirstPage] = useState(1);
-
-  const LIMIT = 1;
-
-  useEffect(() => {
-    axiosAuthInstance
-      .get(`/users/friends`)
-      .then((response) => {
-        setUserFriends(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  const handleSearch = async () => {
-    try {
-      const response = await axiosAuthInstance.get(
-        `/users/find-friends?page=${1}&limit=${LIMIT}`
-      );
-      setUsersList(response.data.data.usersList);
-      setTotalPages(response.data.data.totalPages);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handlePageChange = async (selectedPage) => {
-    const pageSet = Math.ceil(selectedPage / 3);
-
-    setFirstPage(pageSet * 3 - 3 + 1);
-
-    setCurrentPage(selectedPage);
-    try {
-      const response = await axiosAuthInstance.get(
-        `/users/find-friends?page=${selectedPage}&limit=${LIMIT}`
-      );
-      setUsersList(response.data.data.usersList);
-      setTotalPages(response.data.data.totalPages);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const {
+    isLoading,
+    error,
+    userFriends,
+    usersList,
+    totalPages,
+    currentPage,
+    firstPage,
+    searchFriends,
+  } = useFriend();
 
   return (
     <div className="w-[600px] flex flex-col gap-y-10 items-center">
@@ -62,7 +24,7 @@ const FindFriends = () => {
             className="my-3 border rounded-lg p-3 focus:outline-none"
           />
           <button
-            onClick={handleSearch}
+            onClick={() => searchFriends(1)}
             className="ms-5 bg-blue py-3 px-8 text-white rounded-xl"
           >
             Search
@@ -84,30 +46,33 @@ const FindFriends = () => {
         <div>
           <button
             disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
+            onClick={() => searchFriends(currentPage - 1)}
           >
             Prev
           </button>
         </div>
         {Array.from(Array(3), (e, i) => {
           return (
-            <button
-              key={i}
-              onClick={() => handlePageChange(i + firstPage)}
-              className={
-                currentPage === i + firstPage
-                  ? "bg-blue text-white font-semibold border px-4 py-2 rounded-full"
-                  : " bg-slate-500 text-white font-semibold border px-4 py-2 rounded-full"
-              }
-            >
-              {i + firstPage}
-            </button>
+            <div key={i}>
+              {firstPage + i <= totalPages && (
+                <button
+                  onClick={() => searchFriends(i + firstPage)}
+                  className={
+                    currentPage === i + firstPage
+                      ? "bg-blue text-white font-semibold border px-4 py-2 rounded-full"
+                      : " bg-slate-500 text-white font-semibold border px-4 py-2 rounded-full"
+                  }
+                >
+                  {i + firstPage}
+                </button>
+              )}
+            </div>
           );
         })}
         <div>
           <button
             disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
+            onClick={() => searchFriends(currentPage + 1)}
           >
             Next
           </button>

@@ -1,53 +1,26 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
-import { axiosAuthInstance } from "../../services/api-client";
 import { useUserContext } from "../../context/UserContext";
+import useComment from "../../hooks/useComment";
 
 const Comments = ({ postId }) => {
-  const [comments, setComments] = useState([]);
-
-  const commentContentRef = useRef(false);
-
   const { userDetails } = useUserContext();
-  useEffect(() => {
-    axiosAuthInstance
-      .get(`/users/posts/${postId}/comments`)
-      .then((response) => {
-        setComments(response.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const {
+    isLoading,
+    error,
+    comments,
+    commentContentRef,
+    addComment,
+    deleteComment,
+  } = useComment(postId);
 
-  const handleComment = async () => {
-    const commentContent = commentContentRef.current.value;
-    if (commentContent !== false && commentContent !== "") {
-      try {
-        const response = await axiosAuthInstance.post(
-          `/users/posts/${postId}/comment`,
-          { commentContent }
-        );
-        setComments(response.data.data);
-        commentContentRef.current.value = "";
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  const deleteComment = async (commentId) => {
-    try {
-      const response = await axiosAuthInstance.delete(
-        `/users/posts/${postId}/comments/${commentId}`
-      );
-      setComments(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  if (isLoading) {
+    return <p>{isLoading}</p>;
+  }
+  if (error) {
+    return <p>Something Went wrong</p>;
+  }
 
   return (
     <div>
@@ -107,7 +80,7 @@ const Comments = ({ postId }) => {
           className="focus:outline-none font-bolder text-start p-2 bg-white-smoke w-full rounded-3xl text-slate-500"
           ref={commentContentRef}
         />
-        <button className=" disabled:opacity-60" onClick={handleComment}>
+        <button className=" disabled:opacity-60" onClick={addComment}>
           <FontAwesomeIcon icon={faRightToBracket} />
         </button>
       </div>

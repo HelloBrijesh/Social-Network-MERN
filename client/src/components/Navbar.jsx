@@ -76,12 +76,6 @@ const Navbar = () => {
           </div>
           {showUserMenu && (
             <ul className="absolute top-[65px] bg-slate-500 text-white right-[20px] font-base border">
-              <Link to="#" onClick={() => setShowUserMenu(false)}>
-                <li className="py-3 px-5 tracking-wide hover:font-semibold hover:text-red-700">
-                  Delete Account
-                </li>
-              </Link>
-              <hr className="text-white"></hr>
               <Link
                 to="/change-password"
                 onClick={() => setShowUserMenu(false)}
