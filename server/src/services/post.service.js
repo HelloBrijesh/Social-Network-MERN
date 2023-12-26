@@ -37,6 +37,7 @@ const editPostById = async (postId, postContent, postImage) => {
 const fetchPostsForId = async (userId) => {
   try {
     const posts = await Post.find()
+      .sort({ createdAt: -1 })
       .populate({
         path: "postedBy",
         select: "firstName lastName profileImage",
@@ -59,6 +60,7 @@ const fetchPostsForId = async (userId) => {
 const getPostByUserId = async (userId) => {
   try {
     const posts = await Post.find({ postedBy: userId })
+      .sort({ createdAt: -1 })
       .populate({
         path: "postedBy",
         select: "firstName lastName profileImage",

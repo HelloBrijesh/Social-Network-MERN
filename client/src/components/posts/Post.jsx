@@ -14,13 +14,24 @@ const Post = (post) => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const { userDetails } = useUserContext();
   const [showEditPost, setShowEditPost] = useState(false);
-
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
   useEffect(() => {
     if (post.likes.includes(userDetails.id)) {
       setLike(true);
     }
     setLikeCount(post.likes.length);
-  }, []);
+    if (isDeleted || isEdited) {
+      window.location.reload(false);
+    }
+  }, [isDeleted, showEditPost]);
+
+  const dateObject = new Date(post.createdAt);
+  const options = { day: "numeric", month: "short", year: "numeric" };
+  const postDate = dateObject.toLocaleDateString("en-US", options);
+
+  const optionsTime = { hour: "2-digit", minute: "2-digit", hour12: false };
+  const postTime = dateObject.toLocaleTimeString("en-US", optionsTime);
 
   const handleLike = async () => {
     try {
@@ -47,6 +58,7 @@ const Post = (post) => {
     } catch (error) {
       console.log(error);
     }
+    setIsDeleted(true);
   };
 
   return (
@@ -55,7 +67,10 @@ const Post = (post) => {
         <div className="flex gap-3 items-center">
           <EditPost
             isVisible={showEditPost}
-            onClose={() => setShowEditPost(false)}
+            onClose={() => {
+              setShowEditPost(false);
+              setIsEdited(true);
+            }}
             post={post}
           ></EditPost>
 
@@ -79,7 +94,9 @@ const Post = (post) => {
                 {post.postedBy.firstName} {post.postedBy.lastName}
               </p>
             </Link>
-            <p className="text-slate-500">time</p>
+            <p className="text-slate-500">
+              {postDate} {postTime}
+            </p>
           </div>
         </div>
 

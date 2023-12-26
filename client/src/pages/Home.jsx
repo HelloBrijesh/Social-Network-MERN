@@ -22,7 +22,7 @@ const Home = () => {
       .catch((error) => {
         setStatus("Error");
       });
-  }, []);
+  }, [showCreatePost]);
   const isLoading = status === "Loading";
   const error = status === "Error";
 

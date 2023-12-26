@@ -81,7 +81,7 @@ const CreatePost = ({ isVisible, onClose }) => {
                     {userDetails.firstName} {userDetails.lastName}
                   </p>
                 </Link>
-                <p className="text-slate-500">time</p>
+                {/* <p className="text-slate-500">time</p> */}
               </div>
             </div>
             <div>
