@@ -1,30 +1,14 @@
 import { Link } from "react-router-dom";
 import POSTS from "../components/posts/Posts";
 import CreatePost from "../components/posts/CreatePost";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useUserContext } from "../context/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { axiosAuthInstance } from "../services/api-client";
+
 const Home = () => {
   const [showCreatePost, setCreatePost] = useState(false);
   const { userDetails } = useUserContext();
-  const [status, setStatus] = useState("");
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    setStatus("Loading");
-    axiosAuthInstance
-      .get("/users/posts")
-      .then((response) => {
-        setPosts(response.data.data);
-        setStatus("Success");
-      })
-      .catch((error) => {
-        setStatus("Error");
-      });
-  }, [showCreatePost]);
-  const isLoading = status === "Loading";
-  const error = status === "Error";
 
   return (
     <>
@@ -105,7 +89,7 @@ const Home = () => {
             onClose={() => setCreatePost(false)}
           ></CreatePost>
           <div className="w-full ">
-            <POSTS posts={posts} status={status} />
+            <POSTS />
           </div>
         </div>
       </div>
