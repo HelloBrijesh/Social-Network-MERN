@@ -9,6 +9,7 @@ const FindFriends = () => {
     totalPages,
     currentPage,
     firstPage,
+    setQuery,
     searchFriends,
   } = useFriend();
 
@@ -22,6 +23,9 @@ const FindFriends = () => {
             id=""
             placeholder="Enter text to search"
             className="border rounded-lg p-3 focus:outline-none"
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
           />
           <button
             onClick={() => searchFriends(1)}

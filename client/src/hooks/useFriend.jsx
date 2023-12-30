@@ -12,6 +12,7 @@ const useFriend = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [firstPage, setFirstPage] = useState(1);
+  const [query, setQuery] = useState("");
 
   const LIMIT = 3;
   useEffect(() => {
@@ -76,9 +77,10 @@ const useFriend = () => {
     const pageSet = Math.ceil(selectedPage / 3);
     setFirstPage(pageSet * 3 - 3 + 1);
     setCurrentPage(selectedPage);
+
     try {
       const response = await axiosAuthInstance.get(
-        `/users/find-friends?page=${selectedPage}&limit=${LIMIT}`
+        `/users/find-friends?page=${selectedPage}&limit=${LIMIT}&query=${query}`
       );
       setUsersList(response.data.data.usersList);
       setTotalPages(response.data.data.totalPages);
@@ -108,6 +110,7 @@ const useFriend = () => {
     setCurrentPage,
     setFirstPage,
     searchFriends,
+    setQuery,
   };
 };
 

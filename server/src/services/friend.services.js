@@ -1,8 +1,14 @@
 import User from "../models/user.model.js";
 
-const findFriends = async (userId, page, limit) => {
+const findFriends = async (userId, page, limit, query) => {
   try {
-    const usersList = await User.find({ _id: { $ne: userId } })
+    const usersList = await User.find({
+      _id: { $ne: userId },
+      $or: [
+        { firstName: { $regex: query, $options: "i" } },
+        { lastName: { $regex: query, $options: "i" } },
+      ],
+    })
       .select(
         "-friends -requestReceived -requestSent -password -verified -city -workplace -college -highSchool -homeTown -gender -dateOfBirth -email -coverImage -createdAt -updatedAt -__v"
       )
