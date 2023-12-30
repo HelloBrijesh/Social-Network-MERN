@@ -16,8 +16,15 @@ const getUsersListForFriends = async (req, res, next) => {
   const userId = req.userId;
   const limit = Number(req.query.limit);
   const page = Number(req.query.page);
+  const query = req.query.query;
+
   try {
-    const { usersList, totalPages } = await findFriends(userId, page, limit);
+    const { usersList, totalPages } = await findFriends(
+      userId,
+      page,
+      limit,
+      query
+    );
 
     return res
       .status(201)
