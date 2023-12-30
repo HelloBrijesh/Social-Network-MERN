@@ -34,7 +34,7 @@ const editPostById = async (postId, postContent, postImage) => {
   }
 };
 
-const fetchPostsForId = async (userId) => {
+const fetchPostsForId = async (userId, page, limit) => {
   try {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
@@ -50,14 +50,17 @@ const fetchPostsForId = async (userId) => {
             select: "firstName lastName profileImage",
           },
         },
-      ]);
+      ])
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
     return posts;
   } catch (error) {
     return Promise.reject(error);
   }
 };
 
-const getPostByUserId = async (userId) => {
+const getPostByUserId = async (userId, page, limit) => {
   try {
     const posts = await Post.find({ postedBy: userId })
       .sort({ createdAt: -1 })
@@ -73,7 +76,10 @@ const getPostByUserId = async (userId) => {
             select: "firstName lastName profileImage",
           },
         },
-      ]);
+      ])
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
     return posts;
   } catch (error) {
     return Promise.reject(error);

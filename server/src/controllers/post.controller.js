@@ -52,8 +52,10 @@ const editPost = async (req, res, next) => {
 
 const getPostsForUser = async (req, res, next) => {
   const userId = req.userId;
+  const page = req.query.page;
+  const limit = req.query.limit;
   try {
-    const posts = await fetchPostsForId(userId);
+    const posts = await fetchPostsForId(userId, page, limit);
     return res.status(201).json(new ApiResponse(200, posts, "Posts"));
   } catch (error) {
     return next(ApiError.serverError("Something went Wrong"));
@@ -62,8 +64,10 @@ const getPostsForUser = async (req, res, next) => {
 
 const getPostsOfUser = async (req, res, next) => {
   const { userId } = req.params;
+  const page = req.query.page;
+  const limit = req.query.limit;
   try {
-    const posts = await getPostByUserId(userId);
+    const posts = await getPostByUserId(userId, page, limit);
     return res.status(201).json(new ApiResponse(200, posts, "Posts"));
   } catch (error) {
     return next(ApiError.serverError("Something went Wrong"));
