@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 
 const CreatePost = ({ isVisible, onClose }) => {
   const [postContent, setPostContent] = useState("");
-
   const { userDetails } = useUserContext();
   const {
     isLoading,

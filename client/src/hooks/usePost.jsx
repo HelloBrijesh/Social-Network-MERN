@@ -11,7 +11,6 @@ import { useState } from "react";
 const usePost = () => {
   const [status, setStatus] = useState("");
   const [postImage, setPostImage] = useState("");
-
   const addPostImage = async (e) => {
     if (postImage !== "") {
       const imageTobeDeleted = postImage?.split("2F")[2].split("?")[0];
