@@ -89,7 +89,7 @@ const Post = (post) => {
             )}
           </div>
           <div className="text-sm">
-            <Link to={`${post.postedBy.id}/profile/`}>
+            <Link to={`/${post.postedBy.id}/profile/`}>
               <p className="font-bold">
                 {post.postedBy.firstName} {post.postedBy.lastName}
               </p>

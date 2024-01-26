@@ -4,7 +4,8 @@ import { axiosAuthInstance } from "../../services/api-client";
 import CreatePost from "../posts/CreatePost";
 import { useUserContext } from "../../context/UserContext";
 import usePost from "../../hooks/usePost";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 const Posts = () => {
   const [status, setStatus] = useState("");
   const [posts, setPosts] = useState([]);
@@ -45,10 +46,6 @@ const Posts = () => {
 
   const isLoading = status === "Loading";
   const error = status === "Error";
-
-  if (posts.length === 0) {
-    return <div className="text-center">Yo don&apos;t have any post</div>;
-  }
 
   return (
     <>
@@ -94,6 +91,10 @@ const Posts = () => {
           }}
         ></CreatePost>
         <div className="w-full">
+          {posts.length === 0 && (
+            <div className="text-center">Yo don&apos;t have any post</div>
+          )}
+
           {posts.map((post, index) => {
             if (posts.length === index + 1) {
               return (

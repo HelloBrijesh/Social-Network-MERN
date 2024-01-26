@@ -13,7 +13,7 @@ const Login = () => {
               Social Network
             </h1>
             <p className="text-xl md:text-3xl w-full md:w-3/4">
-              Connect with friends and the world around you on Facebook.
+              Connect with friends and the world around you on Social Network.
             </p>
           </div>
           <div className="w-full md:w-2/5 bg-white border rounded-lg shadow-lg">

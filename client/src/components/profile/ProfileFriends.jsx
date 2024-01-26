@@ -3,12 +3,9 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import useProfile from "../../hooks/useProfile";
-
+import { useOutletContext } from "react-router-dom";
 const ProfileFriends = () => {
-  let { userId } = useParams();
-
-  const { isLoading, error, friends } = useProfile(userId);
-
+  const friends = useOutletContext();
   return (
     <div className="mx-10">
       <div>
@@ -36,12 +33,6 @@ const ProfileFriends = () => {
                 {friend.firstName} {friend.lastName}
               </h1>
             </Link>
-            {/* <button
-              onClick={() => handleUnfriend(friend.id)}
-              className="py-2 w-full bg-red-500 text-white"
-            >
-              Unfriend
-            </button> */}
           </div>
         ))}
       </div>

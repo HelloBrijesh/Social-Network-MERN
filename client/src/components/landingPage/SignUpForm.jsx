@@ -3,19 +3,21 @@ import useSignup from "../../hooks/useSignup";
 
 const SignUpForm = ({ isVisible, onClose }) => {
   const { isError, submitting, isSignedup, signup } = useSignup();
-  const { handleSubmit, errors, touched, getFieldProps } = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      dateOfBirth: "",
-      gender: "",
-    },
-    onSubmit: async (values) => {
-      await signup(values);
-    },
-  });
+  const { handleSubmit, errors, touched, resetForm, getFieldProps } = useFormik(
+    {
+      initialValues: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        dateOfBirth: "",
+        gender: "",
+      },
+      onSubmit: async (values) => {
+        await signup(values);
+      },
+    }
+  );
 
   if (!isVisible) return null;
 
@@ -29,7 +31,10 @@ const SignUpForm = ({ isVisible, onClose }) => {
               <p className="text-base md:text-xl">It’s quick and easy.</p>
             </div>
             <button
-              onClick={() => onClose()}
+              onClick={() => {
+                resetForm();
+                onClose();
+              }}
               className="text-xl font-semibold p-5"
             >
               X

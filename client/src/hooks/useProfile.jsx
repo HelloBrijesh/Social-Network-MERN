@@ -8,7 +8,6 @@ const useProfile = (userId) => {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     setStatus("Loading");
-
     axiosAuthInstance
       .get(`/users/${userId}/profile-details`)
       .then((response) => {

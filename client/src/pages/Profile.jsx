@@ -13,7 +13,7 @@ const Profile = () => {
   const [showCoverImage, setShowCoverImage] = useState(false);
 
   let { userId } = useParams();
-  const { isLoading, error, profileDetails } = useProfile(userId);
+  const { isLoading, error, profileDetails, friends } = useProfile(userId);
 
   if (profileDetails === null) {
     return <p>Loading</p>;
@@ -97,7 +97,7 @@ const Profile = () => {
           </div>
           <hr className="my-5"></hr>
           <div className="pt-10 pb-28">
-            <Outlet />
+            {profileDetails && <Outlet context={friends} />}
           </div>
         </div>
       </div>
