@@ -78,7 +78,7 @@ const Post = ({ post, removePost, updatePost }) => {
               setIsEditPost(false);
             }}
           >
-            <div className="bg-white m-5 w-[500px] flex flex-col rounded-lg">
+            <div className="p-5 sm:w-[500px] rounded-lg">
               <h1 className="text-xl text-center font-bold mt-3 mb-5">
                 Edit Post
               </h1>
