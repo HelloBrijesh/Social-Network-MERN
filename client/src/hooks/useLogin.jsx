@@ -14,13 +14,9 @@ const useLogin = () => {
     setIsError(false);
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/login`,
-        values,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`/api/v1/auth/login`, values, {
+        withCredentials: true,
+      });
       axiosAuthInstance.defaults.headers.common[
         "authorization"
       ] = `Bearer ${response.data.data.accessToken}`;

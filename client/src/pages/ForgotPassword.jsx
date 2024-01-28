@@ -26,10 +26,9 @@ const ForgotPassword = () => {
       setSubmitting(true);
       setSubmitted(false);
       try {
-        await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/auth/forgot-password`,
-          { email: values.email }
-        );
+        await axios.post(`/api/v1/auth/forgot-password`, {
+          email: values.email,
+        });
         setSubmitted(true);
       } catch (error) {
         setIsError(error.response.data.message);

@@ -21,7 +21,7 @@ const useResetPassword = (token) => {
   const resetPassword = async (password) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/reset-password?token=${token}`,
+        `/api/v1/auth/reset-password?token=${token}`,
         { password: password },
         {
           withCredentials: true,

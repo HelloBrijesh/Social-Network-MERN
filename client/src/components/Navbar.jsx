@@ -17,7 +17,7 @@ const Navbar = () => {
   const logout = async () => {
     try {
       await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/logout`,
+        `/api/v1/auth/logout`,
         {},
         {
           withCredentials: true,
