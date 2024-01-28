@@ -16,6 +16,8 @@ const useVerifyEmail = (token) => {
       return navigate("/");
     }
     const verifyEmail = async () => {
+      setIsSubmitting(true);
+      setIsError(null);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/auth/verify-email?token=${token}`,

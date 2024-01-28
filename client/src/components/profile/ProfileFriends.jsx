@@ -1,8 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import useProfile from "../../hooks/useProfile";
 import { useOutletContext } from "react-router-dom";
 const ProfileFriends = () => {
   const friends = useOutletContext();

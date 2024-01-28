@@ -4,8 +4,15 @@ import { Link } from "react-router-dom";
 import useFriend from "../../hooks/useFriend";
 
 const FriendList = () => {
-  const { isLoading, error, friends, unfriend } = useFriend();
-
+  const { isLoading, isError, friends, unfriend } = useFriend();
+  if (isLoading) {
+    return <div className="font-semibold">Loading...</div>;
+  }
+  if (isError) {
+    return (
+      <div className="font-semibold text-red-500">Error : please try again</div>
+    );
+  }
   return (
     <div className="h-full mx-5 md:mx-12">
       <div className="flex gap-7 flex-wrap justify-start">

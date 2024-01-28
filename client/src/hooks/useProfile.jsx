@@ -1,31 +1,32 @@
 import { axiosAuthInstance } from "../services/api-client";
 import { useState, useEffect } from "react";
 const useProfile = (userId) => {
-  const [status, setStatus] = useState("");
-  const [profileDetails, setProfileDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [profileDetails, setProfileDetails] = useState("");
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     axiosAuthInstance
       .get(`/users/${userId}/profile-details`)
       .then((response) => {
         setProfileDetails(response.data.data);
         setFriends(response.data.data.friends);
-        setStatus("Success");
       })
       .catch((error) => {
-        setStatus("Error");
+        setIsError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [userId, showEditProfile]);
 
-  const isLoading = status === "Loading";
-  const error = status === "Error";
-
   return {
     isLoading,
-    error,
+    isError,
     friends,
     profileDetails,
     posts,

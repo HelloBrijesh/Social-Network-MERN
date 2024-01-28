@@ -2,7 +2,8 @@ import { axiosAuthInstance } from "../services/api-client";
 import { useState, useEffect } from "react";
 
 const useFriend = () => {
-  const [status, setStatus] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [friends, setFriends] = useState([]);
   const [userFriends, setUserFriends] = useState([]);
   const [requestReceived, setRequestReceived] = useState([]);
@@ -16,7 +17,8 @@ const useFriend = () => {
 
   const LIMIT = 3;
   useEffect(() => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     axiosAuthInstance
       .get(`/users/friends`)
       .then((response) => {
@@ -24,78 +26,85 @@ const useFriend = () => {
         setRequestReceived(response.data.data.requestReceived);
         setRequestSent(response.data.data.requestSent);
         setUserFriends(response.data.data);
-        setStatus("Success");
       })
       .catch((error) => {
-        setStatus("Error");
+        setIsError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
   const unfriend = async (userIdOfFriend) => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     try {
       const response = await axiosAuthInstance.delete(
         `/users/friends/${userIdOfFriend}`
       );
       setFriends(response.data.data.friends);
-      setStatus("Success");
     } catch (error) {
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const acceptFriendRequest = async (userIdForFriend) => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     try {
       const response = await axiosAuthInstance.post(
         "/users/friends/accept-request",
         { userIdForFriend }
       );
       setRequestReceived(response.data.data.requestReceived);
-      setStatus("Success");
     } catch (error) {
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const rejectFriendRequest = async (userIdForFriend) => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     try {
       const response = await axiosAuthInstance.post(
         "/users/friends/reject-request",
         { userIdForFriend }
       );
       setRequestReceived(response.data.data.requestReceived);
-      setStatus("Success");
     } catch (error) {
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const searchFriends = async (selectedPage) => {
-    setStatus("Loading");
     const pageSet = Math.ceil(selectedPage / 3);
     setFirstPage(pageSet * 3 - 3 + 1);
     setCurrentPage(selectedPage);
 
+    setIsLoading(true);
+    setIsError(false);
     try {
       const response = await axiosAuthInstance.get(
         `/users/find-friends?page=${selectedPage}&limit=${LIMIT}&query=${query}`
       );
       setUsersList(response.data.data.usersList);
       setTotalPages(response.data.data.totalPages);
-      setStatus("Success");
     } catch (error) {
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const isLoading = status === "Loading";
-  const error = status === "Error";
-
   return {
     isLoading,
-    error,
+    isError,
     friends,
     requestReceived,
     requestSent,
@@ -110,6 +119,7 @@ const useFriend = () => {
     setCurrentPage,
     setFirstPage,
     searchFriends,
+    query,
     setQuery,
   };
 };

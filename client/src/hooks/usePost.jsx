@@ -9,81 +9,99 @@ import { axiosAuthInstance } from "../services/api-client";
 import { useState } from "react";
 
 const usePost = () => {
-  const [status, setStatus] = useState("");
-  const [postImage, setPostImage] = useState("");
-  const addPostImage = async (e) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const addPostImage = async (e, postImage) => {
+    setIsLoading(true);
+    setIsError(false);
     if (postImage !== "") {
       const imageTobeDeleted = postImage?.split("2F")[2].split("?")[0];
       const desertRef = ref(
         storage,
         `SocialNetwork/postImages/${imageTobeDeleted}`
       );
-      await deleteObject(desertRef);
+      try {
+        await deleteObject(desertRef);
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     try {
-      setStatus("Loading");
+      setIsLoading(true);
+      setIsError(false);
       const imageName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
       const storageRef = ref(storage, `SocialNetwork/postImages/${imageName}`);
       const snapshot = await uploadBytes(storageRef, e.target.files[0]);
       const downloaded_url = await getDownloadURL(storageRef);
-      setPostImage(downloaded_url);
-      setStatus("Success");
+      return downloaded_url;
     } catch (error) {
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const deletePostImage = async () => {
+  const deletePostImage = async (postImage) => {
+    setIsLoading(true);
+    setIsError(false);
     if (postImage !== "") {
       const imageTobeDeleted = postImage?.split("2F")[2].split("?")[0];
       const desertRef = ref(
         storage,
         `SocialNetwork/postImages/${imageTobeDeleted}`
       );
-      setStatus("Loading");
       try {
         await deleteObject(desertRef);
-        setPostImage("");
-        setStatus("Success");
+        return "";
       } catch (error) {
-        setStatus("Error");
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
-  const createPost = async (postContent) => {
-    setStatus("Loading");
+
+  const createPost = async (postContent, postImage) => {
+    setIsLoading(true);
+    setIsError(false);
     try {
       const response = await axiosAuthInstance.post("/users/posts", {
-        postImage,
         postContent,
+        postImage,
       });
-      setPostImage("");
-      setStatus("Success");
+      return response.data.data;
     } catch (error) {
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
-  const editPost = async (postContent, postId) => {
-    setStatus("Loading");
+
+  const editPost = async (postId, postContent, postImage) => {
+    setIsLoading(true);
+    setIsError(false);
     try {
       const response = await axiosAuthInstance.put(`/users/posts/${postId}`, {
-        postImage,
         postContent,
+        postImage,
       });
-      setPostImage("");
-      setStatus("Success");
+      return response.data.data;
     } catch (error) {
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
-  const isLoading = status === "Loading";
-  const error = status === "Error";
+
   return {
     isLoading,
-    error,
-    postImage,
-    setPostImage,
+    setIsLoading,
+    isError,
+    setIsError,
     addPostImage,
     deletePostImage,
     createPost,

@@ -10,14 +10,25 @@ const About = () => {
   let { userId } = useParams();
   const {
     isLoading,
-    error,
+    isError,
     profileDetails,
     showEditProfile,
     setShowEditProfile,
   } = useProfile(userId);
 
-  if (profileDetails === null) {
-    return <p>Loading</p>;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center font-semibold">
+        Loading....
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="text-red-500 flex justify-center items-center font-semibold">
+        Error
+      </div>
+    );
   }
 
   return (

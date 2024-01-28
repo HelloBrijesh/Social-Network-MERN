@@ -6,11 +6,21 @@ import useFriend from "../../hooks/useFriend";
 const FriendRequest = () => {
   const {
     isLoading,
-    error,
+    isError,
     requestReceived,
     acceptFriendRequest,
     rejectFriendRequest,
   } = useFriend();
+
+  if (isLoading) {
+    return <div className="font-semibold">Loading...</div>;
+  }
+  if (isError) {
+    return (
+      <div className="font-semibold text-red-500">Error : please try again</div>
+    );
+  }
+
   return (
     <div className="w-full mx-10 flex flex-col items-center gap-y-10 h-full">
       {requestReceived.length === 0 && (

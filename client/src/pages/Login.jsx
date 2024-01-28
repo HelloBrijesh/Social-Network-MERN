@@ -1,8 +1,9 @@
 import { useState } from "react";
 import LogInForm from "../components/landingPage/LogInForm.jsx";
 import SignUpForm from "../components/landingPage/SignUpForm.jsx";
+import Modal from "../components/Modal.jsx";
 const Login = () => {
-  const [showSignUp, setShowSignUp] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -20,7 +21,7 @@ const Login = () => {
             <LogInForm />
             <div className="text-center mb-5">
               <button
-                onClick={() => setShowSignUp(true)}
+                onClick={() => setIsModalOpen(true)}
                 className="w-3/5 p-3 bg-green-500 font-bold text-white text-lg border border-none rounded-lg"
               >
                 Create new account
@@ -29,7 +30,14 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <SignUpForm isVisible={showSignUp} onClose={() => setShowSignUp(false)} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+      >
+        <SignUpForm />
+      </Modal>
     </>
   );
 };
