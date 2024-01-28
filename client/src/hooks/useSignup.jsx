@@ -10,10 +10,7 @@ const useSignup = () => {
     setIsError(false);
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/signup`,
-        values
-      );
+      await axios.post(`/api/v1/auth/signup`, values);
       setIsSignedup(true);
     } catch (error) {
       setIsError(error.response.data.message);

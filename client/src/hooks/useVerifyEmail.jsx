@@ -20,7 +20,7 @@ const useVerifyEmail = (token) => {
       setIsError(null);
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/auth/verify-email?token=${token}`,
+          `/api/v1/auth/verify-email?token=${token}`,
           {
             withCredentials: true,
           }
