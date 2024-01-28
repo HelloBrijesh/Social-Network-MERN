@@ -8,7 +8,7 @@ const Comments = ({ postId }) => {
   const { userDetails } = useUserContext();
   const {
     isLoading,
-    error,
+    isError,
     comments,
     commentContentRef,
     addComment,
@@ -16,9 +16,9 @@ const Comments = ({ postId }) => {
   } = useComment(postId);
 
   if (isLoading) {
-    return <p>{isLoading}</p>;
+    return <p>Loading...</p>;
   }
-  if (error) {
+  if (isError) {
     return <p>Something Went wrong</p>;
   }
 

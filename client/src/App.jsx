@@ -16,28 +16,31 @@ import ChangePassword from "./pages/ChangePassword";
 import ProfileFriends from "./components/profile/ProfileFriends";
 const App = () => {
   return (
-    <>
-      <Routes>
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/" element={<LandingPage />}>
-          <Route path="" element={<Home />} />
-          <Route path="friends" element={<Friends />}>
-            <Route path="" element={<FriendList />} />
-            <Route path="friend-request" element={<FriendRequest />} />
-            <Route path="find-friends" element={<FindFriends />} />
-          </Route>
-          <Route path=":userId/profile" element={<Profile />}>
-            <Route index element={<Timeline />} />
-            <Route path="about" element={<About />} />
-            <Route path="friendlist" element={<ProfileFriends />} />
-          </Route>
-          <Route path="/change-password" element={<ChangePassword />} />
+    <Routes>
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+
+      <Route path="/" element={<LandingPage />}>
+        <Route index element={<Home />} />
+
+        <Route path="friends" element={<Friends />}>
+          <Route index element={<FriendList />} />
+          <Route path="friend-request" element={<FriendRequest />} />
+          <Route path="find-friends" element={<FindFriends />} />
         </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </>
+
+        <Route path=":userId/profile" element={<Profile />}>
+          <Route index element={<Timeline />} />
+          <Route path="about" element={<About />} />
+          <Route path="friendlist" element={<ProfileFriends />} />
+        </Route>
+
+        <Route path="/change-password" element={<ChangePassword />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

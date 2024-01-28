@@ -2,64 +2,65 @@ import { useEffect, useState, useRef } from "react";
 import { axiosAuthInstance } from "../services/api-client";
 
 const useComment = (postId) => {
-  const [status, setStatus] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [comments, setComments] = useState([]);
 
   const commentContentRef = useRef(false);
 
   useEffect(() => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     axiosAuthInstance
       .get(`/users/posts/${postId}/comments`)
       .then((response) => {
         setComments(response.data.data);
-        setStatus("Success");
       })
       .catch((error) => {
-        console.log(error);
-        setStatus("Error");
+        setIsError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
   const addComment = async () => {
     const commentContent = commentContentRef.current.value;
     if (commentContent !== false && commentContent !== "") {
-      setStatus("Loading");
-
+      setIsLoading(true);
+      setIsError(false);
       try {
         const response = await axiosAuthInstance.post(
           `/users/posts/${postId}/comment`,
           { commentContent }
         );
         setComments(response.data.data);
-        setStatus("Success");
       } catch (error) {
-        console.log(error);
-        setStatus("Error");
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
 
   const deleteComment = async (commentId) => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     try {
       const response = await axiosAuthInstance.delete(
         `/users/posts/${postId}/comments/${commentId}`
       );
       setComments(response.data.data);
-      setStatus("Success");
     } catch (error) {
-      console.log(error);
-      setStatus("Error");
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const isLoading = status === "Loading";
-  const error = status === "Error";
-
   return {
     isLoading,
-    error,
+    isError,
     comments,
     commentContentRef,
     addComment,

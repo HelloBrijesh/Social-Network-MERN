@@ -3,12 +3,13 @@ import useFriend from "../../hooks/useFriend";
 const FindFriends = () => {
   const {
     isLoading,
-    error,
+    isError,
     userFriends,
     usersList,
     totalPages,
     currentPage,
     firstPage,
+    query,
     setQuery,
     searchFriends,
   } = useFriend();
@@ -29,7 +30,8 @@ const FindFriends = () => {
           />
           <button
             onClick={() => searchFriends(1)}
-            className="md:ms-5 mt-5 md:mt-0 bg-blue py-3 px-8 text-white rounded-xl"
+            className="disabled:opacity-80 disabled:bg-gray-500 md:ms-5 mt-5 md:mt-0 bg-blue py-3 px-8 text-white rounded-xl"
+            disabled={query === ""}
           >
             Search
           </button>
@@ -37,6 +39,8 @@ const FindFriends = () => {
       </div>
 
       <div className="w-full flex flex-col items-center">
+        {isLoading && <p className="font-semibold text-center">Loading...</p>}
+
         {usersList.map((user) => (
           <UserList
             key={user.id}

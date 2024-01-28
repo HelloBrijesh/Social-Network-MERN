@@ -9,6 +9,8 @@ const Timeline = () => {
   const LIMIT = 5;
 
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
   const [hasNext, setHasNext] = useState(true);
@@ -29,21 +31,42 @@ const Timeline = () => {
   );
 
   useEffect(() => {
-    setStatus("Loading");
+    setIsLoading(true);
+    setIsError(false);
     axiosAuthInstance
       .get(`/users/${userId}/posts?page=${page}&limit=${LIMIT}`)
       .then((response) => {
         setPosts((prev) => [...prev, ...response.data.data]);
         setHasNext(response.data.data.length > 0);
-        setStatus("Success");
       })
       .catch((error) => {
-        setStatus("Error");
+        setIsError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [page]);
 
-  const isLoading = status === "Loading";
-  const error = status === "Error";
+  const removePost = (postId) => {
+    setPosts(() => {
+      return posts.filter((post) => postId !== post.id);
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center font-semibold">
+        Loading....
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="text-red-500 flex justify-center items-center font-semibold">
+        Error
+      </div>
+    );
+  }
 
   if (posts.length === 0) {
     return <div className="text-center font-semibold">No post</div>;
@@ -55,13 +78,13 @@ const Timeline = () => {
         if (posts.length === index + 1) {
           return (
             <div key={post.id} ref={lastPostElementRef}>
-              <Post {...post}></Post>
+              <Post post={post} removePost={removePost}></Post>
             </div>
           );
         } else {
           return (
             <div key={post.id}>
-              <Post {...post}></Post>
+              <Post post={post} removePost={removePost}></Post>
             </div>
           );
         }

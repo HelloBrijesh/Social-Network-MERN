@@ -10,8 +10,15 @@ const savePost = async (userId, postContent, postImage) => {
 
   try {
     const createdPost = await newPost.save();
-    return createdPost;
+    const post = await Post.findById(createdPost.id)
+      .populate({
+        path: "postedBy",
+        select: "firstName lastName profileImage",
+      })
+      .exec();
+    return post;
   } catch (error) {
+    console.log(error);
     return Promise.reject(error);
   }
 };

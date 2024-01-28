@@ -13,12 +13,22 @@ const Profile = () => {
   const [showCoverImage, setShowCoverImage] = useState(false);
 
   let { userId } = useParams();
-  const { isLoading, error, profileDetails } = useProfile(userId);
+  const { isLoading, isError, profileDetails, friends } = useProfile(userId);
 
-  if (profileDetails === null) {
-    return <p>Loading</p>;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center font-semibold h-screen">
+        Loading....
+      </div>
+    );
   }
-
+  if (isError) {
+    return (
+      <div className="text-red-500 flex justify-center items-center h-screen font-semibold">
+        Error
+      </div>
+    );
+  }
   return (
     <>
       <div>
@@ -97,7 +107,7 @@ const Profile = () => {
           </div>
           <hr className="my-5"></hr>
           <div className="pt-10 pb-28">
-            <Outlet />
+            {profileDetails && <Outlet context={friends} />}
           </div>
         </div>
       </div>

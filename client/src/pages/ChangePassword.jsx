@@ -17,7 +17,9 @@ const ChangePassword = () => {
   return (
     <div className="bg-white-smoke h-screen font-custom flex flex-col justify-center items-center">
       <div className=" w-[300px]">
-        <div className="font-custom text-center mb-5">Change Password</div>
+        <div className="font-custom text-center mb-5 font-semibold text-xl">
+          Change Password
+        </div>
         {isError && (
           <p className="text-red-500 text-center">Error : {isError}</p>
         )}

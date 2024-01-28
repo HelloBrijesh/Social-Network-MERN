@@ -49,39 +49,9 @@ const verifyRefreshToken = async (token) => {
   }
 };
 
-const saveRefreshToken = async (token) => {
-  try {
-    await RefreshToken.create({ savedRefreshToken: token });
-  } catch (error) {
-    return error;
-  }
-};
-
-const getRefreshToken = async (token) => {
-  try {
-    const verifiedRefreshToken = await RefreshToken.findOne({
-      savedRefreshToken: token,
-    });
-    return verifiedRefreshToken;
-  } catch (error) {
-    return error;
-  }
-};
-
-const deleteRefreshtoken = async (token) => {
-  try {
-    await RefreshToken.deleteOne({ savedRefreshToken: token });
-  } catch (error) {
-    return error;
-  }
-};
-
 export {
   createAccessToken,
   verifyAccessToken,
   createRefreshToken,
   verifyRefreshToken,
-  saveRefreshToken,
-  getRefreshToken,
-  deleteRefreshtoken,
 };

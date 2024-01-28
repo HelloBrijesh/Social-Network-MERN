@@ -71,52 +71,6 @@ const CoverImage = ({ isVisible, onClose }) => {
               Delete
             </button>
           </div>
-
-          {/* <div className="flex justify-between">
-            <div className="flex">
-              <input
-                id="bookImage"
-                className="hidden border-0"
-                type="file"
-                accept="image/png, image/jpeg, image/jpg"
-                onChange={handleCoverImage}
-              />
-              <label
-                className="bg-blue flex items-center cursor-pointer px-2 py-3 font-semibold text-white text-base border border-none rounded-lg"
-                htmlFor="bookImage"
-              >
-                Upload Image
-              </label>
-              <button
-                onClick={deleteImage}
-                className="text-xl font-semibold p-5"
-              >
-                Delete Image
-              </button>
-            </div>
-            {isError && (
-              <p className="text-red-500">Error : Please Try Again</p>
-            )}
-            <button
-              onClick={() => onClose()}
-              className="text-xl font-semibold p-5"
-            >
-              X
-            </button>
-          </div>
-          <div className="h-[300px]">
-            <div className="flex flex-col h-full justify-center border gap-5">
-              {userDetails.coverImage === "" ? (
-                <FontAwesomeIcon icon={faUser} className="text-[80px]" />
-              ) : (
-                <img
-                  src={`${userDetails.coverImage}`}
-                  alt=""
-                  className="w-full h-[300px]"
-                />
-              )}
-            </div>
-          </div> */}
         </div>
       </div>
     </>

@@ -18,10 +18,7 @@ import { sendEmail } from "../services/email.service.js";
 import {
   createAccessToken,
   createRefreshToken,
-  deleteRefreshtoken,
-  saveRefreshToken,
   verifyRefreshToken,
-  getRefreshToken,
 } from "../services/jwt.services.js";
 import { BCRYPT_COST_FACTOR } from "../constants.js";
 
@@ -117,12 +114,6 @@ const verifyEmail = async (req, res, next) => {
   const accessToken = await createAccessToken(existingUser.id);
   const refreshToken = await createRefreshToken(existingUser.id);
 
-  try {
-    await saveRefreshToken(refreshToken);
-  } catch (error) {
-    return next(ApiError.serverError());
-  }
-
   const loginData = { existingUser, accessToken };
 
   res.status(200).cookie("token", refreshToken, {
@@ -189,8 +180,6 @@ const login = async (req, res, next) => {
     const refreshToken = await createRefreshToken(existingUser.id);
     const loginData = { user, accessToken };
 
-    await saveRefreshToken(refreshToken);
-
     res.status(200).cookie("token", refreshToken, {
       secure: true,
       sameSite: "lax",
@@ -218,11 +207,6 @@ const logout = async (req, res, next) => {
     return next(ApiError.badRequest());
   }
 
-  try {
-    await deleteRefreshtoken(refreshTokenInCookie);
-  } catch (error) {
-    return next(ApiError.serverError());
-  }
   res.status(200).clearCookie("token");
 
   return res
@@ -232,25 +216,11 @@ const logout = async (req, res, next) => {
 
 const tokenRefresh = async (req, res, next) => {
   let cookie = req.headers.cookie;
-
   if (!cookie) {
     return next(ApiError.notAuthorized("Invalid Refresh Token"));
   }
   const refreshTokenInCookie = cookie.split("=")[1];
-
   if (!refreshTokenInCookie) {
-    return next(ApiError.notAuthorized("Invalid Refresh Token"));
-  }
-
-  try {
-    let refreshTokenExists = await getRefreshToken(refreshTokenInCookie);
-
-    if (!refreshTokenExists) {
-      res.clearCookie("token");
-      return next(ApiError.notAuthorized("Invalid Refresh Token"));
-    }
-  } catch (error) {
-    res.clearCookie("token");
     return next(ApiError.notAuthorized("Invalid Refresh Token"));
   }
 
@@ -258,7 +228,6 @@ const tokenRefresh = async (req, res, next) => {
   try {
     const tokenData = await verifyRefreshToken(refreshTokenInCookie);
     if (tokenData.message === "jwt expired") {
-      await deleteRefreshtoken(refreshTokenInCookie);
       res.clearCookie("token");
       return next(ApiError.notAuthorized("Invalid Refresh Token"));
     }
@@ -286,9 +255,6 @@ const tokenRefresh = async (req, res, next) => {
   try {
     const accessToken = await createAccessToken(existingUser.id);
     const refreshToken = await createRefreshToken(existingUser.id);
-
-    await saveRefreshToken(refreshToken);
-    await deleteRefreshtoken(refreshTokenInCookie);
 
     res.status(200).cookie("token", refreshToken, {
       sameSite: "lax",
@@ -389,12 +355,6 @@ const resetPassword = async (req, res, next) => {
 
     const accessToken = await createAccessToken(existingUser.id);
     const refreshToken = await createRefreshToken(existingUser.id);
-
-    try {
-      await saveRefreshToken(refreshToken);
-    } catch (error) {
-      return next(ApiError.serverError());
-    }
 
     const loginData = { existingUser, accessToken };
     res.status(200).cookie("token", refreshToken, {

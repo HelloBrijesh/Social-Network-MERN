@@ -26,7 +26,7 @@ const EditProfile = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
   return (
     <div className="absolute inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center ">
-      <div className="bg-white border border-slate-500 w-auto flex flex-col rounded-lg">
+      <div className="bg-white  pb-10 border border-slate-500 w-auto flex flex-col rounded-lg">
         <div className="flex justify-between items-start border-0 border-b-2">
           <div className="p-5">
             <h1 className="text-xl font-bold mb-2">Edit Profile</h1>
@@ -129,6 +129,14 @@ const EditProfile = ({ isVisible, onClose }) => {
             </button>
           </div>
         </form>
+        {submitting && (
+          <p className="font-semibold text-center">submitting...</p>
+        )}
+        {isError && (
+          <p className="font-semibold text-center text-red-500">
+            Error Please Try Again Later
+          </p>
+        )}
       </div>
     </div>
   );
