@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 // export const axiosAuthInstance = axios.create({
-//   baseURL: `${import.meta.env.VITE_SERVER_URL}`,
+//   baseURL: `${import.meta.env.VITE_SERVER_URL}/api/v1`,
 // });
 
 // axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
