@@ -53,6 +53,18 @@ const Timeline = () => {
     });
   };
 
+  const updatePost = (postId, postContent, postImage) => {
+    setPosts(
+      posts.map((post) => {
+        if (post.id === postId) {
+          post.postContent = postContent;
+          post.postImage = postImage;
+        }
+        return post;
+      })
+    );
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center font-semibold">
@@ -78,13 +90,21 @@ const Timeline = () => {
         if (posts.length === index + 1) {
           return (
             <div key={post.id} ref={lastPostElementRef}>
-              <Post post={post} removePost={removePost}></Post>
+              <Post
+                post={post}
+                removePost={removePost}
+                updatePost={updatePost}
+              ></Post>
             </div>
           );
         } else {
           return (
             <div key={post.id}>
-              <Post post={post} removePost={removePost}></Post>
+              <Post
+                post={post}
+                removePost={removePost}
+                updatePost={updatePost}
+              ></Post>
             </div>
           );
         }
