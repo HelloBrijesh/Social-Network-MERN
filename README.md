@@ -2,6 +2,13 @@
 
 Welcome to the Social Networking Site project! This repository contains the source code and documentation for social networking application built using the MERN (MongoDB, Express.js, React.js, Node.js) stack.
 
+## Test Users
+
+- Live Project link - https://social-network-91b3.onrender.com/
+- User
+  - UserId : test@socialnetwork.com
+  - Password : Abcd@1234
+
 ## Technologies Used
 
 - **Frontend:** React.js
