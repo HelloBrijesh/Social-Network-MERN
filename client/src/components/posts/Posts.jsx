@@ -135,11 +135,11 @@ const Posts = () => {
             setIsModalOpen(false);
           }}
         >
-          <div className="bg-white m-5 w-[500px] flex flex-col rounded-lg">
+          <div className="p-5 sm:w-[500px] rounded-lg">
             <h1 className="text-base text-center md:text-xl font-bold mb-6">
               Create Post
             </h1>
-            <div>
+            <div className="w-full">
               <div className="flex gap-3">
                 <div className="">
                   {userDetails.profileImage === "" ? (
@@ -161,7 +161,6 @@ const Posts = () => {
                       {userDetails.firstName} {userDetails.lastName}
                     </p>
                   </Link>
-                  {/* <p className="text-slate-500">time</p> */}
                 </div>
               </div>
               <div className="">
