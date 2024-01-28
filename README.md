@@ -28,6 +28,7 @@ Our Social Networking Site project aims to create a platform where users can con
 ## Features
 
 - **User Management:** JWT token-based authentication for secure user management.
+- **Infinite Scrolling:** For posts and user feeds to dynamically load content as the user scrolls down the page.
 - **Profile Management:**
 
   - User Profiles
