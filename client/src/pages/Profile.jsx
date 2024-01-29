@@ -11,7 +11,6 @@ const Profile = () => {
   const { userDetails } = useUserContext();
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [showCoverImage, setShowCoverImage] = useState(false);
-
   let { userId } = useParams();
   const { isLoading, isError, profileDetails, friends } = useProfile(userId);
 
@@ -81,11 +80,17 @@ const Profile = () => {
 
             <ProfileImage
               isVisible={showProfileImage}
-              onClose={() => setShowProfileImage(false)}
+              onClose={() => {
+                setShowProfileImage(false);
+                window.location.reload();
+              }}
             />
             <CoverImage
               isVisible={showCoverImage}
-              onClose={() => setShowCoverImage(false)}
+              onClose={() => {
+                setShowCoverImage(false);
+                window.location.reload();
+              }}
             />
             <p className="text-center mt-5 font-bold tracking-wide text-xl">
               {profileDetails.firstName} {profileDetails.lastName}

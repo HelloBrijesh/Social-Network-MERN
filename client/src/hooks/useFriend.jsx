@@ -33,7 +33,7 @@ const useFriend = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [currentPage]);
 
   const unfriend = async (userIdOfFriend) => {
     setIsLoading(true);
