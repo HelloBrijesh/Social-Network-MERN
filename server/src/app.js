@@ -3,6 +3,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorHandler.js";
 import routes from "./routes/index.js";
+import path from "path";
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use("/api/v1", routes);
 
 app.use(express.static("dist"));
 app.get("*", (req, res) =>
-  res.sendFile(path.resolve(__dirname, "dist", "index.html"))
+  res.sendFile(path.resolve(process.cwd(), "dist", "index.html"))
 );
 
 app.use(errorHandler);
